@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة إدارة منصة المؤسس</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { 
+            box-sizing: border-box; 
+            font-family: 'Cairo', sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            transition: all 0.3s ease; 
+        }
+        
+        body { 
+            background-color: #20262e; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            padding: 20px; 
+        }
+        
+        .control-card { 
+            background: white; 
+            width: 100%; 
+            max-width: 580px; 
+            padding: 45px 35px; 
+            border-radius: 20px; 
+            text-align: center; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4); 
+        }
+        
+        .control-card h1 { 
+            font-size: 1.9rem; 
+            color: #1e293b; 
+            font-weight: 900; 
+            margin-bottom: 6px; 
+        }
+        
+        .control-card p { 
+            font-size: 1.05rem; 
+            color: #64748b; 
+            font-weight: 600; 
+            margin-bottom: 35px; 
+        }
+        
+        .links-stack { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 16px; 
+        }
+        
+        .hub-btn { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 10px; 
+            padding: 15px; 
+            border: none; 
+            border-radius: 12px; 
+            color: white; 
+            font-size: 1.05rem; 
+            font-weight: 700; 
+            text-decoration: none; 
+            cursor: pointer; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08); 
+        }
+        
+        .hub-btn:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.18); 
+            opacity: 0.95; 
+        }
+        
+        /* ألوان الأزرار مطابقة للصورة تماماً */
+        .btn-live { 
+            background-color: #22c55e; 
+        }
+        
+        .btn-admin { 
+            background-color: #2563eb; 
+        }
+        
+        .btn-github { 
+            background-color: #24292f; 
+        }
+    </style>
+</head>
+<body>
+
+    <div class="control-card">
+        <h1>لوحة إدارة منصة المؤسس</h1>
+        <p>روابط الوصول السريع والتحكم الخاصة بمستر أحمد جابر</p>
+        
+        <div class="links-stack">
+            
+            <a href="index.html" target="_blank" class="hub-btn btn-live">
+                🌐 رابط المنصة الحية (عرض الطلاب)
+            </a>
+            
+            <a href="admin.html" target="_blank" class="hub-btn btn-admin">
+                ⚙️ لوحة التحكم والأدمن (للتعديل)
+            </a>
+            
+            <a href="https://github.com/architect1010a-source/AHMED_SULTAN" target="_blank" class="hub-btn btn-github">
+                📁 إدارة المستودع على GitHub (لرفع الملفات)
+            </a>
+            
+        </div>
+    </div>
+
+</body>
+</html>
