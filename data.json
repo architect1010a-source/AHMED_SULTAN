@@ -1,0 +1,130 @@
+{
+  "lessons": [
+    {
+      "grade": "6",
+      "branch": "جبر",
+      "title": "الدرس 1: قابلية القسمة",
+      "img": "",
+      "url_expl": "https://youtu.be/E31VENqOvAg?si=ZnjmXgkq3Ncw3qMQ",
+      "url_work": "",
+      "url_sol": "",
+      "url_exam": "exams6/kabeliat_alkesma.html"
+    },
+    {
+      "grade": "1_prep",
+      "branch": "جبر",
+      "title": "التناسب",
+      "img": "",
+      "url_expl": "https://youtu.be/qoC9quP48QY?si=vGgmHulgU8AT4uLw",
+      "url_work": "",
+      "url_sol": "",
+      "url_exam": "exams1/1tanasob.html"
+    },
+    {
+      "grade": "1_prep",
+      "branch": "جبر",
+      "title": "مقياس الرسم",
+      "img": "",
+      "url_expl": "https://youtu.be/hWBtnAFnFhY?si=PYOqzvkNPBp4965P",
+      "url_work": "",
+      "url_sol": "",
+      "url_exam": "exams1/2mekyas-rasm.html"
+    },
+    {
+      "grade": "1_prep",
+      "branch": "جبر",
+      "title": "التقسيم التناسبي",
+      "img": "",
+      "url_expl": "https://youtu.be/VvJpRTnlA3w?si=Zl4cNFlUmi6oTRyP",
+      "url_work": "",
+      "url_sol": "",
+      "url_exam": "exams1/3exam-altaqseem-altanasobi.html"
+    },
+    {
+      "grade": "1_prep",
+      "branch": "جبر",
+      "title": "النسبة المئوية",
+      "img": "",
+      "url_expl": "https://youtu.be/D55__S4UQrs?si=vkfKE3KrBhLNQk_R",
+      "url_work": "",
+      "url_sol": "",
+      "url_exam": "exams1/4exam-alnisba-almeawya.html"
+    },
+    {
+      "grade": "6",
+      "branch": "جبر",
+      "title": "تحليل العدد إلى عوامله الأولية",
+      "img": "",
+      "url_expl": "https://youtu.be/QWcgl7v-ZWo?si=i7r3VCJAunTCHWQD",
+      "url_work": "",
+      "url_sol": "",
+      "url_exam": "exams6/tahlel_aladd_ela_awamiloh_alawalia.html"
+    },
+    {
+      "grade": "6",
+      "branch": "جبر",
+      "title": "كتابة تعبيرات عددية باستخدام ع.م.أ",
+      "img": "",
+      "url_expl": "https://youtu.be/UJKD_EIfWvQ?si=8w4uK7zsHUu1C8AD",
+      "url_work": "",
+      "url_sol": "",
+      "url_exam": "exams6/ketabet_taberat_adadia.html"
+    },
+    {
+      "grade": "6",
+      "branch": "جبر",
+      "title": "تحليل المضاعف المشترك الأصغر",
+      "img": "",
+      "url_expl": "https://youtu.be/dIHyCpuDOd8?si=k4v3NB3tWnPQXuXF",
+      "url_work": "",
+      "url_sol": "",
+      "url_exam": "exams6/tahlil_aalmodaaf_almoshtak_alasgr.html"
+    },
+    {
+      "grade": "2_prep",
+      "branch": "جبر",
+      "title": "الاعداد الحقيقية",
+      "img": "",
+      "url_expl": "https://youtu.be/n_9AaFMZHKY?si=O1-L6Lt9oNar0AeV",
+      "url_work": "",
+      "url_sol": "",
+      "url_exam": "exams2/aladad_alhakikia.html"
+    },
+    {
+      "grade": "2_prep",
+      "branch": "جبر",
+      "title": "الفترات والعمليات عليها",
+      "img": "",
+      "url_expl": "https://youtu.be/veqWcc0mC1A?si=FPxBXLPGtYiUqts2",
+      "url_work": "",
+      "url_sol": "",
+      "url_exam": "exams2/alftarat.html"
+    },
+    {
+      "grade": "2_prep",
+      "branch": "جبر",
+      "title": "العمليات على الاعداد الحقيقية",
+      "img": "",
+      "url_expl": "https://youtu.be/mAlaqpir8yE?si=lEjInfp1bw1RRiTA",
+      "url_work": "",
+      "url_sol": "",
+      "url_exam": "exams2/El3amalyat_3ala_ElA3dad_El7aqiqya.html"
+    },
+    {
+      "grade": "2_prep",
+      "branch": "جبر",
+      "title": "قوانين الجذور الربيعية والتكعيبية",
+      "img": "",
+      "url_expl": "https://youtu.be/n7q2Z0IkeuY?si=H-Zr3y1p7J8W3-Hj",
+      "url_work": "",
+      "url_sol": "",
+      "url_exam": "exams2/kwanin_algzoor.html"
+    }
+  ],
+  "allowedCodes": {
+    "Mo_3109": {
+      "name": "احمد جابر محمد",
+      "status": "active"
+    }
+  }
+}

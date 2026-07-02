@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>منصة المؤسس التعليمية</title>
+    <style>
+        /* إضافة ستايل العلامة المائية */
+        .watermark {
+            position: fixed; top: 20%; left: 10%; font-size: 40px; color: rgba(255, 255, 255, 0.1);
+            pointer-events: none; z-index: 9999; transform: rotate(-45deg); user-select: none;
+            white-space: nowrap; font-weight: 900;
+        }
+        #login-overlay {
+            position: fixed; top:0; left:0; width:100%; height:100%; background: #0b132b;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 10000; color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="login-overlay">
+        <h2>أدخل كود الاشتراك الخاص بك</h2>
+        <input type="text" id="student-code-input" placeholder="مثال: Mo_1234">
+        <button onclick="checkStudent()">دخول المنصة</button>
+    </div>
+
+    <div id="wm-container"></div>
+
+    <div id="main-content" style="display:none;">
+        </div>
+
+<script>
+    let userData = null; // بيانات الطالب بعد الدخول
+
+    async function checkStudent() {
+        const code = document.getElementById('student-code-input').value.trim();
+        
+        // جلب ملف الـ JSON المرفوع على جيت هاب (ضع رابط ملفك الـ Raw هنا)
+        const response = await fetch('رابط_ملف_الـ_JSON_الخاص_بك_على_جيت_هاب');
+        const data = await response.json();
+
+        if (data.allowedCodes && data.allowedCodes[code]) {
+            const student = data.allowedCodes[code];
+            if (student.status === 'active') {
+                userData = student;
+                document.getElementById('login-overlay').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                initWatermark(student.name, code);
+            } else {
+                alert("اشتراكك منتهي، تواصل مع المؤسس!");
+            }
+        } else {
+            alert("كود غير صحيح!");
+        }
+    }
+
+    function initWatermark(name, code) {
+        const div = document.createElement('div');
+        div.className = 'watermark';
+        div.innerHTML = `${name} - ${code}`;
+        document.body.appendChild(div);
+    }
+</script>
+</body>
+</html>

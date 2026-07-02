@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم المعلم الذكية | منصة المؤسس</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --dark-hero: linear-gradient(135deg, #0b132b, #1c2541);
+            --accent-gold: linear-gradient(135deg, #ffe066, #f59e0b);
+            --bg-body: #f8fafc;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --card-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        * { box-sizing: border-box; font-family: 'Cairo', sans-serif; margin: 0; padding: 0; }
+        body { background-color: var(--bg-body); color: var(--text-dark); padding: 40px 20px; }
+        
+        /* شاشة الدخول الفخمة */
+        #login-screen {
+            max-width: 450px; margin: 100px auto; background: white; padding: 40px; 
+            border-radius: 24px; box-shadow: var(--card-shadow); text-align: center;
+            border-top: 5px solid #f59e0b;
+        }
+        #login-screen h2 { margin-bottom: 20px; font-weight: 800; }
+        
+        /* لوحة التحكم الرئيسية */
+        #admin-workspace { display: none; max-width: 1200px; margin: auto; }
+        
+        .admin-panel { 
+            background: white; padding: 35px; border-radius: 24px; 
+            margin-bottom: 40px; border: 1px solid #e2e8f0; box-shadow: var(--card-shadow);
+        }
+        .admin-header { display: flex; align-items: center; gap: 12px; margin-bottom: 25px; }
+        .admin-header h2 { font-weight: 900; font-size: 1.6rem; color: #1c2541; }
+        
+        .input-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 25px; }
+        input, select { 
+            width: 100%; padding: 14px 18px; border: 2px solid #e2e8f0; border-radius: 12px; 
+            font-size: 0.95rem; font-weight: 600; background: #f8fafc;
+        }
+        input:focus, select:focus { outline: none; border-color: #2563eb; background: white; }
+        
+        .btn { 
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 14px 24px; border: none; border-radius: 12px; cursor: pointer; 
+            color: white; font-size: 1rem; font-weight: 700; text-decoration: none; 
+        }
+        .btn-primary { background: linear-gradient(135deg, #1c2541, #2563eb); width: 100%; }
+        .admin-actions { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px; padding-top: 20px; border-top: 2px dashed #e2e8f0; }
+        
+        /* جدول استعراض وتعديل الدروس الحالي */
+        .preview-section { background: white; padding: 30px; border-radius: 24px; box-shadow: var(--card-shadow); margin-bottom: 40px; }
+        .preview-title { font-weight: 800; font-size: 1.3rem; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; text-align: right; margin-top: 15px; }
+        th, td { padding: 14px; border-bottom: 1px solid #e2e8f0; font-weight: 600; }
+        th { background: #f1f5f9; color: #1c2541; font-weight: 800; }
+        .action-btn { padding: 6px 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 0.85rem; }
+        .btn-edit { background: #e0f2fe; color: #0369a1; }
+        .btn-delete { background: #fee2e2; color: #b91c1c; }
+        .btn-move { background: #f1f5f9; color: #475569; }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" style="width: 60px; height: 60px; margin-bottom: 15px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        <h2>لوحة إدارة المؤسس</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">الرجاء إدخال رمز التحقق الآمن لفتح الصلاحيات المعيارية</p>
+        <input type="password" id="admin-pass-input" placeholder="🔐 أدخل كلمة المرور هنا..." style="text-align: center; margin-bottom: 20px;">
+        <button class="btn btn-primary" onclick="verifyAdminAccess()">دخول اللوحة الآمنة</button>
+    </div>
+
+    <div id="admin-workspace">
+        <div class="admin-panel">
+            <div class="admin-header">
+                <h2>لوحة تحكم المعلم الذكية ⚙️</h2>
+            </div>
+            
+            <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:12px;">➕ إضافة أو تعديل درس تعليمي:</h3>
+            <div class="input-group">
+                <select id="lesson-grade">
+                    <option value="6">الصف السادس الابتدائي</option>
+                    <option value="1_prep">الصف الأول الاعدادي</option>
+                    <option value="2_prep">الصف الثاني الاعدادي</option>
+                    <option value="3_prep">الصف الثالث الاعدادي</option>
+                </select>
+                <select id="lesson-branch">
+                    <option value="جبر">فرع الجبر</option>
+                    <option value="هندسة">فرع الهندسة</option>
+                    <option value="إحصاء">فرع الإحصاء</option>
+                </select>
+                <input type="text" id="title" placeholder="📚 عنوان الدرس الجديد...">
+                <input type="text" id="img" placeholder="🖼️ اتركها فارغة لجلاف اليوتيوب تلقائياً...">
+            </div>
+            <div class="input-group" style="margin-top: -10px;">
+                <input type="text" id="url_expl" placeholder="▶️ رابط فيديو الشرح الرئيسي من اليوتيوب">
+                <input type="text" id="url_work" placeholder="📄 رابط ملف واجب الـ PDF">
+                <input type="text" id="url_sol" placeholder="✅ رابط فيديو حل الواجب">
+                <input type="text" id="url_exam" placeholder="📝 رابط الامتحان التفاعلي">
+            </div>
+            
+            <button id="save-btn" class="btn btn-primary" onclick="saveLesson()">
+                اعتماد وحفظ الدرس في المنصة
+            </button>
+
+            <div style="margin-top: 25px; padding-top: 25px; border-top: 2px dashed #e2e8f0; margin-bottom: 25px;">
+                <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 12px;">🛠️ تعديل الكروت الرئيسية الأربعة:</h3>
+                <div class="input-group">
+                    <select id="edit-grade-select" onchange="loadGradeToConfigForm()">
+                        <option value="6">الصف السادس الابتدائي</option>
+                        <option value="1_prep">الصف الأول الاعدادي</option>
+                        <option value="2_prep">الصف الثاني الاعدادي</option>
+                        <option value="3_prep">الصف الثالث الاعدادي</option>
+                    </select>
+                    <input type="text" id="grade-title-input" placeholder="اسم الصف الدراسي...">
+                    <input type="text" id="grade-desc-input" placeholder="الوصف التحفيزي للمرحلة...">
+                    <input type="text" id="grade-img-input" placeholder="رابط غلاف صورة الكارت...">
+                </div>
+                <button class="btn" style="background: #0f172a; width: 100%;" onclick="updateGradeCardConfig()">
+                    💾 حفظ تعديلات كارت الصف المختار فوراً
+                </button>
+            </div>
+
+            <div class="admin-actions">
+                <button class="btn" style="background: #059669;" onclick="exportData()">💾 تصدير قاعدة البيانات (JSON)</button>
+                <input type="file" id="importFile" style="display:none" onchange="importData(event)" accept=".json">
+                <button class="btn" style="background: #f59e0b; color: #0b132b;" onclick="document.getElementById('importFile').click()">📤 استيراد قاعدة البيانات (JSON)</button>
+            </div>
+        </div>
+
+        <div class="admin-panel">
+            <div class="admin-header">
+                <h2>👥 إدارة أكواد الطلاب والمشتركين</h2>
+            </div>
+            <div class="input-group">
+                <input type="text" id="student-name" placeholder="👤 اسم الطالب الثنائي أو الثلاثي...">
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="student-code" placeholder="🔑 كود الطالب (مثال: Mo_1234)...">
+                    <button class="btn" style="background: #475569; padding: 0 15px; font-size: 0.9rem; white-space: nowrap;" onclick="generateRandomCode()">توليد كود</button>
+                </div>
+            </div>
+            <button class="btn" style="background: linear-gradient(135deg, #059669, #10b981); width: 100%;" onclick="addStudent()">
+                ➕ إضافة الطالب لقائمة المشتركين
+            </button>
+            
+            <div class="preview-section" style="margin-top: 25px; box-shadow: none; padding: 0;">
+                <h3 class="preview-title" style="font-size: 1.1rem; margin-bottom: 12px;">📊 قائمة الطلاب الحاليين والتحكم بالاشتراك:</h3>
+                <table id="admin-students-table">
+                    <thead>
+                        <tr>
+                            <th>اسم الطالب</th>
+                            <th>الكود الخاص به</th>
+                            <th>الحالة</th>
+                            <th>العمليات</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="preview-section">
+            <h3 class="preview-title">📊 إدارة وترتيب كافة الدروس المضافة حالياً:</h3>
+            <table id="admin-lessons-table">
+                <thead>
+                    <tr>
+                        <th>المرحلة</th>
+                        <th>الفرع</th>
+                        <th>عنوان الدرس</th>
+                        <th>الترتيب</th>
+                        <th>العمليات</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+<script>
+    const CRYPT_HASH = "MTIzNA=="; 
+
+    let lessons = JSON.parse(localStorage.getItem('math_lessons')) || [];
+    let students = JSON.parse(localStorage.getItem('math_students')) || {}; // قاعدة بيانات الطلاب الجديدة
+    let editIndex = -1;
+
+    let defaultGradesConfig = [
+        { id: "6", title: "الصف السادس الابتدائي", desc: "تأسيس هندسي وحسابي متين وبداية طريق الأذكياء", img: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?auto=format&fit=crop&w=600&q=80", colorClass: "border-yellow" },
+        { id: "1_prep", title: "الصف الأول الاعدادي", desc: "أهلاً بك في عالم المفاهيم الجبرية والتحليلات الهندسية الفاخرة", img: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=600&q=80", colorClass: "border-purple" },
+        { id: "2_prep", title: "الصف الثاني الاعدادي", desc: "تعميق النظريات وحل المعادلات الرياضية الكبرى بثقة وإتقان", img: "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=600&q=80", colorClass: "border-green" },
+        { id: "3_prep", title: "الصف الثالث الاعدادي", desc: "سنة الشهادة الحاسمة.. نحو القمة والدرجات النهائية دائماً", img: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=600&q=80", colorClass: "border-orange" }
+    ];
+    let gradesConfig = JSON.parse(localStorage.getItem('math_grades_config')) || defaultGradesConfig;
+
+    function verifyAdminAccess() {
+        const input = document.getElementById("admin-pass-input").value;
+        if(btoa(input) === CRYPT_HASH) {
+            document.getElementById("login-screen").style.display = "none";
+            document.getElementById("admin-workspace").style.display = "block";
+            loadGradeToConfigForm();
+            refreshAdminTable();
+            refreshStudentsTable(); // تحديث جدول الطلاب عند الدخول
+        } else {
+            alert("رمز التحقق الآمن غير صحيح! ❌");
+        }
+    }
+
+    function refreshAdminTable() {
+        const tbody = document.querySelector("#admin-lessons-table tbody");
+        tbody.innerHTML = "";
+        
+        if(lessons.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">لا توجد دروس مضافة حالياً.</td></tr>`;
+            return;
+        }
+
+        lessons.forEach((l, idx) => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${l.grade}</td>
+                    <td>${l.branch}</td>
+                    <td><strong>${l.title}</strong></td>
+                    <td>
+                        <button class="action-btn btn-move" onclick="moveLesson(${idx}, -1)">🔼</button>
+                        <button class="action-btn btn-move" onclick="moveLesson(${idx}, 1)">🔽</button>
+                    </td>
+                    <td>
+                        <button class="action-btn btn-edit" onclick="editLesson(${idx})">تعديل</button>
+                        <button class="action-btn btn-delete" onclick="deleteLesson(${idx})">حذف</button>
+                    </td>
+                </tr>`;
+        });
+    }
+
+    /* ---- أكواد إدارة الطلاب الجديدة ---- */
+    function generateRandomCode() {
+        const rand = Math.floor(1000 + Math.random() * 9000);
+        document.getElementById('student-code').value = `Mo_${rand}`;
+    }
+
+    function refreshStudentsTable() {
+        const tbody = document.querySelector("#admin-students-table tbody");
+        tbody.innerHTML = "";
+        
+        const keys = Object.keys(students);
+        if(keys.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">لا يوجد طلاب مضافين حالياً.</td></tr>`;
+            return;
+        }
+
+        keys.forEach(code => {
+            const s = students[code];
+            const statusText = s.status === 'active' ? '🟢 نشط' : '🔴 اشتراك ملغي';
+            const toggleBtnText = s.status === 'active' ? 'حظر وإلغاء' : 'تفعيل الحساب';
+            const btnColor = s.status === 'active' ? 'background: #fef3c7; color: #d97706;' : 'background: #d1fae5; color: #059669;';
+
+            tbody.innerHTML += `
+                <tr>
+                    <td><strong>${s.name}</strong></td>
+                    <td><code style="background:#f1f5f9; padding:4px 8px; border-radius:6px; font-family:monospace; font-weight:700;">${code}</code></td>
+                    <td>${statusText}</td>
+                    <td>
+                        <button class="action-btn" style="${btnColor}" onclick="toggleStudentStatus('${code}')">${toggleBtnText}</button>
+                        <button class="action-btn btn-delete" onclick="deleteStudent('${code}')">حذف نهائي</button>
+                    </td>
+                </tr>`;
+        });
+    }
+
+    function addStudent() {
+        const name = document.getElementById('student-name').value.trim();
+        const code = document.getElementById('student-code').value.trim();
+
+        if(!name || !code) return alert("برجاء إدخال اسم الطالب والكود معاً!");
+
+        students[code] = { name: name, status: 'active' };
+        localStorage.setItem('math_students', JSON.stringify(students));
+        
+        document.getElementById('student-name').value = "";
+        document.getElementById('student-code').value = "";
+        refreshStudentsTable();
+        alert("تم إضافة الطالب بنجاح وقفل حسابه على الكود المختار! 👥");
+    }
+
+    function toggleStudentStatus(code) {
+        if(students[code]) {
+            students[code].status = students[code].status === 'active' ? 'expired' : 'active';
+            localStorage.setItem('math_students', JSON.stringify(students));
+            refreshStudentsTable();
+        }
+    }
+
+    function deleteStudent(code) {
+        if(confirm("هل أنت متأكد من حذف هذا الطالب تماماً من النظام؟")) {
+            delete students[code];
+            localStorage.setItem('math_students', JSON.stringify(students));
+            refreshStudentsTable();
+        }
+    }
+    /* ---------------------------------- */
+
+    function saveLesson() {
+        const grade = document.getElementById('lesson-grade').value;
+        const branch = document.getElementById('lesson-branch').value;
+        const title = document.getElementById('title').value.trim();
+        const img = document.getElementById('img').value.trim();
+        const url_expl = document.getElementById('url_expl').value.trim();
+        const url_work = document.getElementById('url_work').value.trim();
+        const url_sol = document.getElementById('url_sol').value.trim();
+        const url_exam = document.getElementById('url_exam').value.trim();
+
+        if(!title) return alert("عنوان الدرس مطلوب!");
+
+        const data = { grade, branch, title, img, url_expl, url_work, url_sol, url_exam };
+
+        if(editIndex > -1) {
+            lessons[editIndex] = data;
+            editIndex = -1;
+            document.getElementById('save-btn').innerText = "اعتماد وحفظ الدرس في المنصة";
+        } else {
+            lessons.push(data);
+        }
+
+        localStorage.setItem('math_lessons', JSON.stringify(lessons));
+        document.querySelectorAll('.admin-panel input[type="text"]').forEach(i => i.value = "");
+        refreshAdminTable();
+        alert("تم الحفظ بنجاح! 🎉");
+    }
+
+    function editLesson(idx) {
+        editIndex = idx;
+        const l = lessons[idx];
+        document.getElementById('lesson-grade').value = l.grade;
+        document.getElementById('lesson-branch').value = l.branch;
+        document.getElementById('title').value = l.title;
+        document.getElementById('img').value = l.img || "";
+        document.getElementById('url_expl').value = l.url_expl || "";
+        document.getElementById('url_work').value = l.url_work || "";
+        document.getElementById('url_sol').value = l.url_sol || "";
+        document.getElementById('url_exam').value = l.url_exam || "";
+        document.getElementById('save-btn').innerText = "💾 تحديث بيانات الدرس المختار";
+    }
+
+    function deleteLesson(idx) {
+        if(confirm("هل أنت متأكد من حذف هذا الدرس؟")) {
+            lessons.splice(idx, 1);
+            localStorage.setItem('math_lessons', JSON.stringify(lessons));
+            refreshAdminTable();
+        }
+    }
+
+    function moveLesson(index, direction) {
+        const newIndex = index + direction;
+        if (newIndex >= 0 && newIndex < lessons.length) {
+            const temp = lessons[index]; lessons[index] = lessons[newIndex]; lessons[newIndex] = temp;
+            localStorage.setItem('math_lessons', JSON.stringify(lessons));
+            refreshAdminTable();
+        }
+    }
+
+    function loadGradeToConfigForm() {
+        const id = document.getElementById('edit-grade-select').value;
+        const config = gradesConfig.find(g => g.id === id);
+        if(config) {
+            document.getElementById('grade-title-input').value = config.title;
+            document.getElementById('grade-desc-input').value = config.desc;
+            document.getElementById('grade-img-input').value = config.img;
+        }
+    }
+
+    function updateGradeCardConfig() {
+        const id = document.getElementById('edit-grade-select').value;
+        const config = gradesConfig.find(g => g.id === id);
+        if(config) {
+            config.title = document.getElementById('grade-title-input').value;
+            config.desc = document.getElementById('grade-desc-input').value;
+            config.img = document.getElementById('grade-img-input').value;
+            localStorage.setItem('math_grades_config', JSON.stringify(gradesConfig));
+            alert("تم تحديث الكارت بنجاح! 🎉");
+        }
+    }
+
+    // تعديل التصدير ليحتوي على الدروس والطلاب معاً
+    function exportData() {
+        const outputPackage = {
+            lessons: lessons,
+            allowedCodes: students
+        };
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(outputPackage, null, 2));
+        const a = document.createElement('a'); a.href = dataStr; a.download = "AlMoasses_Platform_Data.json";
+        a.click();
+    }
+
+    // تعديل الاستيراد ليدعم الملفات القديمة والجديدة
+    function importData(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const importedData = JSON.parse(e.target.result);
+                if (Array.isArray(importedData)) {
+                    // إذا كان ملف قديم يحتوي على مصفوفة دروس فقط
+                    lessons = importedData;
+                    students = {};
+                } else {
+                    // إذا كان ملف مطور يحتوي على الكائن الجديد
+                    lessons = importedData.lessons || [];
+                    students = importedData.allowedCodes || {};
+                }
+                localStorage.setItem('math_lessons', JSON.stringify(lessons));
+                localStorage.setItem('math_students', JSON.stringify(students));
+                refreshAdminTable();
+                refreshStudentsTable();
+                alert("تم استيراد البيانات بنجاح وتحديث القوائم! 🎉");
+            } catch(err) { alert("ملف غير صالح."); }
+        };
+        reader.readAsText(file);
+    }
+</script>
+</body>
+</html>
