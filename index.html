@@ -4,16 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منصة المؤسس في الرياضيات | مستر أحمد جابر</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#20262e">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<!-- أيقونة المتصفح الافتراضية (Favicon) -->
-<link rel="icon" type="image/png" href="logo.png">
-
-<!-- أيقونة الشاشة الرئيسية للهواتف الذكية (أندرويد وآيفون) -->
-<link rel="apple-touch-icon" href="logo.png">
+    
+    <!-- إعدادات التطبيق المستقل (PWA) بدون علامة كروم -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#20262e">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="المؤسس">
+    
+    <!-- أيقونة المتصفح والشاشة الرئيسية موحدة على ملف logo.jpg -->
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    <link rel="apple-touch-icon" href="logo.jpg">
+    
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root { 
@@ -42,7 +45,6 @@
         * { box-sizing: border-box; font-family: 'Cairo', sans-serif; margin: 0; padding: 0; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         body { background-color: var(--bg-body); color: var(--text-dark); line-height: 1.6; padding-bottom: 0px; }
         
-        /* شاشة القفل والدخول الفاخرة للمؤسس */
         #login-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(135deg, #0b132b, #1c2541);
@@ -58,7 +60,6 @@
         .login-box h2 { font-weight: 900; margin-bottom: 10px; font-size: 1.7rem; }
         .login-box p { color: #94a3b8; font-weight: 600; margin-bottom: 25px; font-size: 0.95rem; }
         
-        /* العلامة المائية المتحركة الذكية */
         .watermark {
             position: fixed; font-size: 28px; color: rgba(148, 163, 184, 0.07);
             pointer-events: none; z-index: 9999; transform: rotate(-25deg);
@@ -381,7 +382,7 @@
         </div>
         
         <div class="brand-center">
-            <img id="teacher-img" src="https://i.ibb.co/N2r5LTSr/image.png" alt="مستر أحمد جابر" class="teacher-avatar-lg">
+            <img id="teacher-img" src="logo.jpg" alt="مستر أحمد جابر" class="teacher-avatar-lg">
             <h1>مستر أحمد جابر</h1>
             <p>المؤسس في الرياضيات</p>
         </div>
@@ -464,7 +465,6 @@
     
     let gradesConfig = JSON.parse(localStorage.getItem('math_grades_config')) || (BUILTIN_GRADES.length > 0 ? BUILTIN_GRADES : defaultGradesConfig);
 
-    // دالة التحقق من الكود المطور والمربوط بملف الـ JSON الموحد
     async function checkStudent(forcedCode = null, isAutoLoad = false) {
         const code = forcedCode ? forcedCode : document.getElementById('student-code-input').value.trim();
         if(!code) {
@@ -692,7 +692,6 @@
         } 
         updateThemeUI(); 
 
-        // فحص ذكي: لو الطالب دخل كود صح قبل كدة، يفتح المنصة علطول بدون طلب الكود مجدداً
         const savedCode = localStorage.getItem('user_code');
         if(savedCode) {
             checkStudent(savedCode, true);
