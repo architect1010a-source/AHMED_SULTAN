@@ -11,14 +11,14 @@
   "lang": "ar",
   "icons": [
     {
-      "src": "https://i.ibb.co/N2r5LTSr/image.png",
+      "src": "logo.jpg",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/jpeg"
     },
     {
-      "src": "https://i.ibb.co/N2r5LTSr/image.png",
+      "src": "logo.jpg",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/jpeg"
     }
   ]
 }
