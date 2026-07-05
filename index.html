@@ -123,12 +123,27 @@
         .container { padding: 40px 5%; max-width: 1400px; margin: auto; }
         .motivation-container {
             background: white; border-left: 5px solid #f59e0b; border-right: 5px solid #f59e0b;
-            border-radius: 16px; padding: 25px; text-align: center; margin-bottom: 40px; box-shadow: var(--card-shadow);
+            border-radius: 16px; padding: 25px; text-align: center; margin-bottom: 25px; box-shadow: var(--card-shadow);
         }
         body.dark-mode .motivation-container { background: #1e293b; }
         .motivation-container h2 { font-size: 1.4rem; color: #1c2541; font-weight: 800; margin-bottom: 10px; }
         body.dark-mode .motivation-container h2 { color: #f8fafc; }
         .motivation-container p { color: var(--text-muted); font-size: 1.05rem; font-weight: 600; }
+
+        /* زر التثبيت الذكي للتطبيق */
+        .install-pwa-btn {
+            display: none; align-items: center; justify-content: center; gap: 12px;
+            background: linear-gradient(135deg, #f59e0b, #ea580c); color: white; border: none;
+            padding: 16px 28px; border-radius: 16px; font-size: 1.15rem; font-weight: 900; cursor: pointer;
+            margin: 0 auto 35px auto; max-width: 500px; width: 100%;
+            box-shadow: 0 10px 25px rgba(234, 88, 12, 0.4); animation: pulseBtn 2s infinite;
+        }
+        .install-pwa-btn:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 15px 30px rgba(234, 88, 12, 0.6); }
+        @keyframes pulseBtn {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
 
         .back-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #e2e8f0; }
         body.dark-mode .back-bar { border-bottom-color: #334155; }
@@ -310,6 +325,11 @@
             <h2>👋 أهلاً بكم في قلعة "المؤسس" للتميز والإبداع!</h2>
             <p>الرياضيات ليست مجرد أرقام وحسابات، بل هي لغة الأذكياء.. استمتع بالدرس الأول مجاناً في كل مرحلة، وابدأ طريق التفوق! 🚀🏆</p>
         </div>
+
+        <!-- زر تثبيت التطبيق الفوري (يظهر تلقائياً عندما يدعم الهاتف التثبيت) -->
+        <button id="custom-install-btn" class="install-pwa-btn" onclick="triggerPwaInstall()">
+            📲 تثبيت منصة المؤسس كتطبيق على هاتفك الآن
+        </button>
 
         <div id="grades-view" class="grid"></div>
 
@@ -720,6 +740,37 @@
         const isDark = document.body.classList.contains('dark-mode'); const icon = document.getElementById('theme-icon'); const text = document.getElementById('theme-text');
         if(isDark) { icon.innerHTML = `<path d="M12 3v1M12 20v1M4.22 4.22l.7.7M18.36 18.36l.7.7M1 12h1M22 12h1M4.22 19.78l.7-.7M18.36 5.64l.7-.7M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" fill="none" stroke="currentColor" stroke-width="2.5"></path>`; text.innerText = "الوضع المضيء"; } 
         else { icon.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="none" stroke="currentColor" stroke-width="2.5"></path>`; text.innerText = "الوضع الليلي"; }
+    }
+
+    // --- أكواد تسجيل السيرفس وركر والتحكم في زر التثبيت الـ PWA ---
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        const installBtn = document.getElementById('custom-install-btn');
+        if (installBtn) {
+            installBtn.style.display = 'flex';
+        }
+    });
+
+    function triggerPwaInstall() {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+            }
+            deferredPrompt = null;
+            document.getElementById('custom-install-btn').style.display = 'none';
+        });
+    }
+
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('Service Worker Registered Successfully'))
+                .catch(err => console.log('Service Worker Failed', err));
+        });
     }
 
     window.onload = function() { 
