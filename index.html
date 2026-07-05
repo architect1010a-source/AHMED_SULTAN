@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منصة المؤسس في الرياضيات | مستر أحمد جابر</title>
     
+    <!-- إعدادات التطبيق المستقل (PWA) -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#20262e">
     <meta name="mobile-web-app-capable" content="yes">
@@ -12,6 +13,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="المؤسس">
     
+    <!-- أيقونة المتصفح والشاشة الرئيسية موحدة على ملف logo.jpg -->
     <link rel="icon" type="image/jpeg" href="logo.jpg">
     <link rel="apple-touch-icon" href="logo.jpg">
     
@@ -43,20 +45,27 @@
         * { box-sizing: border-box; font-family: 'Cairo', sans-serif; margin: 0; padding: 0; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         body { background-color: var(--bg-body); color: var(--text-dark); line-height: 1.6; padding-bottom: 0px; }
         
+        /* بوابة تسجيل الدخول أصبحت Modal يمكن إغلاقها */
         #login-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #0b132b, #1c2541);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: rgba(11, 19, 43, 0.85); backdrop-filter: blur(10px);
+            display: none; flex-direction: column; align-items: center; justify-content: center;
             z-index: 10000; color: white; padding: 20px; text-align: center;
         }
         .login-box {
-            background: rgba(255, 255, 255, 0.04);
+            background: #1e293b; position: relative;
             padding: 40px 30px; border-radius: 24px; border: 2px solid #f59e0b;
-            backdrop-filter: blur(15px); box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
             max-width: 420px; width: 100%; text-align: center;
         }
-        .login-box h2 { font-weight: 900; margin-bottom: 10px; font-size: 1.7rem; }
-        .login-box p { color: #94a3b8; font-weight: 600; margin-bottom: 25px; font-size: 0.95rem; }
+        .close-login-btn {
+            position: absolute; top: 15px; left: 15px; background: rgba(255,255,255,0.1);
+            border: none; color: white; width: 35px; height: 35px; border-radius: 50%;
+            font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+        }
+        .close-login-btn:hover { background: #ef4444; }
+        .login-box h2 { font-weight: 900; margin-bottom: 10px; font-size: 1.7rem; color: #ffffff; }
+        .login-box p { color: #cbd5e1; font-weight: 600; margin-bottom: 25px; font-size: 0.95rem; }
 
         /* تنسيق نافذة التحذير الأمني الذكية */
         #security-modal {
@@ -96,7 +105,7 @@
             background: var(--dark-hero); padding: 60px 20px; text-align: center; position: relative;
             box-shadow: 0 10px 30px rgba(11, 19, 43, 0.3); border-bottom: 4px solid #f59e0b;
         }
-        .admin-trigger-container { position: absolute; top: 20px; left: 5%; display: flex; gap: 10px; }
+        .admin-trigger-container { position: absolute; top: 20px; left: 5%; display: flex; gap: 10px; flex-wrap: wrap; }
         .brand-center { display: flex; flex-direction: column; align-items: center; gap: 15px; }
         
         .teacher-avatar-lg {
@@ -166,12 +175,13 @@
 
         .btn { 
             display: flex; align-items: center; justify-content: center; gap: 8px;
-            padding: 12px 24px; border: none; border-radius: 12px; cursor: pointer; 
-            color: white; font-size: 0.95rem; font-weight: 700; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 10px 18px; border: none; border-radius: 12px; cursor: pointer; 
+            color: white; font-size: 0.9rem; font-weight: 700; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
         .btn-header { background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(5px); }
         .btn-header:hover { background: #ffffff; color: #0b132b; border-color: #ffffff; }
+        .btn-login-trigger { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border: 1px solid #f59e0b; }
         .btn-login { background: linear-gradient(135deg, #1c2541, #2563eb); width: 100%; padding: 14px; margin-top: 5px;}
 
         input, select { width: 100%; padding: 14px 18px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 0.95rem; font-weight: 600; background: #f8fafc; color: #0f172a;}
@@ -218,10 +228,11 @@
         .btn-sol { background: var(--btn-sol-grad); }
         .btn-exam { background: var(--btn-exam-grad); font-weight: 800; }
 
-        /* قفل وتلوين الكروت المتتالية */
-        .card.is-locked { filter: grayscale(100%) opacity(0.55); cursor: not-allowed; position: relative; }
-        .lock-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.03); display: flex; align-items: center; justify-content: center; z-index: 10; }
+        /* قفل وتلوين الكروت المتتالية أو التي تتطلب كود */
+        .card.is-locked { filter: grayscale(100%) opacity(0.65); cursor: not-allowed; position: relative; }
+        .lock-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; gap: 8px; }
         .lock-badge { background: #1e293b; color: #f59e0b; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0,0,0,0.4); border: 2px solid #f59e0b; }
+        .lock-text { background: #1e293b; color: #f8fafc; font-size: 0.8rem; font-weight: 800; padding: 4px 14px; border-radius: 50px; border: 1px solid #f59e0b; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
 
         /* الزر العائم للرجوع */
         .floating-back-btn {
@@ -246,16 +257,19 @@
 </head>
 <body>
 
+<!-- بوابة تسجيل الدخول بالكود (تفتح فقط عند الحاجة) -->
 <div id="login-overlay">
     <div class="login-box">
+        <button class="close-login-btn" onclick="closeLoginModal()">✕</button>
         <svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" style="width: 55px; height: 55px; margin-bottom: 15px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
         <h2>بوابة المؤسس التعليمية 🏰</h2>
-        <p>مرحباً بك يا بطل، الرجاء إدخال كود الاشتراك الخاص بك لفتح المحتوى:</p>
+        <p>هذا الدرس حصري للمشتركين! الرجاء إدخال كود الاشتراك لفتح كل الدروس:</p>
         <input type="text" id="student-code-input" placeholder="🔐 أدخل الكود هنا (مثال: Mo_4321)..." style="text-align: center; font-size: 1.1rem; margin-bottom: 20px;">
-        <button class="btn btn-login" onclick="checkStudent()">🚀 فتح المنصة الآن</button>
+        <button class="btn btn-login" onclick="checkStudent()">🚀 تفعيل وفتح المنصة الآن</button>
     </div>
 </div>
 
+<!-- شاشة التحذير الأمني الذكية -->
 <div id="security-modal">
     <div class="warning-box">
         <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" style="width: 60px; height: 60px; margin-bottom: 15px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
@@ -270,12 +284,17 @@
 
 <div id="wm-container"></div>
 
-<div id="main-content" style="display: none;">
+<!-- المحتوى الرئيسي للمنصة ظاهر للجميع فوراً -->
+<div id="main-content">
     <header class="hero-header">
         <div class="admin-trigger-container">
             <button class="btn btn-header" id="theme-toggle-btn" onclick="toggleTheme()">
                 <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px; height:18px;"></svg>
                 <span id="theme-text">الوضع الليلي</span>
+            </button>
+            
+            <button class="btn btn-login-trigger" id="header-login-btn" onclick="openLoginModal()">
+                🔐 إدخال كود الاشتراك
             </button>
         </div>
         
@@ -289,7 +308,7 @@
     <div class="container">
         <div class="motivation-container">
             <h2>👋 أهلاً بكم في قلعة "المؤسس" للتميز والإبداع!</h2>
-            <p>الرياضيات ليست مجرد أرقام وحسابات، بل هي لغة الأذكياء وطريقك لبناء تفكير عبقري.. ثق بنفسك واجتهد، فالقمة دائماً تتسع للمتميزين! 🚀🏆</p>
+            <p>الرياضيات ليست مجرد أرقام وحسابات، بل هي لغة الأذكياء.. استمتع بالدرس الأول مجاناً في كل مرحلة، وابدأ طريق التفوق! 🚀🏆</p>
         </div>
 
         <div id="grades-view" class="grid"></div>
@@ -343,6 +362,7 @@
     </footer>
 </div>
 
+<!-- الزر العائم للرجوع للخلف -->
 <button id="floating-back-btn" class="floating-back-btn" onclick="showGradesHome()" title="العودة للمراحل الدراسية">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width:24px; height:24px;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
 </button>
@@ -355,9 +375,10 @@
 
     let lessons = JSON.parse(localStorage.getItem('math_lessons')) || (BUILTIN_LESSONS.length > 0 ? BUILTIN_LESSONS : []);
     let completedLessons = JSON.parse(localStorage.getItem('math_completed_lessons')) || [];
-    let openedExams = JSON.parse(localStorage.getItem('math_opened_exams')) || []; // ذاكرة حفظ الامتحانات المفتوحة
+    let openedExams = JSON.parse(localStorage.getItem('math_opened_exams')) || []; 
     let selectedGradeId = null;
     let currentBranchFilter = 'all';
+    let isLoggedIn = false;
 
     let defaultGradesConfig = [
         { id: "6", title: "الصف السادس الابتدائي", desc: "تأسيس هندسي وحسابي متين وبداية طريق الأذكياء", img: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?auto=format&fit=crop&w=600&q=80", colorClass: "border-yellow" },
@@ -369,6 +390,14 @@
     let gradesConfig = JSON.parse(localStorage.getItem('math_grades_config')) || (BUILTIN_GRADES.length > 0 ? BUILTIN_GRADES : defaultGradesConfig);
 
     window.tempStudentData = null;
+
+    function openLoginModal() {
+        document.getElementById('login-overlay').style.display = 'flex';
+    }
+
+    function closeLoginModal() {
+        document.getElementById('login-overlay').style.display = 'none';
+    }
 
     async function checkStudent(forcedCode = null, isAutoLoad = false) {
         const code = forcedCode ? forcedCode : document.getElementById('student-code-input').value.trim();
@@ -390,18 +419,20 @@
                         proceedToPlatform(code, data.lessons, student.name);
                     } else {
                         window.tempStudentData = { code: code, lessons: data.lessons, name: student.name };
+                        document.getElementById('login-overlay').style.display = 'none';
                         document.getElementById('security-modal').style.display = 'flex';
                     }
                 } else {
                     if(isAutoLoad) localStorage.removeItem('user_code');
-                    alert("🔴 هذا الاشتراك معطل أو منتهي! برجاء التواصل مع مستر أحمد جابر لتجديد الاشتراك.");
+                    alert("🔴 هذا الاشتراك معطل أو منتهي! برجاء التواصل مع مستر أحمد جابر.");
                 }
             } else {
                 if(isAutoLoad) localStorage.removeItem('user_code');
-                alert("❌ كود الاشتراك غير صحيح! تأكد من كتابته بشكل سليم.");
+                if(!isAutoLoad) alert("❌ كود الاشتراك غير صحيح! تأكد من كتابته بشكل سليم.");
             }
         } catch(e) {
             console.log("تنبيه: تعذر قراءة data.json");
+            if(!isAutoLoad) alert("⚠️ تعذر التحقق من الكود حالياً. تأكد من وجود ملف data.json");
         }
     }
 
@@ -419,16 +450,23 @@
     }
 
     function proceedToPlatform(code, dataLessons, studentName) {
+        isLoggedIn = true;
         localStorage.setItem('user_code', code);
         if(dataLessons) {
             lessons = dataLessons;
             localStorage.setItem('math_lessons', JSON.stringify(lessons));
         }
-        document.getElementById('login-overlay').style.display = 'none';
-        document.getElementById('main-content').style.display = 'block';
+        closeLoginModal();
+        
+        // تحديث زر الهيدر ليعرض اسم/كود الطالب
+        const headerBtn = document.getElementById('header-login-btn');
+        headerBtn.innerText = `👤 المشترك: ${studentName.split(' ')[0]}`;
+        headerBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+        headerBtn.style.borderColor = '#10b981';
+        headerBtn.onclick = () => alert(`أهلاً بك يا بطل (${studentName}). حسابك نشط وتستمتع بجميع ميزات المنصة! 🚀`);
+
         initWatermark(studentName, code);
-        renderGradeCards();
-        fetchCloudData();
+        renderLessons();
     }
 
     function initWatermark(name, code) {
@@ -541,12 +579,11 @@
         renderLessons();
     }
 
-    // دالة فتح الامتحان وحفظ أنه تم فتحه لكي يظهر زر "تحديد كمنجز"
     function handleExamClick(lessonKey, examUrl) {
         if (!openedExams.includes(lessonKey)) {
             openedExams.push(lessonKey);
             localStorage.setItem('math_opened_exams', JSON.stringify(openedExams));
-            renderLessons(); // إعادة رسم الكروت لإظهار زر تحديد كمنجز فوراً
+            renderLessons();
         }
         window.open(examUrl, '_blank');
     }
@@ -573,12 +610,18 @@
         const allGradeLessons = lessons.filter(l => l.grade === selectedGradeId);
         
         let isPrevLessonCompleted = true; 
-        const lessonsWithLockStatus = allGradeLessons.map(l => {
+        const lessonsWithLockStatus = allGradeLessons.map((l, index) => {
             const lessonKey = `${selectedGradeId}_${l.title}`;
             const isCompleted = completedLessons.includes(lessonKey);
-            const isLocked = !isPrevLessonCompleted;
+            
+            // الدرس الأول (index 0) مجاني دائماً (Free Preview)
+            const isFree = (index === 0);
+            
+            // قفل التتابع: يطبق لو الدرس مش مجاني، أو الطالب مسجل دخول بالفعل
+            const isLockedSeq = !isPrevLessonCompleted;
             isPrevLessonCompleted = isCompleted;
-            return { ...l, lessonKey, isCompleted, isLocked };
+            
+            return { ...l, lessonKey, isCompleted, isFree, isLockedSeq };
         });
 
         const completedGradeLessons = lessonsWithLockStatus.filter(l => l.isCompleted);
@@ -603,13 +646,17 @@
             let branchClass = 'bg-branch-jabr'; if(l.branch === 'هندسة') branchClass = 'bg-branch-handasa'; if(l.branch === 'إحصاء') branchClass = 'bg-branch-ehsa';
             const safeLessonKey = l.lessonKey.replace(/'/g, "\\'");
 
-            if (l.isLocked) {
+            // الحالة الأولى: الطالب غير مسجل دخول والدرس غير مجاني (يحتاج كود اشتراك)
+            if (!isLoggedIn && !l.isFree) {
                 grid.innerHTML += `
-                    <div class="card is-locked" onclick="alert('🔒 عذراً يا بطل! هذا الدرس مغلق. يجب عليك مذاكرة الدرس السابق وحل امتحانه ثم الضغط على (تحديد كمنجز) لفتح هذا الدرس تلقائياً! 🎯')">
-                        <div class="lock-overlay"><div class="lock-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width:20px; height:20px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div></div>
+                    <div class="card is-locked" onclick="openLoginModal()">
+                        <div class="lock-overlay">
+                            <div class="lock-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width:20px; height:20px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>
+                            <span class="lock-text">🔐 حصري للمشتركين (اضغط لفتح المنصة)</span>
+                        </div>
                         <div class="card-img-wrapper"><img class="card-img" src="${finalImgSrc}"></div>
                         <div class="card-content">
-                            <div class="student-status-bar"><span class="branch-badge ${branchClass}">${l.branch || 'جبر'}</span><button class="done-toggle-btn" disabled>📖 مغلق</button></div>
+                            <div class="student-status-bar"><span class="branch-badge ${branchClass}">${l.branch || 'جبر'}</span></div>
                             <h3 class="card-title">${l.title}</h3>
                             <div class="links-grid">
                                 <span class="link-btn btn-expl" style="opacity:0.5;">${icons.expl} فيديو الشرح</span>
@@ -617,13 +664,36 @@
                             </div>
                         </div>
                     </div>`;
-            } else {
-                // شرط إظهار زر الإنجاز: أن يكون الدرس ليس به امتحان أصلاً، أو أن الطالب فتح الامتحان فعلياً، أو أنه تم إنجازه مسبقاً
+            }
+            // الحالة الثانية: الدرس مغلق بنظام التتابع (الطالب مسجل دخول ولكنه لم ينهِ الدرس السابق)
+            else if (isLoggedIn && l.isLockedSeq && !l.isFree) {
+                grid.innerHTML += `
+                    <div class="card is-locked" onclick="alert('🔒 عذراً يا بطل! هذا الدرس مغلق. يجب عليك مذاكرة الدرس السابق وحل امتحانه ثم الضغط على (تحديد كمنجز) لفتح هذا الدرس تلقائياً! 🎯')">
+                        <div class="lock-overlay">
+                            <div class="lock-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width:20px; height:20px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>
+                            <span class="lock-text">🔒 مغلق حتى إنجاز الدرس السابق</span>
+                        </div>
+                        <div class="card-img-wrapper"><img class="card-img" src="${finalImgSrc}"></div>
+                        <div class="card-content">
+                            <div class="student-status-bar"><span class="branch-badge ${branchClass}">${l.branch || 'جبر'}</span></div>
+                            <h3 class="card-title">${l.title}</h3>
+                            <div class="links-grid">
+                                <span class="link-btn btn-expl" style="opacity:0.5;">${icons.expl} فيديو الشرح</span>
+                                <span class="link-btn btn-exam" style="opacity:0.5;">${icons.exam} الامتحان</span>
+                            </div>
+                        </div>
+                    </div>`;
+            } 
+            // الحالة الثالثة: الدرس متاح ومفتوح (سواء أول درس هدية أو طالب مسجل دخول ومجتاز السابق)
+            else {
                 const showDoneBtn = !l.url_exam || openedExams.includes(l.lessonKey) || l.isCompleted;
 
                 grid.innerHTML += `
                     <div class="card">
-                        <div class="card-img-wrapper"><img class="card-img" src="${finalImgSrc}"></div>
+                        <div class="card-img-wrapper">
+                            <img class="card-img" src="${finalImgSrc}">
+                            ${l.isFree ? `<span style="position:absolute; top:12px; right:12px; background:#10b981; color:white; font-size:0.75rem; font-weight:800; padding:4px 12px; border-radius:50px; box-shadow:0 4px 10px rgba(0,0,0,0.3);">🎁 درس تجريبي مجاني</span>` : ''}
+                        </div>
                         <div class="card-content">
                             <div class="student-status-bar">
                                 <span class="branch-badge ${branchClass}">${l.branch || 'جبر'}</span>
@@ -655,12 +725,11 @@
     window.onload = function() { 
         if(localStorage.getItem('math_theme') === 'dark') { document.body.classList.add('dark-mode'); } 
         updateThemeUI(); 
+        renderGradeCards();
 
         const savedCode = localStorage.getItem('user_code');
         if(savedCode) {
             checkStudent(savedCode, true);
-        } else {
-            renderGradeCards();
         }
     };
 </script>
