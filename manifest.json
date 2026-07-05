@@ -2,11 +2,11 @@
   "name": "منصة المؤسس في الرياضيات",
   "short_name": "المؤسس",
   "description": "منصة مستر أحمد جابر للتميز والإبداع في الرياضيات",
-  "start_url": "index.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#0b132b",
-  "orientation": "portrait-primary",
+  "orientation": "any",
   "dir": "rtl",
   "lang": "ar",
   "icons": [
@@ -14,13 +14,13 @@
       "src": "logo.jpg",
       "sizes": "192x192",
       "type": "image/jpeg",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "logo.jpg",
       "sizes": "512x512",
       "type": "image/jpeg",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }
