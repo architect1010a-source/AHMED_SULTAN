@@ -121,14 +121,5 @@
       "url_exam": "exams2/kwanin_algzoor.html"
     }
   ],
-  "allowedCodes": {
-    "Mo_3109": {
-      "name": "احمد جابر محمد",
-      "status": "active"
-    },
-    "Mo_6120": {
-      "name": "روان احمد",
-      "status": "active"
-    }
-  }
+  "allowedCodes": {}
 }
