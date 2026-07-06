@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منصة المؤسس في الرياضيات | مستر أحمد جابر</title>
     
-    <!-- إعدادات التطبيق المستقل (PWA) -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#20262e">
     <meta name="mobile-web-app-capable" content="yes">
@@ -13,7 +12,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="المؤسس">
     
-    <!-- أيقونة المتصفح والشاشة الرئيسية موحدة على ملف logo.jpg -->
     <link rel="icon" type="image/jpeg" href="logo.jpg">
     <link rel="apple-touch-icon" href="logo.jpg">
     
@@ -102,10 +100,20 @@
         }
 
         .hero-header { 
-            background: var(--dark-hero); padding: 60px 20px; text-align: center; position: relative;
+            background: var(--dark-hero); padding: 65px 20px 50px 20px; text-align: center; position: relative;
             box-shadow: 0 10px 30px rgba(11, 19, 43, 0.3); border-bottom: 4px solid #f59e0b;
         }
-        .admin-trigger-container { position: absolute; top: 20px; left: 5%; display: flex; gap: 10px; flex-wrap: wrap; }
+        
+        /* التوزيع الجديد لأزرار الهيدر العلوية */
+        .top-right-controls { position: absolute; top: 18px; right: 4%; z-index: 100; }
+        .top-left-controls { position: absolute; top: 18px; left: 4%; z-index: 100; }
+        
+        @media (max-width: 600px) {
+            .hero-header { padding-top: 75px; }
+            .top-right-controls { top: 14px; right: 12px; }
+            .top-left-controls { top: 14px; left: 12px; }
+        }
+
         .brand-center { display: flex; flex-direction: column; align-items: center; gap: 15px; }
         
         .teacher-avatar-lg {
@@ -120,25 +128,25 @@
             border-radius: 50px; background-color: rgba(245, 158, 11, 0.05); margin-top: 5px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.1);
         }
 
-        .container { padding: 40px 5%; max-width: 1400px; margin: auto; }
+        .container { padding: 35px 5%; max-width: 1400px; margin: auto; }
         .motivation-container {
             background: white; border-left: 5px solid #f59e0b; border-right: 5px solid #f59e0b;
-            border-radius: 16px; padding: 25px; text-align: center; margin-bottom: 25px; box-shadow: var(--card-shadow);
+            border-radius: 16px; padding: 25px; text-align: center; margin-bottom: 30px; box-shadow: var(--card-shadow);
         }
         body.dark-mode .motivation-container { background: #1e293b; }
         .motivation-container h2 { font-size: 1.4rem; color: #1c2541; font-weight: 800; margin-bottom: 10px; }
         body.dark-mode .motivation-container h2 { color: #f8fafc; }
         .motivation-container p { color: var(--text-muted); font-size: 1.05rem; font-weight: 600; }
 
-        /* زر التثبيت الذكي للتطبيق */
+        /* زر التثبيت التحميلي فوق الترحيب مباشرة */
         .install-pwa-btn {
             display: none; align-items: center; justify-content: center; gap: 12px;
             background: linear-gradient(135deg, #f59e0b, #ea580c); color: white; border: none;
-            padding: 16px 28px; border-radius: 16px; font-size: 1.15rem; font-weight: 900; cursor: pointer;
-            margin: 0 auto 35px auto; max-width: 500px; width: 100%;
+            padding: 16px 28px; border-radius: 18px; font-size: 1.18rem; font-weight: 900; cursor: pointer;
+            margin: 0 auto 25px auto; max-width: 550px; width: 100%;
             box-shadow: 0 10px 25px rgba(234, 88, 12, 0.4); animation: pulseBtn 2s infinite;
         }
-        .install-pwa-btn:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 15px 30px rgba(234, 88, 12, 0.6); }
+        .install-pwa-btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 15px 35px rgba(234, 88, 12, 0.6); }
         @keyframes pulseBtn {
             0% { transform: scale(1); }
             50% { transform: scale(1.02); }
@@ -272,7 +280,6 @@
 </head>
 <body>
 
-<!-- بوابة تسجيل الدخول بالكود (تفتح فقط عند الحاجة) -->
 <div id="login-overlay">
     <div class="login-box">
         <button class="close-login-btn" onclick="closeLoginModal()">✕</button>
@@ -284,7 +291,6 @@
     </div>
 </div>
 
-<!-- شاشة التحذير الأمني الذكية -->
 <div id="security-modal">
     <div class="warning-box">
         <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" style="width: 60px; height: 60px; margin-bottom: 15px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
@@ -299,15 +305,16 @@
 
 <div id="wm-container"></div>
 
-<!-- المحتوى الرئيسي للمنصة ظاهر للجميع فوراً -->
 <div id="main-content">
     <header class="hero-header">
-        <div class="admin-trigger-container">
+        <div class="top-right-controls">
             <button class="btn btn-header" id="theme-toggle-btn" onclick="toggleTheme()">
                 <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px; height:18px;"></svg>
                 <span id="theme-text">الوضع الليلي</span>
             </button>
-            
+        </div>
+        
+        <div class="top-left-controls">
             <button class="btn btn-login-trigger" id="header-login-btn" onclick="openLoginModal()">
                 🔐 إدخال كود الاشتراك
             </button>
@@ -321,15 +328,14 @@
     </header>
 
     <div class="container">
+        <button id="custom-install-btn" class="install-pwa-btn" onclick="triggerPwaInstall()">
+            📲 تثبيت منصة المؤسس كتطبيق على هاتفك الآن
+        </button>
+
         <div class="motivation-container">
             <h2>👋 أهلاً بكم في قلعة "المؤسس" للتميز والإبداع!</h2>
             <p>الرياضيات ليست مجرد أرقام وحسابات، بل هي لغة الأذكياء.. استمتع بالدرس الأول مجاناً في كل مرحلة، وابدأ طريق التفوق! 🚀🏆</p>
         </div>
-
-        <!-- زر تثبيت التطبيق الفوري (يظهر تلقائياً عندما يدعم الهاتف التثبيت) -->
-        <button id="custom-install-btn" class="install-pwa-btn" onclick="triggerPwaInstall()">
-            📲 تثبيت منصة المؤسس كتطبيق على هاتفك الآن
-        </button>
 
         <div id="grades-view" class="grid"></div>
 
@@ -382,7 +388,6 @@
     </footer>
 </div>
 
-<!-- الزر العائم للرجوع للخلف -->
 <button id="floating-back-btn" class="floating-back-btn" onclick="showGradesHome()" title="العودة للمراحل الدراسية">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width:24px; height:24px;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
 </button>
