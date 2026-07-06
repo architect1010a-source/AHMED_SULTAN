@@ -3,120 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تثبيت منصة المؤسس في الرياضيات</title>
+    <title>منصة المؤسس في الرياضيات</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;700;900&display=swap" rel="stylesheet">
     
-    <!-- ربط ملف المانيفست الخاص بك لتهيئة التثبيت فوراً -->
     <link rel="manifest" href="manifest.json">
 
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
         body {
+            background-color: #f3f4f6;
+            color: #1e293b;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* الهيدر الكحلي الفاخر مثل السكرين شوت */
+        .header-section {
             background: linear-gradient(135deg, #0b132b, #1c2541);
+            width: 100%;
+            padding: 40px 20px 30px 20px;
+            text-align: center;
+            position: relative;
+            border-bottom: 5px solid #f59e0b; /* الخط الذهبي الفاصل */
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .header-title {
             color: #ffffff;
-            display: flex; justify-content: center; align-items: center;
-            min-height: 100vh; overflow: hidden; position: relative;
-        }
-        body::before {
-            content: ''; position: absolute; border-radius: 50%;
-            background: linear-gradient(135deg, #f59e0b, #ea580c);
-            opacity: 0.08; filter: blur(80px); width: 400px; height: 400px; top: -50px; right: -50px;
+            font-size: 2.4rem;
+            font-weight: 900;
+            margin-bottom: 12px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
-        .install-card {
-            background: rgba(30, 41, 59, 0.5);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 2px solid rgba(245, 158, 11, 0.3);
-            border-radius: 28px; padding: 45px 30px; text-align: center;
-            max-width: 450px; width: 90%; box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        .badge-founder {
+            display: inline-block;
+            border: 2px solid #f59e0b;
+            color: #f59e0b;
+            padding: 5px 25px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: rgba(245, 158, 11, 0.05);
         }
 
-        .avatar {
-            width: 130px; height: 130px; border-radius: 50%;
-            border: 4px solid #f59e0b; box-shadow: 0 0 25px rgba(245, 158, 11, 0.4);
-            margin-bottom: 20px; object-fit: cover;
+        /* حاوي المحتوى الرئيسي ليكون متناسق على الموبايل */
+        .main-container {
+            max-width: 480px;
+            width: 92%;
+            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
-        h1 { font-size: 2rem; font-weight: 900; margin-bottom: 5px; }
-        .subtitle { font-size: 1.2rem; color: #f59e0b; font-weight: 700; margin-bottom: 15px; }
-        .promo-text { font-size: 1rem; color: #94a3b8; margin-bottom: 30px; line-height: 1.6; }
+        /* 📲 الزرار البرتقالي في الأول خالص مع تأثير نبض احترافي */
+        .btn-install-now {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: #ffffff;
+            background: linear-gradient(135deg, #ea580c, #f59e0b);
+            border: none;
+            border-radius: 18px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(234, 88, 12, 0.35);
+            transition: all 0.3s ease;
+            animation: pulseGlow 2s infinite;
+        }
 
-        /* زر التثبيت العملاق */
-        .btn-install {
-            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-            width: 100%; padding: 16px 20px; font-size: 1.25rem; font-weight: 900;
-            color: #ffffff; background: linear-gradient(135deg, #f59e0b, #ea580c);
-            border: none; border-radius: 15px; cursor: pointer;
-            box-shadow: 0 10px 20px rgba(234, 88, 12, 0.3); transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .btn-install:hover {
-            transform: translateY(-3px); box-shadow: 0 15px 25px rgba(234, 88, 12, 0.5);
+        .btn-install-now:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px rgba(234, 88, 12, 0.5);
         }
 
-        /* رابط تخطي التثبيت */
-        .btn-skip {
-            display: inline-block; margin-top: 20px; font-size: 0.95rem;
-            color: #94a3b8; text-decoration: none; transition: color 0.2s;
+        @keyframes pulseGlow {
+            0% { transform: scale(1); box-shadow: 0 10px 25px rgba(234, 88, 12, 0.35); }
+            50% { transform: scale(1.02); box-shadow: 0 10px 35px rgba(234, 88, 12, 0.6); }
+            100% { transform: scale(1); box-shadow: 0 10px 25px rgba(234, 88, 12, 0.35); }
         }
-        .btn-skip:hover { color: #ffffff; text-decoration: underline; }
+
+        /* كارت الترحيب الأبيض ذو الحواف الذهبية */
+        .welcome-card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 30px 24px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border-left: 6px solid #f59e0b;
+            border-right: 6px solid #f59e0b;
+        }
+
+        .welcome-card h2 {
+            font-size: 1.45rem;
+            font-weight: 900;
+            color: #1e293b;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .welcome-card p {
+            font-size: 1.1rem;
+            color: #64748b;
+            line-height: 1.7;
+            font-weight: 700;
+        }
+
+        /* كارت الصورة الدائرية الحرة */
+        .image-card {
+            width: 100%;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            background: #ffffff;
+        }
+
+        .image-card img {
+            width: 100%;
+            display: block;
+            object-fit: cover;
+        }
     </style>
 </head>
 <body>
 
-    <div class="install-card">
-        <img class="avatar" src="https://architect1010a-source.github.io/AHMED_SULTAN/logo.jpg" alt="مستر أحمد جابر">
-        <h1>منصة المؤسس التعليمية</h1>
-        <div class="subtitle">مستر أحمد جابر</div>
-        <p class="promo-text">للحصول على أفضل تجربة متابعة سريعة، وتصفح المحاضرات والامتحانات بدون تقطيع، قم بتثبيت التطبيق على جهازك الآن.</p>
+    <div class="header-section">
+        <h1 class="header-title">مستر أحمد جابر</h1>
+        <div class="badge-founder">المؤسس في الرياضيات</div>
+    </div>
+
+    <div class="main-container">
         
-        <!-- زر التثبيت البرمجي الذكي -->
-        <button id="installBtn" class="btn-install">
-            <span>📥 تحميل المنصة كتطبيق</span>
+        <button id="pwaInstallBtn" class="btn-install-now">
+            <span>📲 تثبيت منصة المؤسس كتطبيق على هاتفك الآن</span>
         </button>
 
-        <!-- رابط تخطي لمن يفضل المتصفح -->
-        <a href="main_platform.html" class="btn-skip">أو الدخول عبر المتصفح مباشرة 🌐</a>
+        <div class="welcome-card">
+            <h2>👋 أهلاً بكم في قلعة "المؤسس" للتميز والإبداع!</h2>
+            <p>الرياضيات ليست مجرد أرقام وحسابات، بل هي لغة الأذكياء.. استمتع بالدرس الأول مجاناً في كل مرحلة، وابدأ طريق التفوق! 🚀🏆</p>
+        </div>
+
+        <div class="image-card">
+            <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=600&q=80" alt="امتحانات المؤسس">
+        </div>
+
     </div>
 
     <script>
-        // تسجيل السيرفس وركر لضمان تفعيل الـ PWA فوراً
+        // تسجيل السيرفس وركر لتهيئة بيئة الـ PWA
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js')
-            .then(() => console.log('Service Worker Registered[cite: 1]'))
-            .catch(err => console.log('Service Worker Failed', err));
+            .then(() => console.log('Service Worker Active'))
+            .catch(err => console.log('Service Worker Error', err));
         }
 
         let deferredPrompt;
-        const installBtn = document.getElementById('installBtn');
+        const installBtn = document.getElementById('pwaInstallBtn');
 
-        // التقاط حدث التثبيت من المتصفح وحفظه
+        // التقاط رسالة التثبيت الرسمية من المتصفح وحفظها للزرار
         window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault(); // منع المتصفح من إظهار شريطه السفلي التلقائي
-            deferredPrompt = e; // حفظ الحدث لتشغيله عند ضغط الطالب
-            console.log('جاهز للتثبيت الفوري!');
+            e.preventDefault();
+            deferredPrompt = e;
+            console.log('جاهز للتثبيت الفوري عند ضغط المستر!');
         });
 
-        // تشغيل نافذة التثبيت فور ضغط الطالب على الزرار
+        // تنفيذ عملية التثبيت الفعلية بمجرد ضغط الطالب
         installBtn.addEventListener('click', async () => {
             if (deferredPrompt) {
-                deferredPrompt.prompt(); // إظهار نافذة التثبيت الرسمية فوراً
+                deferredPrompt.prompt(); // إظهار نافذة جوجل كروم الرسمية للتثبيت فوراً
                 const { outcome } = await deferredPrompt.userChoice;
                 if (outcome === 'accepted') {
-                    console.log('الطالب وافق على التثبيت');
-                    window.location.href = "main_platform.html"; // توجيهه للمنصة بعد التثبيت
+                    console.log('الطالب قام بتنزيل التطبيق بنجاح!');
                 }
                 deferredPrompt = null;
             } else {
-                // إذا كان المتصفح لا يدعم أو التطبيق مثبت بالفعل، ينقله للمنصة مباشرة
-                window.location.href = "main_platform.html";
+                // رسالة ذكية تظهر إذا كان التطبيق نازل بالفعل عند الطالب أو المتصفح لا يدعم
+                alert('التطبيق جاهز ومثبت بالفعل على شاشة هاتف الرئيسية، أو جهازك يدخلك للمنصة مباشرة! 🚀');
             }
-        });
-
-        // إذا تم التثبيت بنجاح بالفعل، انقله تلقائياً للمنصة
-        window.addEventListener('appinstalled', () => {
-            console.log('تم التثبيت بنجاح!');
-            window.location.href = "main_platform.html";
         });
     </script>
 
