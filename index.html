@@ -82,10 +82,8 @@
         .warning-box h3 { color: #ef4444; font-weight: 900; font-size: 1.6rem; margin-bottom: 15px; }
         .warning-box p { color: #cbd5e1; font-weight: 600; font-size: 1.05rem; margin-bottom: 25px; line-height: 1.7; }
         .warning-btns { display: flex; gap: 15px; }
-        .btn-no { background: #22c55e; flex: 1; padding: 12px; font-weight: 700; border-radius: 12px; border:none; color:white; cursor:pointer;}
-        .btn-no:hover { background: #16a34a; transform: translateY(-2px); }
-        .btn-yes { background: #ef4444; flex: 1; padding: 12px; font-weight: 700; border-radius: 12px; border:none; color:white; cursor:pointer;}
-        .btn-yes:hover { background: #dc2626; transform: translateY(-2px); }
+        .btn-agree { background: #22c55e; width: 100%; padding: 14px; font-size: 1.1rem; font-weight: 800; border-radius: 12px; border:none; color:white; cursor:pointer;}
+        .btn-agree:hover { background: #16a34a; transform: translateY(-2px); }
 
         /* 🎬 تصميم نافذة عرض الفيديو السينمائية المدمجة داخل التطبيق */
         #video-popup-overlay {
@@ -309,7 +307,7 @@
 </head>
 <body>
 
-<!-- 🎬 الشاشة المنبثقة الذكية لعرض فيديوهات اليوتيوب داخل المنصة (تم إضافة زر التكبير) -->
+<!-- 🎬 الشاشة المنبثقة الذكية لعرض فيديوهات اليوتيوب داخل المنصة -->
 <div id="video-popup-overlay">
     <div class="video-popup-container" id="video-popup-container">
         <!-- زر الإغلاق -->
@@ -336,15 +334,14 @@
     </div>
 </div>
 
-<!-- شاشة التحذير الأمني الذكية -->
+<!-- شاشة التحذير الأمني الذكية المحدثة -->
 <div id="security-modal">
     <div class="warning-box">
         <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" style="width: 60px; height: 60px; margin-bottom: 15px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-        <h3>⚠️ تحذير أمني هام وعاجل!</h3>
-        <p>هل قمت بكتابة أو فتح هذا الكود في موبايل أو جهاز آخر من قبل؟<br><br><strong>احذر:</strong> مشاركة هذا الكود مع أي شخص آخر أو تشغيله على أكثر من جهاز قد يعرض حسابك ومنصتك للغلق النهائي فوراً والتحقيق القانوني!</p>
+        <h3>⚠️ تعليمات أمنية هامة!</h3>
+        <p><strong>احذر:</strong> مشاركة هذا الكود مع أي شخص آخر أو تشغيله على أكثر من جهاز قد يعرض حسابك ومنصتك للغلق النهائي فوراً والتحقيق القانوني.</p>
         <div class="warning-btns">
-            <button class="btn-no" onclick="handleWarningResponse(false)">❌ لا، هذا جهازي الأول والوحيد</button>
-            <button class="btn-yes" onclick="handleWarningResponse(true)">⚠️ نعم، فتحته على جهاز آخر</button>
+            <button class="btn-agree" onclick="acceptSecurityWarning()">✅ أوافق على الشروط</button>
         </div>
     </div>
 </div>
@@ -442,7 +439,7 @@
 
 <script>
     // -----------------------------------------------------------
-    // إعدادات المنصة الأساسية (لم يتم تغييرها)
+    // إعدادات المنصة الأساسية 
     // -----------------------------------------------------------
     const GOOGLE_SHEET_ID = "1fpd9X0CYOArq59vhqjaruBTVrb2ZPxMeNoDz5briLwA"; 
 
@@ -491,7 +488,6 @@
         }
     }
 
-    // الدالة الجديدة لتكبير حاوية الفيديو بالكامل
     function toggleFullScreenVideo() {
         const container = document.getElementById('video-popup-container');
         if (!document.fullscreenElement) {
@@ -548,16 +544,13 @@
         }
     }
 
-    function handleWarningResponse(isShared) {
-        if (isShared) {
-            alert("🚨 من فضلك تواصل مع مستر أحمد جابر ليعطيك إذن تفعيل للجهاز الآخر ويتم اعتماد حسابك.");
-        } else {
-            if (window.tempStudentData) {
-                const s = window.tempStudentData;
-                localStorage.setItem('warning_cleared_' + s.code, 'true');
-                document.getElementById('security-modal').style.display = 'none';
-                proceedToPlatform(s.code, s.lessons, s.name);
-            }
+    // دالة الموافقة على شروط الأمان المعدلة
+    function acceptSecurityWarning() {
+        if (window.tempStudentData) {
+            const s = window.tempStudentData;
+            localStorage.setItem('warning_cleared_' + s.code, 'true');
+            document.getElementById('security-modal').style.display = 'none';
+            proceedToPlatform(s.code, s.lessons, s.name);
         }
     }
 
