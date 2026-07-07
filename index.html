@@ -84,6 +84,27 @@
         .btn-no:hover { background: #16a34a; transform: translateY(-2px); }
         .btn-yes { background: #ef4444; flex: 1; padding: 12px; font-weight: 700; border-radius: 12px; border:none; color:white; cursor:pointer;}
         .btn-yes:hover { background: #dc2626; transform: translateY(-2px); }
+
+        /* 🎬 تصميم نافذة عرض الفيديو السينمائية المدمجة داخل التطبيق */
+        #video-popup-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.92); backdrop-filter: blur(8px);
+            display: none; align-items: center; justify-content: center;
+            z-index: 30000; padding: 15px;
+        }
+        .video-popup-container {
+            background: #1e293b; width: 100%; max-width: 850px; border-radius: 24px;
+            border: 2px solid #f59e0b; overflow: hidden; position: relative;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.7);
+        }
+        .close-video-btn {
+            position: absolute; top: 12px; left: 12px; background: rgba(255,255,255,0.2);
+            border: none; color: white; width: 38px; height: 38px; border-radius: 50%;
+            font-size: 16px; cursor: pointer; z-index: 100; display: flex; align-items: center; justify-content: center;
+        }
+        .close-video-btn:hover { background: #ef4444; }
+        .video-ratio-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; }
+        .video-ratio-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
         
         .watermark {
             position: fixed; font-size: 28px; color: rgba(148, 163, 184, 0.07);
@@ -280,6 +301,15 @@
 </head>
 <body>
 
+<div id="video-popup-overlay">
+    <div class="video-popup-container">
+        <button class="close-video-btn" onclick="closeVideoModal()">✕</button>
+        <div class="video-ratio-wrapper">
+            <iframe id="popup-youtube-iframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
 <div id="login-overlay">
     <div class="login-box">
         <button class="close-login-btn" onclick="closeLoginModal()">✕</button>
@@ -350,7 +380,7 @@
 
             <div class="progress-section">
                 <div class="progress-info">
-                    <span>📊 مؤشر مستوى إنجازك ومذاكرتك لهذا الصف:</span>
+                    <span>📊 مؤشر مستوى إنجازك ومذاكرتك لهذا صف:</span>
                     <span id="progress-percent-text">0%</span>
                 </div>
                 <div class="progress-bar-bg">
@@ -424,6 +454,25 @@
         document.getElementById('login-overlay').style.display = 'none';
     }
 
+    // 🖥️ دالة تشغيل فيديوهات اليوتيوب داخل المنصة سينمائياً
+    function openVideoModal(videoUrl) {
+        const videoId = getYoutubeId(videoUrl);
+        if (videoId) {
+            // نقوم بإنشاء رابط التضمين المباشر مع تفعيل التشغيل التلقائي ومنع اقتراحات المنافسين
+            const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
+            document.getElementById('popup-youtube-iframe').src = embedUrl;
+            document.getElementById('video-popup-overlay').style.display = 'flex';
+        } else {
+            alert("⚠️ عذراً يا بطل! رابط الفيديو هذا غير صالح أو ليس من يوتيوب.");
+        }
+    }
+
+    // ❌ دالة إغلاق الفيديو وإيقاف الصوت فوراً
+    function closeVideoModal() {
+        document.getElementById('popup-youtube-iframe').src = "";
+        document.getElementById('video-popup-overlay').style.display = 'none';
+    }
+
     async function checkStudent(forcedCode = null, isAutoLoad = false) {
         const code = forcedCode ? forcedCode : document.getElementById('student-code-input').value.trim();
         if(!code) {
@@ -483,7 +532,6 @@
         }
         closeLoginModal();
         
-        // تحديث زر الهيدر ليعرض اسم/كود الطالب
         const headerBtn = document.getElementById('header-login-btn');
         headerBtn.innerText = `👤 المشترك: ${studentName.split(' ')[0]}`;
         headerBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
@@ -638,11 +686,7 @@
         const lessonsWithLockStatus = allGradeLessons.map((l, index) => {
             const lessonKey = `${selectedGradeId}_${l.title}`;
             const isCompleted = completedLessons.includes(lessonKey);
-            
-            // الدرس الأول (index 0) مجاني دائماً (Free Preview)
             const isFree = (index === 0);
-            
-            // قفل التتابع: يطبق لو الدرس مش مجاني، أو الطالب مسجل دخول بالفعل
             const isLockedSeq = !isPrevLessonCompleted;
             isPrevLessonCompleted = isCompleted;
             
@@ -671,7 +715,10 @@
             let branchClass = 'bg-branch-jabr'; if(l.branch === 'هندسة') branchClass = 'bg-branch-handasa'; if(l.branch === 'إحصاء') branchClass = 'bg-branch-ehsa';
             const safeLessonKey = l.lessonKey.replace(/'/g, "\\'");
 
-            // الحالة الأولى: الطالب غير مسجل دخول والدرس غير مجاني (يحتاج كود اشتراك)
+            // روابط منسقة ومحمية برمجياً لتشغيل دالة الـ Popup البديلة
+            const urlExplClean = l.url_expl ? l.url_expl.replace(/'/g, "\\'") : '';
+            const urlSolClean = l.url_sol ? l.url_sol.replace(/'/g, "\\'") : '';
+
             if (!isLoggedIn && !l.isFree) {
                 grid.innerHTML += `
                     <div class="card is-locked" onclick="openLoginModal()">
@@ -690,7 +737,6 @@
                         </div>
                     </div>`;
             }
-            // الحالة الثانية: الدرس مغلق بنظام التتابع (الطالب مسجل دخول ولكنه لم ينهِ الدرس السابق)
             else if (isLoggedIn && l.isLockedSeq && !l.isFree) {
                 grid.innerHTML += `
                     <div class="card is-locked" onclick="alert('🔒 عذراً يا بطل! هذا الدرس مغلق. يجب عليك مذاكرة الدرس السابق وحل امتحانه ثم الضغط على (تحديد كمنجز) لفتح هذا الدرس تلقائياً! 🎯')">
@@ -709,10 +755,10 @@
                         </div>
                     </div>`;
             } 
-            // الحالة الثالثة: الدرس متاح ومفتوح (سواء أول درس هدية أو طالب مسجل دخول ومجتاز السابق)
             else {
                 const showDoneBtn = !l.url_exam || openedExams.includes(l.lessonKey) || l.isCompleted;
 
+                // هنا تم استبدال الـ <a> بـ <span> مع إضافة حدث onclick لتشغيل المودال السينمائي
                 grid.innerHTML += `
                     <div class="card">
                         <div class="card-img-wrapper">
@@ -729,9 +775,9 @@
                             </div>
                             <h3 class="card-title">${l.title}</h3>
                             <div class="links-grid">
-                                ${l.url_expl ? `<a href="${l.url_expl}" target="_blank" class="link-btn btn-expl">${icons.expl} فيديو الشرح</a>` : ''}
+                                ${l.url_expl ? `<span onclick="openVideoModal('${urlExplClean}')" class="link-btn btn-expl">${icons.expl} فيديو الشرح</span>` : ''}
                                 ${l.url_work ? `<a href="${l.url_work}" target="_blank" class="link-btn btn-work">${icons.work} تحميل الواجب</a>` : ''}
-                                ${l.url_sol ? `<a href="${l.url_sol}" target="_blank" class="link-btn btn-sol">${icons.sol} فيديو الحل</a>` : ''}
+                                ${l.url_sol ? `<span onclick="openVideoModal('${urlSolClean}')" class="link-btn btn-sol">${icons.sol} فيديو الحل</span>` : ''}
                                 ${l.url_exam ? `<span onclick="handleExamClick('${safeLessonKey}', '${l.url_exam}')" class="link-btn btn-exam">${icons.exam} الامتحان</span>` : ''}
                             </div>
                         </div>
@@ -747,7 +793,6 @@
         else { icon.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="none" stroke="currentColor" stroke-width="2.5"></path>`; text.innerText = "الوضع الليلي"; }
     }
 
-    // --- أكواد تسجيل السيرفس وركر والتحكم في زر التثبيت الـ PWA ---
     let deferredPrompt;
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
