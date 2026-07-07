@@ -121,5 +121,10 @@
       "url_exam": "exams2/kwanin_algzoor.html"
     }
   ],
-  "allowedCodes": {}
+  "allowedCodes": {
+    "Mo_2226": {
+      "name": "احمد جابر محمد",
+      "status": "active"
+    }
+  }
 }
