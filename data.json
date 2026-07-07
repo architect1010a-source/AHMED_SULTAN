@@ -125,6 +125,40 @@
     "Mo_2226": {
       "name": "احمد جابر محمد",
       "status": "active"
+    },
+    "Mo_1668": {
+      "name": "روان احمد عبد العزيز",
+      "status": "active"
     }
-  }
+  },
+  "gradesConfig": [
+    {
+      "id": "6",
+      "title": "الصف السادس الابتدائي",
+      "desc": "تأسيس هندسي وحسابي متين وبداية طريق الأذكياء",
+      "img": "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?auto=format&fit=crop&w=600&q=80",
+      "colorClass": "border-yellow"
+    },
+    {
+      "id": "1_prep",
+      "title": "الصف الأول الاعدادي",
+      "desc": "أهلاً بك في عالم المفاهيم الجبرية والتحليلات الهندسية الفاخرة",
+      "img": "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=600&q=80",
+      "colorClass": "border-purple"
+    },
+    {
+      "id": "2_prep",
+      "title": "الصف الثاني الاعدادي",
+      "desc": "تعميق النظريات وحل المعادلات الرياضية الكبرى بثقة وإتقان",
+      "img": "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=600&q=80",
+      "colorClass": "border-green"
+    },
+    {
+      "id": "3_prep",
+      "title": "الصف الثالث الاعدادي",
+      "desc": "سنة الشهادة الحاسمة.. نحو القمة والدرجات النهائية دائماً",
+      "img": "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=600&q=80",
+      "colorClass": "border-orange"
+    }
+  ]
 }
