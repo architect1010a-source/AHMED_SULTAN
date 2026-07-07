@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لوحة تحكم المعلم الذكية | منصة المؤسس</title>
-<!-- أيقونة المتصفح الافتراضية (Favicon) -->
-<link rel="icon" type="image/png" href="logo.png">
-
-<!-- أيقونة الشاشة الرئيسية للهواتف الذكية (أندرويد وآيفون) -->
-<link rel="apple-touch-icon" href="logo.png">
+    <link rel="icon" type="image/png" href="logo.jpg">
+    <link rel="apple-touch-icon" href="logo.jpg">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root { 
@@ -22,22 +19,20 @@
         * { box-sizing: border-box; font-family: 'Cairo', sans-serif; margin: 0; padding: 0; }
         body { background-color: var(--bg-body); color: var(--text-dark); padding: 40px 20px; }
         
-        /* شاشة الدخول الفخمة */
         #login-screen {
-            max-width: 450px; margin: 100px auto; background: white; padding: 40px; 
+            max-width: 500px; margin: 100px auto; background: white; padding: 40px; 
             border-radius: 24px; box-shadow: var(--card-shadow); text-align: center;
             border-top: 5px solid #f59e0b;
         }
-        #login-screen h2 { margin-bottom: 20px; font-weight: 800; }
+        #login-screen h2 { margin-bottom: 10px; font-weight: 900; color: #1c2541; }
         
-        /* لوحة التحكم الرئيسية */
         #admin-workspace { display: none; max-width: 1200px; margin: auto; }
         
         .admin-panel { 
             background: white; padding: 35px; border-radius: 24px; 
             margin-bottom: 40px; border: 1px solid #e2e8f0; box-shadow: var(--card-shadow);
         }
-        .admin-header { display: flex; align-items: center; gap: 12px; margin-bottom: 25px; }
+        .admin-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 25px; }
         .admin-header h2 { font-weight: 900; font-size: 1.6rem; color: #1c2541; }
         
         .input-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 25px; }
@@ -50,18 +45,24 @@
         .btn { 
             display: flex; align-items: center; justify-content: center; gap: 8px;
             padding: 14px 24px; border: none; border-radius: 12px; cursor: pointer; 
-            color: white; font-size: 1rem; font-weight: 700; text-decoration: none; 
+            color: white; font-size: 1rem; font-weight: 700; text-decoration: none; transition: transform 0.2s;
         }
+        .btn:hover { transform: translateY(-2px); }
         .btn-primary { background: linear-gradient(135deg, #1c2541, #2563eb); width: 100%; }
-        .admin-actions { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px; padding-top: 20px; border-top: 2px dashed #e2e8f0; }
         
-        /* جدول استعراض وتعديل الدروس الحالي */
-        .preview-section { background: white; padding: 30px; border-radius: 24px; box-shadow: var(--card-shadow); margin-bottom: 40px; }
+        /* مؤشر التحميل والمزامنة السحابية */
+        #sync-status {
+            display: none; position: fixed; top: 20px; right: 20px; background: #10b981; 
+            color: white; padding: 12px 25px; border-radius: 50px; font-weight: 800;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4); z-index: 9999;
+        }
+
+        .preview-section { background: white; padding: 30px; border-radius: 24px; box-shadow: var(--card-shadow); margin-bottom: 40px; overflow-x: auto; }
         .preview-title { font-weight: 800; font-size: 1.3rem; margin-bottom: 20px; }
-        table { width: 100%; border-collapse: collapse; text-align: right; margin-top: 15px; }
+        table { width: 100%; border-collapse: collapse; text-align: right; margin-top: 15px; min-width: 600px; }
         th, td { padding: 14px; border-bottom: 1px solid #e2e8f0; font-weight: 600; }
         th { background: #f1f5f9; color: #1c2541; font-weight: 800; }
-        .action-btn { padding: 6px 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 0.85rem; }
+        .action-btn { padding: 6px 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 0.85rem; margin: 2px;}
         .btn-edit { background: #e0f2fe; color: #0369a1; }
         .btn-delete { background: #fee2e2; color: #b91c1c; }
         .btn-move { background: #f1f5f9; color: #475569; }
@@ -69,18 +70,21 @@
 </head>
 <body>
 
+    <div id="sync-status">⏳ جاري المزامنة مع جيت هب...</div>
+
     <div id="login-screen">
         <svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" style="width: 60px; height: 60px; margin-bottom: 15px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-        <h2>لوحة إدارة المؤسس</h2>
-        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">الرجاء إدخال رمز التحقق الآمن لفتح الصلاحيات المعيارية</p>
-        <input type="password" id="admin-pass-input" placeholder="🔐 أدخل كلمة المرور هنا..." style="text-align: center; margin-bottom: 20px;">
-        <button class="btn btn-primary" onclick="verifyAdminAccess()">دخول اللوحة الآمنة</button>
+        <h2>لوحة إدارة المؤسس السحابية</h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 25px; line-height: 1.6;">اللوحة مرتبطة الآن بسيرفرات GitHub مباشرة.<br>الرجاء إدخال مفتاح الـ Token الآمن الخاص بك.</p>
+        <input type="password" id="admin-pass-input" placeholder="🔑 أدخل مفتاح GitHub Token هنا..." style="text-align: center; margin-bottom: 20px; font-family: monospace;">
+        <button id="login-btn" class="btn btn-primary" onclick="verifyAdminAccess()">دخول اللوحة الآمنة</button>
     </div>
 
     <div id="admin-workspace">
         <div class="admin-panel">
             <div class="admin-header">
                 <h2>لوحة تحكم المعلم الذكية ⚙️</h2>
+                <button class="btn" style="background: #ef4444; padding: 8px 15px; font-size: 0.85rem;" onclick="logout()">تسجيل الخروج</button>
             </div>
             
             <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:12px;">➕ إضافة أو تعديل درس تعليمي:</h3>
@@ -97,7 +101,7 @@
                     <option value="إحصاء">فرع الإحصاء</option>
                 </select>
                 <input type="text" id="title" placeholder="📚 عنوان الدرس الجديد...">
-                <input type="text" id="img" placeholder="🖼️ اتركها فارغة لجلاف اليوتيوب تلقائياً...">
+                <input type="text" id="img" placeholder="🖼️ اتركها فارغة لغلاف اليوتيوب تلقائياً...">
             </div>
             <div class="input-group" style="margin-top: -10px;">
                 <input type="text" id="url_expl" placeholder="▶️ رابط فيديو الشرح الرئيسي من اليوتيوب">
@@ -107,10 +111,10 @@
             </div>
             
             <button id="save-btn" class="btn btn-primary" onclick="saveLesson()">
-                اعتماد وحفظ الدرس في المنصة
+                ☁️ اعتماد وحفظ الدرس ورفعه للمنصة فوراً
             </button>
 
-            <div style="margin-top: 25px; padding-top: 25px; border-top: 2px dashed #e2e8f0; margin-bottom: 25px;">
+            <div style="margin-top: 35px; padding-top: 25px; border-top: 2px dashed #e2e8f0;">
                 <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 12px;">🛠️ تعديل الكروت الرئيسية الأربعة:</h3>
                 <div class="input-group">
                     <select id="edit-grade-select" onchange="loadGradeToConfigForm()">
@@ -124,14 +128,8 @@
                     <input type="text" id="grade-img-input" placeholder="رابط غلاف صورة الكارت...">
                 </div>
                 <button class="btn" style="background: #0f172a; width: 100%;" onclick="updateGradeCardConfig()">
-                    💾 حفظ تعديلات كارت الصف المختار فوراً
+                    ☁️ حفظ تعديلات كارت الصف المختار ورفعها للمنصة
                 </button>
-            </div>
-
-            <div class="admin-actions">
-                <button class="btn" style="background: #059669;" onclick="exportData()">💾 تصدير قاعدة البيانات (JSON)</button>
-                <input type="file" id="importFile" style="display:none" onchange="importData(event)" accept=".json">
-                <button class="btn" style="background: #f59e0b; color: #0b132b;" onclick="document.getElementById('importFile').click()">📤 استيراد قاعدة البيانات (JSON)</button>
             </div>
         </div>
 
@@ -147,7 +145,7 @@
                 </div>
             </div>
             <button class="btn" style="background: linear-gradient(135deg, #059669, #10b981); width: 100%;" onclick="addStudent()">
-                ➕ إضافة الطالب لقائمة المشتركين
+                ☁️ إضافة الطالب لقائمة المشتركين وتحديث السيرفر
             </button>
             
             <div class="preview-section" style="margin-top: 25px; box-shadow: none; padding: 0;">
@@ -184,42 +182,157 @@
     </div>
 
 <script>
-    const CRYPT_HASH = "MTIzNA=="; 
+    // --- إعدادات جيت هب الأساسية لحسابك ---
+    const GITHUB_OWNER = 'architect1010a-source'; 
+    const GITHUB_REPO = 'AHMED_SULTAN';
+    const GITHUB_FILE_PATH = 'data.json';
+    let GITHUB_TOKEN = '';
+    let currentFileSha = '';
 
-    let lessons = JSON.parse(localStorage.getItem('math_lessons')) || [];
-    let students = JSON.parse(localStorage.getItem('math_students')) || {}; // قاعدة بيانات الطلاب الجديدة
+    // --- متغيرات المنصة ---
+    let lessons = [];
+    let students = {};
     let editIndex = -1;
-
     let defaultGradesConfig = [
         { id: "6", title: "الصف السادس الابتدائي", desc: "تأسيس هندسي وحسابي متين وبداية طريق الأذكياء", img: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?auto=format&fit=crop&w=600&q=80", colorClass: "border-yellow" },
         { id: "1_prep", title: "الصف الأول الاعدادي", desc: "أهلاً بك في عالم المفاهيم الجبرية والتحليلات الهندسية الفاخرة", img: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=600&q=80", colorClass: "border-purple" },
         { id: "2_prep", title: "الصف الثاني الاعدادي", desc: "تعميق النظريات وحل المعادلات الرياضية الكبرى بثقة وإتقان", img: "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=600&q=80", colorClass: "border-green" },
         { id: "3_prep", title: "الصف الثالث الاعدادي", desc: "سنة الشهادة الحاسمة.. نحو القمة والدرجات النهائية دائماً", img: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=600&q=80", colorClass: "border-orange" }
     ];
-    let gradesConfig = JSON.parse(localStorage.getItem('math_grades_config')) || defaultGradesConfig;
+    let gradesConfig = defaultGradesConfig;
 
-    function verifyAdminAccess() {
-        const input = document.getElementById("admin-pass-input").value;
-        if(btoa(input) === CRYPT_HASH) {
+    // --- دالة فك التشفير الآمنة للغة العربية ---
+    function decodeBase64UTF8(base64) {
+        return decodeURIComponent(escape(atob(base64)));
+    }
+
+    // --- دالة التشفير الآمنة للغة العربية ---
+    function encodeBase64UTF8(str) {
+        return btoa(unescape(encodeURIComponent(str)));
+    }
+
+    // --- دالة الاتصال بجيت هب وجلب البيانات ---
+    async function fetchGitHubData() {
+        const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE_PATH}`;
+        try {
+            const response = await fetch(url, {
+                headers: { 'Authorization': `Bearer ${GITHUB_TOKEN}` }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                currentFileSha = data.sha;
+                const content = JSON.parse(decodeBase64UTF8(data.content));
+                
+                lessons = content.lessons || [];
+                students = content.allowedCodes || {};
+                gradesConfig = content.gradesConfig || defaultGradesConfig;
+                return true;
+            } else if (response.status === 404) {
+                // الملف غير موجود بعد، سيتم إنشاؤه عند أول حفظ
+                return true;
+            } else {
+                alert('❌ خطأ في الاتصال! تأكد أن الـ Token صحيح ومسموح له بتعديل الـ Repos.');
+                return false;
+            }
+        } catch (error) {
+            alert('تعذر الاتصال بالسيرفر. تحقق من اتصالك بالإنترنت.');
+            return false;
+        }
+    }
+
+    // --- دالة المزامنة ورفع البيانات لجيت هب ---
+    async function syncWithGitHub() {
+        const statusEl = document.getElementById('sync-status');
+        statusEl.style.display = 'block';
+        
+        const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE_PATH}`;
+        const contentObj = {
+            lessons: lessons,
+            allowedCodes: students,
+            gradesConfig: gradesConfig
+        };
+        
+        const contentBase64 = encodeBase64UTF8(JSON.stringify(contentObj, null, 2));
+
+        const body = {
+            message: 'تحديث بيانات منصة المؤسس عبر لوحة التحكم الذكية',
+            content: contentBase64
+        };
+        if (currentFileSha) body.sha = currentFileSha;
+
+        try {
+            const response = await fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${GITHUB_TOKEN}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                currentFileSha = data.content.sha; // تحديث الـ SHA للعمليات القادمة
+                statusEl.innerText = "✅ تمت المزامنة بنجاح!";
+                setTimeout(() => statusEl.style.display = 'none', 2000);
+            } else {
+                statusEl.style.background = "#ef4444";
+                statusEl.innerText = "❌ فشلت المزامنة!";
+                alert('حدث خطأ أثناء المزامنة مع السيرفر السحابي!');
+                setTimeout(() => { statusEl.style.display = 'none'; statusEl.style.background = "#10b981"; statusEl.innerText = "⏳ جاري المزامنة مع جيت هب..."; }, 3000);
+            }
+        } catch (e) {
+            alert('حدث خطأ في الشبكة أثناء الرفع!');
+            statusEl.style.display = 'none';
+        }
+    }
+
+    // --- تسجيل الدخول بالتوكن ---
+    async function verifyAdminAccess() {
+        const tokenInput = document.getElementById("admin-pass-input").value.trim();
+        if(!tokenInput) return alert("الرجاء إدخال الـ Token الخاص بك! 🔑");
+        
+        const loginBtn = document.getElementById("login-btn");
+        loginBtn.innerText = "⏳ جاري التحقق والاتصال بسيرفرات GitHub...";
+        loginBtn.disabled = true;
+
+        GITHUB_TOKEN = tokenInput;
+        const success = await fetchGitHubData();
+        
+        if(success) {
+            localStorage.setItem('admin_github_token', GITHUB_TOKEN);
             document.getElementById("login-screen").style.display = "none";
             document.getElementById("admin-workspace").style.display = "block";
             loadGradeToConfigForm();
             refreshAdminTable();
-            refreshStudentsTable(); // تحديث جدول الطلاب عند الدخول
+            refreshStudentsTable();
         } else {
-            alert("رمز التحقق الآمن غير صحيح! ❌");
+            loginBtn.innerText = "دخول اللوحة الآمنة";
+            loginBtn.disabled = false;
         }
     }
 
+    function logout() {
+        localStorage.removeItem('admin_github_token');
+        location.reload();
+    }
+
+    // استرجاع التوكن التلقائي عند فتح الصفحة
+    window.onload = function() {
+        const savedToken = localStorage.getItem('admin_github_token');
+        if(savedToken) {
+            document.getElementById("admin-pass-input").value = savedToken;
+        }
+    };
+
+    // --- أكواد إدارة الواجهة والبيانات (معدلة للمزامنة السحابية) ---
     function refreshAdminTable() {
         const tbody = document.querySelector("#admin-lessons-table tbody");
         tbody.innerHTML = "";
-        
         if(lessons.length === 0) {
             tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">لا توجد دروس مضافة حالياً.</td></tr>`;
             return;
         }
-
         lessons.forEach((l, idx) => {
             tbody.innerHTML += `
                 <tr>
@@ -238,7 +351,6 @@
         });
     }
 
-    /* ---- أكواد إدارة الطلاب الجديدة ---- */
     function generateRandomCode() {
         const rand = Math.floor(1000 + Math.random() * 9000);
         document.getElementById('student-code').value = `Mo_${rand}`;
@@ -247,13 +359,11 @@
     function refreshStudentsTable() {
         const tbody = document.querySelector("#admin-students-table tbody");
         tbody.innerHTML = "";
-        
         const keys = Object.keys(students);
         if(keys.length === 0) {
             tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">لا يوجد طلاب مضافين حالياً.</td></tr>`;
             return;
         }
-
         keys.forEach(code => {
             const s = students[code];
             const statusText = s.status === 'active' ? '🟢 نشط' : '🔴 اشتراك ملغي';
@@ -273,39 +383,36 @@
         });
     }
 
-    function addStudent() {
+    async function addStudent() {
         const name = document.getElementById('student-name').value.trim();
         const code = document.getElementById('student-code').value.trim();
-
         if(!name || !code) return alert("برجاء إدخال اسم الطالب والكود معاً!");
 
         students[code] = { name: name, status: 'active' };
-        localStorage.setItem('math_students', JSON.stringify(students));
-        
         document.getElementById('student-name').value = "";
         document.getElementById('student-code').value = "";
         refreshStudentsTable();
-        alert("تم إضافة الطالب بنجاح وقفل حسابه على الكود المختار! 👥");
+        
+        await syncWithGitHub();
     }
 
-    function toggleStudentStatus(code) {
+    async function toggleStudentStatus(code) {
         if(students[code]) {
             students[code].status = students[code].status === 'active' ? 'expired' : 'active';
-            localStorage.setItem('math_students', JSON.stringify(students));
             refreshStudentsTable();
+            await syncWithGitHub();
         }
     }
 
-    function deleteStudent(code) {
-        if(confirm("هل أنت متأكد من حذف هذا الطالب تماماً من النظام؟")) {
+    async function deleteStudent(code) {
+        if(confirm("هل أنت متأكد من حذف هذا الطالب تماماً من السيرفر؟")) {
             delete students[code];
-            localStorage.setItem('math_students', JSON.stringify(students));
             refreshStudentsTable();
+            await syncWithGitHub();
         }
     }
-    /* ---------------------------------- */
 
-    function saveLesson() {
+    async function saveLesson() {
         const grade = document.getElementById('lesson-grade').value;
         const branch = document.getElementById('lesson-branch').value;
         const title = document.getElementById('title').value.trim();
@@ -322,15 +429,15 @@
         if(editIndex > -1) {
             lessons[editIndex] = data;
             editIndex = -1;
-            document.getElementById('save-btn').innerText = "اعتماد وحفظ الدرس في المنصة";
+            document.getElementById('save-btn').innerHTML = "☁️ اعتماد وحفظ الدرس ورفعه للمنصة فوراً";
         } else {
             lessons.push(data);
         }
 
-        localStorage.setItem('math_lessons', JSON.stringify(lessons));
         document.querySelectorAll('.admin-panel input[type="text"]').forEach(i => i.value = "");
         refreshAdminTable();
-        alert("تم الحفظ بنجاح! 🎉");
+        
+        await syncWithGitHub();
     }
 
     function editLesson(idx) {
@@ -344,23 +451,23 @@
         document.getElementById('url_work').value = l.url_work || "";
         document.getElementById('url_sol').value = l.url_sol || "";
         document.getElementById('url_exam').value = l.url_exam || "";
-        document.getElementById('save-btn').innerText = "💾 تحديث بيانات الدرس المختار";
+        document.getElementById('save-btn').innerHTML = "☁️ تحديث بيانات الدرس ورفعها للسيرفر";
     }
 
-    function deleteLesson(idx) {
-        if(confirm("هل أنت متأكد من حذف هذا الدرس؟")) {
+    async function deleteLesson(idx) {
+        if(confirm("هل أنت متأكد من حذف هذا الدرس نهائياً؟")) {
             lessons.splice(idx, 1);
-            localStorage.setItem('math_lessons', JSON.stringify(lessons));
             refreshAdminTable();
+            await syncWithGitHub();
         }
     }
 
-    function moveLesson(index, direction) {
+    async function moveLesson(index, direction) {
         const newIndex = index + direction;
         if (newIndex >= 0 && newIndex < lessons.length) {
             const temp = lessons[index]; lessons[index] = lessons[newIndex]; lessons[newIndex] = temp;
-            localStorage.setItem('math_lessons', JSON.stringify(lessons));
             refreshAdminTable();
+            await syncWithGitHub();
         }
     }
 
@@ -374,54 +481,15 @@
         }
     }
 
-    function updateGradeCardConfig() {
+    async function updateGradeCardConfig() {
         const id = document.getElementById('edit-grade-select').value;
         const config = gradesConfig.find(g => g.id === id);
         if(config) {
             config.title = document.getElementById('grade-title-input').value;
             config.desc = document.getElementById('grade-desc-input').value;
             config.img = document.getElementById('grade-img-input').value;
-            localStorage.setItem('math_grades_config', JSON.stringify(gradesConfig));
-            alert("تم تحديث الكارت بنجاح! 🎉");
+            await syncWithGitHub();
         }
-    }
-
-    // تعديل التصدير ليحتوي على الدروس والطلاب معاً
-    function exportData() {
-        const outputPackage = {
-            lessons: lessons,
-            allowedCodes: students
-        };
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(outputPackage, null, 2));
-        const a = document.createElement('a'); a.href = dataStr; a.download = "AlMoasses_Platform_Data.json";
-        a.click();
-    }
-
-    // تعديل الاستيراد ليدعم الملفات القديمة والجديدة
-    function importData(event) {
-        const file = event.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            try {
-                const importedData = JSON.parse(e.target.result);
-                if (Array.isArray(importedData)) {
-                    // إذا كان ملف قديم يحتوي على مصفوفة دروس فقط
-                    lessons = importedData;
-                    students = {};
-                } else {
-                    // إذا كان ملف مطور يحتوي على الكائن الجديد
-                    lessons = importedData.lessons || [];
-                    students = importedData.allowedCodes || {};
-                }
-                localStorage.setItem('math_lessons', JSON.stringify(lessons));
-                localStorage.setItem('math_students', JSON.stringify(students));
-                refreshAdminTable();
-                refreshStudentsTable();
-                alert("تم استيراد البيانات بنجاح وتحديث القوائم! 🎉");
-            } catch(err) { alert("ملف غير صالح."); }
-        };
-        reader.readAsText(file);
     }
 </script>
 </body>
