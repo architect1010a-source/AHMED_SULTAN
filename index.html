@@ -104,7 +104,7 @@
             font-size: 16px; cursor: pointer; z-index: 100; display: flex; align-items: center; justify-content: center;
         }
         .close-video-btn:hover { background: #ef4444; }
-        /* زر تكبير الشاشة (الجديد) */
+        /* زر تكبير الشاشة */
         .expand-video-btn {
             position: absolute; top: 12px; left: 58px; background: rgba(255,255,255,0.2);
             border: none; color: white; width: 38px; height: 38px; border-radius: 50%;
@@ -112,6 +112,14 @@
         }
         .expand-video-btn:hover { background: #3b82f6; }
         
+        /* 🔥 الزر العائم الجديد لإغلاق الفيديو (إضافة جديدة) */
+        .floating-close-video-btn {
+            position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; border-radius: 50%;
+            background: linear-gradient(135deg, #ef4444, #b91c1c); color: white; border: none;
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.5); cursor: pointer; z-index: 30001; display: none; align-items: center; justify-content: center;
+        }
+        .floating-close-video-btn:hover { transform: scale(1.1) translateY(-3px); box-shadow: 0 15px 30px rgba(239, 68, 68, 0.7); }
+
         .video-ratio-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; }
         .video-ratio-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
         
@@ -320,6 +328,11 @@
             <iframe id="popup-youtube-iframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         </div>
     </div>
+    
+    <!-- 🔥 الزر العائم الجديد لإغلاق الفيديو والرجوع للمنصة (إضافة جديدة) -->
+    <button id="floating-close-video-btn" class="floating-close-video-btn" onclick="closeVideoModal()" title="الرجوع للمنصة">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width:28px; height:28px; transform: scaleX(-1);"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+    </button>
 </div>
 
 <!-- بوابة تسجيل الدخول بالكود -->
@@ -465,7 +478,7 @@
     window.tempStudentData = null;
 
     // -----------------------------------------------------------
-    // نوافذ البوب-أب للفيديو (شاملة زر التكبير)
+    // نوافذ البوب-أب للفيديو (تم تعديلها لمنع الخروج من التطبيق 🔥)
     // -----------------------------------------------------------
     function openVideoModal(videoUrl) {
         const videoId = getYoutubeId(videoUrl);
@@ -473,20 +486,39 @@
             const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
             document.getElementById('popup-youtube-iframe').src = embedUrl;
             document.getElementById('video-popup-overlay').style.display = 'flex';
+            document.getElementById('floating-close-video-btn').style.display = 'flex'; // إظهار الزر العائم
+            
+            // إضافة حالة وهمية للتاريخ لمنع الخروج من التطبيق عند ضغط زر الرجوع في الموبايل
+            window.history.pushState({ popup: "video" }, "", "");
         } else {
             alert("⚠️ عذراً يا بطل! رابط الفيديو هذا غير صالح أو ليس من يوتيوب.");
         }
     }
 
-    function closeVideoModal() {
+    function closeVideoModal(fromPopState = false) {
         document.getElementById('popup-youtube-iframe').src = "";
         document.getElementById('video-popup-overlay').style.display = 'none';
+        document.getElementById('floating-close-video-btn').style.display = 'none'; // إخفاء الزر العائم
         
         // الخروج من وضع الشاشة الكاملة إذا كان مفعل عند إغلاق الفيديو
         if (document.fullscreenElement) {
             if (document.exitFullscreen) { document.exitFullscreen(); }
         }
+        
+        // إذا كان الإغلاق تم من خلال الأزرار وليس زر الموبايل، نقوم بالرجوع خطوة في التاريخ لحذف الحالة الوهمية
+        if (!fromPopState && window.history.state && window.history.state.popup === "video") {
+            window.history.back();
+        }
     }
+
+    // التقاط ضغطة "زر الرجوع" في الموبايل
+    window.addEventListener("popstate", function(event) {
+        const overlay = document.getElementById('video-popup-overlay');
+        if (overlay && overlay.style.display === 'flex') {
+            // نغلق الفيديو فقط ولا نخرج من المنصة
+            closeVideoModal(true); // نمرر true حتى لا يستدعي history.back() مرة أخرى
+        }
+    });
 
     function toggleFullScreenVideo() {
         const container = document.getElementById('video-popup-container');
