@@ -105,9 +105,11 @@
             </div>
             <div class="input-group" style="margin-top: -10px;">
                 <input type="text" id="url_expl" placeholder="▶️ رابط فيديو الشرح الرئيسي من اليوتيوب">
+                <input type="text" id="url_notes" placeholder="📝 رابط ورق الشرح (جديد)">
                 <input type="text" id="url_work" placeholder="📄 رابط ملف واجب الـ PDF">
                 <input type="text" id="url_sol" placeholder="✅ رابط فيديو حل الواجب">
                 <input type="text" id="url_exam" placeholder="📝 رابط الامتحان التفاعلي">
+                <input type="text" id="url_essay" placeholder="✍️ رابط الامتحان المقالي (جديد)">
             </div>
             
             <button id="save-btn" class="btn btn-primary" onclick="saveLesson()">
@@ -228,7 +230,6 @@
                 gradesConfig = content.gradesConfig || defaultGradesConfig;
                 return true;
             } else if (response.status === 404) {
-                // الملف غير موجود بعد، سيتم إنشاؤه عند أول حفظ
                 return true;
             } else {
                 alert('❌ خطأ في الاتصال! تأكد أن الـ Token صحيح ومسموح له بتعديل الـ Repos.');
@@ -272,7 +273,7 @@
 
             if (response.ok) {
                 const data = await response.json();
-                currentFileSha = data.content.sha; // تحديث الـ SHA للعمليات القادمة
+                currentFileSha = data.content.sha;
                 statusEl.innerText = "✅ تمت المزامنة بنجاح!";
                 setTimeout(() => statusEl.style.display = 'none', 2000);
             } else {
@@ -317,7 +318,6 @@
         location.reload();
     }
 
-    // استرجاع التوكن التلقائي عند فتح الصفحة
     window.onload = function() {
         const savedToken = localStorage.getItem('admin_github_token');
         if(savedToken) {
@@ -325,7 +325,7 @@
         }
     };
 
-    // --- أكواد إدارة الواجهة والبيانات (معدلة للمزامنة السحابية) ---
+    // --- أكواد إدارة الواجهة والبيانات ---
     function refreshAdminTable() {
         const tbody = document.querySelector("#admin-lessons-table tbody");
         tbody.innerHTML = "";
@@ -418,13 +418,15 @@
         const title = document.getElementById('title').value.trim();
         const img = document.getElementById('img').value.trim();
         const url_expl = document.getElementById('url_expl').value.trim();
+        const url_notes = document.getElementById('url_notes').value.trim(); // الحقل الجديد
         const url_work = document.getElementById('url_work').value.trim();
         const url_sol = document.getElementById('url_sol').value.trim();
         const url_exam = document.getElementById('url_exam').value.trim();
+        const url_essay = document.getElementById('url_essay').value.trim(); // الحقل الجديد
 
         if(!title) return alert("عنوان الدرس مطلوب!");
 
-        const data = { grade, branch, title, img, url_expl, url_work, url_sol, url_exam };
+        const data = { grade, branch, title, img, url_expl, url_notes, url_work, url_sol, url_exam, url_essay };
 
         if(editIndex > -1) {
             lessons[editIndex] = data;
@@ -448,9 +450,11 @@
         document.getElementById('title').value = l.title;
         document.getElementById('img').value = l.img || "";
         document.getElementById('url_expl').value = l.url_expl || "";
+        document.getElementById('url_notes').value = l.url_notes || ""; // الحقل الجديد
         document.getElementById('url_work').value = l.url_work || "";
         document.getElementById('url_sol').value = l.url_sol || "";
         document.getElementById('url_exam').value = l.url_exam || "";
+        document.getElementById('url_essay').value = l.url_essay || ""; // الحقل الجديد
         document.getElementById('save-btn').innerHTML = "☁️ تحديث بيانات الدرس ورفعها للسيرفر";
     }
 
