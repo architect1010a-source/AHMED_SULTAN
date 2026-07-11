@@ -146,7 +146,7 @@
                     <button class="btn" style="background: #475569; padding: 0 15px; font-size: 0.9rem; white-space: nowrap;" onclick="generateRandomCode()">توليد كود</button>
                 </div>
             </div>
-            <button class="btn" style="background: linear-gradient(135deg, #059669, #10b981); width: 100%;" onclick="addStudent()">
+            <button id="save-student-btn" class="btn" style="background: linear-gradient(135deg, #059669, #10b981); width: 100%;" onclick="addStudent()">
                 ☁️ إضافة الطالب لقائمة المشتركين وتحديث السيرفر
             </button>
             
@@ -195,6 +195,8 @@
     let lessons = [];
     let students = {};
     let editIndex = -1;
+    let editStudentOldCode = null; // ✨ متغير جديد لتتبع تعديل كود الطالب ✨
+
     let defaultGradesConfig = [
         { id: "6", title: "الصف السادس الابتدائي", desc: "تأسيس هندسي وحسابي متين وبداية طريق الأذكياء", img: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?auto=format&fit=crop&w=600&q=80", colorClass: "border-yellow" },
         { id: "1_prep", title: "الصف الأول الاعدادي", desc: "أهلاً بك في عالم المفاهيم الجبرية والتحليلات الهندسية الفاخرة", img: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=600&q=80", colorClass: "border-purple" },
@@ -356,6 +358,7 @@
         document.getElementById('student-code').value = `Mo_${rand}`;
     }
 
+    // ✨ تم إضافة زر التعديل في جدول الطلاب هنا ✨
     function refreshStudentsTable() {
         const tbody = document.querySelector("#admin-students-table tbody");
         tbody.innerHTML = "";
@@ -376,6 +379,7 @@
                     <td><code style="background:#f1f5f9; padding:4px 8px; border-radius:6px; font-family:monospace; font-weight:700;">${code}</code></td>
                     <td>${statusText}</td>
                     <td>
+                        <button class="action-btn btn-edit" onclick="editStudent('${code}')">تعديل</button>
                         <button class="action-btn" style="${btnColor}" onclick="toggleStudentStatus('${code}')">${toggleBtnText}</button>
                         <button class="action-btn btn-delete" onclick="deleteStudent('${code}')">حذف نهائي</button>
                     </td>
@@ -383,12 +387,40 @@
         });
     }
 
+    // ✨ دالة التعديل الذكية: سحب بيانات الطالب لحقول الإدخال ✨
+    function editStudent(code) {
+        if(students[code]) {
+            editStudentOldCode = code;
+            document.getElementById('student-name').value = students[code].name;
+            document.getElementById('student-code').value = code;
+            document.getElementById('save-student-btn').innerHTML = "☁️ حفظ تعديلات الطالب وتحديث السيرفر";
+            document.getElementById('student-name').focus();
+        }
+    }
+
+    // ✨ تم تطوير دالة الإضافة لتدعم الحفظ بعد التعديل ✨
     async function addStudent() {
         const name = document.getElementById('student-name').value.trim();
         const code = document.getElementById('student-code').value.trim();
         if(!name || !code) return alert("برجاء إدخال اسم الطالب والكود معاً!");
 
-        students[code] = { name: name, status: 'active' };
+        if(editStudentOldCode) {
+            // حالة تعديل طالب موجود
+            const oldStatus = students[editStudentOldCode] ? students[editStudentOldCode].status : 'active';
+            if (editStudentOldCode !== code) {
+                delete students[editStudentOldCode]; // حذف الكود القديم إن تم تغييره
+            }
+            students[code] = { name: name, status: oldStatus }; // حفظ البيانات مع الاحتفاظ بنفس حالة الاشتراك
+            editStudentOldCode = null;
+            document.getElementById('save-student-btn').innerHTML = "☁️ إضافة الطالب لقائمة المشتركين وتحديث السيرفر";
+        } else {
+            // حالة إضافة طالب جديد
+            if(students[code]) {
+                if(!confirm("هذا الكود موجود مسبقاً! هل تريد تحديث بياناته؟")) return;
+            }
+            students[code] = { name: name, status: 'active' };
+        }
+
         document.getElementById('student-name').value = "";
         document.getElementById('student-code').value = "";
         refreshStudentsTable();
@@ -418,11 +450,11 @@
         const title = document.getElementById('title').value.trim();
         const img = document.getElementById('img').value.trim();
         const url_expl = document.getElementById('url_expl').value.trim();
-        const url_notes = document.getElementById('url_notes').value.trim(); // الحقل الجديد
+        const url_notes = document.getElementById('url_notes').value.trim(); 
         const url_work = document.getElementById('url_work').value.trim();
         const url_sol = document.getElementById('url_sol').value.trim();
         const url_exam = document.getElementById('url_exam').value.trim();
-        const url_essay = document.getElementById('url_essay').value.trim(); // الحقل الجديد
+        const url_essay = document.getElementById('url_essay').value.trim(); 
 
         if(!title) return alert("عنوان الدرس مطلوب!");
 
@@ -450,11 +482,11 @@
         document.getElementById('title').value = l.title;
         document.getElementById('img').value = l.img || "";
         document.getElementById('url_expl').value = l.url_expl || "";
-        document.getElementById('url_notes').value = l.url_notes || ""; // الحقل الجديد
+        document.getElementById('url_notes').value = l.url_notes || ""; 
         document.getElementById('url_work').value = l.url_work || "";
         document.getElementById('url_sol').value = l.url_sol || "";
         document.getElementById('url_exam').value = l.url_exam || "";
-        document.getElementById('url_essay').value = l.url_essay || ""; // الحقل الجديد
+        document.getElementById('url_essay').value = l.url_essay || ""; 
         document.getElementById('save-btn').innerHTML = "☁️ تحديث بيانات الدرس ورفعها للسيرفر";
     }
 
