@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منصة المؤسس في الرياضيات | مستر أحمد جابر</title>
     
-    <!-- إعدادات التطبيق المستقل (PWA) -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#20262e">
     <meta name="mobile-web-app-capable" content="yes">
@@ -13,23 +12,18 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="المؤسس">
     
-    <!-- أيقونة المتصفح والشاشة الرئيسية موحدة على ملف logo.jpg -->
     <link rel="icon" type="image/jpeg" href="logo.jpg">
     <link rel="apple-touch-icon" href="logo.jpg">
     
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root { 
             --dark-hero: linear-gradient(135deg, #0b132b, #1c2541);
             --accent-gold: linear-gradient(135deg, #ffe066, #f59e0b);
-            
-            /* ألوان الأزرار الـ 6 الجديدة */
-            --btn-expl-grad: linear-gradient(135deg, #2563eb, #1d4ed8);      /* 1- فيديو الشرح */
-            --btn-notes-grad: linear-gradient(135deg, #0ea5e9, #0284c7);     /* 2- ورق الشرح */
-            --btn-work-grad: linear-gradient(135deg, #db2777, #b1154a);      /* 3- ورق الواجب */
-            --btn-sol-grad: linear-gradient(135deg, #059669, #046a4e);       /* 4- فيديو حل الواجب */
-            --btn-exam-grad: linear-gradient(135deg, #ea580c, #c2410c);      /* 5- امتحان تفاعلي */
-            --btn-essay-grad: linear-gradient(135deg, #8b5cf6, #6d28d9);     /* 6- امتحان مقالي */
+            --btn-expl-grad: linear-gradient(135deg, #2563eb, #1d4ed8);
+            --btn-work-grad: linear-gradient(135deg, #db2777, #b1154a);
+            --btn-sol-grad: linear-gradient(135deg, #059669, #046a4e);
+            --btn-exam-grad: linear-gradient(135deg, #ea580c, #c2410c);
             
             --bg-body: #f8fafc;
             --text-dark: #0f172a;
@@ -86,44 +80,11 @@
         .warning-box h3 { color: #ef4444; font-weight: 900; font-size: 1.6rem; margin-bottom: 15px; }
         .warning-box p { color: #cbd5e1; font-weight: 600; font-size: 1.05rem; margin-bottom: 25px; line-height: 1.7; }
         .warning-btns { display: flex; gap: 15px; }
-        .btn-agree { background: #22c55e; width: 100%; padding: 14px; font-size: 1.1rem; font-weight: 800; border-radius: 12px; border:none; color:white; cursor:pointer;}
-        .btn-agree:hover { background: #16a34a; transform: translateY(-2px); }
-
-        /* 🎬 تصميم نافذة عرض الفيديو السينمائية المدمجة داخل التطبيق */
-        #video-popup-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.92); backdrop-filter: blur(8px);
-            display: none; align-items: center; justify-content: center;
-            z-index: 30000; padding: 15px;
-        }
-        .video-popup-container {
-            background: #1e293b; width: 100%; max-width: 900px; border-radius: 24px;
-            border: 2px solid #f59e0b; overflow: hidden; position: relative;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.7); transition: all 0.3s ease;
-        }
-        .close-video-btn {
-            position: absolute; top: 12px; left: 12px; background: rgba(255,255,255,0.2);
-            border: none; color: white; width: 38px; height: 38px; border-radius: 50%;
-            font-size: 16px; cursor: pointer; z-index: 100; display: flex; align-items: center; justify-content: center;
-        }
-        .close-video-btn:hover { background: #ef4444; }
-        .expand-video-btn {
-            position: absolute; top: 12px; left: 58px; background: rgba(255,255,255,0.2);
-            border: none; color: white; width: 38px; height: 38px; border-radius: 50%;
-            font-size: 18px; cursor: pointer; z-index: 100; display: flex; align-items: center; justify-content: center; font-weight: bold;
-        }
-        .expand-video-btn:hover { background: #3b82f6; }
-        .floating-close-video-btn {
-            position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; border-radius: 50%;
-            background: linear-gradient(135deg, #ef4444, #b91c1c); color: white; border: none;
-            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.5); cursor: pointer; z-index: 30001; display: none; align-items: center; justify-content: center;
-        }
-        .floating-close-video-btn:hover { transform: scale(1.1) translateY(-3px); box-shadow: 0 15px 30px rgba(239, 68, 68, 0.7); }
-
-        .video-ratio-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; }
-        .video-ratio-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        .btn-no { background: #22c55e; flex: 1; padding: 12px; font-weight: 700; border-radius: 12px; border:none; color:white; cursor:pointer;}
+        .btn-no:hover { background: #16a34a; transform: translateY(-2px); }
+        .btn-yes { background: #ef4444; flex: 1; padding: 12px; font-weight: 700; border-radius: 12px; border:none; color:white; cursor:pointer;}
+        .btn-yes:hover { background: #dc2626; transform: translateY(-2px); }
         
-        /* علامة مائية للمشترك */
         .watermark {
             position: fixed; font-size: 28px; color: rgba(148, 163, 184, 0.07);
             pointer-events: none; z-index: 9999; transform: rotate(-25deg);
@@ -176,8 +137,9 @@
         body.dark-mode .motivation-container h2 { color: #f8fafc; }
         .motivation-container p { color: var(--text-muted); font-size: 1.05rem; font-weight: 600; }
 
+        /* تعديل: جعل زر التثبيت ظاهراً دائماً لجميع الزوار فور فتح الرابط */
         .install-pwa-btn {
-            display: none; align-items: center; justify-content: center; gap: 12px;
+            display: flex; align-items: center; justify-content: center; gap: 12px;
             background: linear-gradient(135deg, #f59e0b, #ea580c); color: white; border: none;
             padding: 16px 28px; border-radius: 18px; font-size: 1.18rem; font-weight: 900; cursor: pointer;
             margin: 0 auto 25px auto; max-width: 550px; width: 100%;
@@ -276,22 +238,17 @@
         .card-title { font-size: 1.25rem; font-weight: 800; color: var(--text-dark); margin-bottom: 15px; line-height: 1.5; }
         body.dark-mode .card-title { color: #f8fafc; }
         
-        /* تحديث شبكة الأزرار لتستوعب 6 أزرار (صفين * 3 أزرار أو 3 صفوف * زرين) */
-        .links-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: auto; }
-        
+        .links-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: auto; }
         .link-btn {
-            color: white; border: none; padding: 12px 10px; border-radius: 12px; text-decoration: none; font-size: 0.85rem; font-weight: 800;
-            display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); cursor: pointer; text-align: center;
+            color: white; border: none; padding: 13px; border-radius: 14px; text-decoration: none; font-size: 0.9rem; font-weight: 700;
+            display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); cursor: pointer;
         }
         .link-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.12); opacity: 0.95; }
         
-        /* ربط الألوان بالفئات */
         .btn-expl { background: var(--btn-expl-grad); }
-        .btn-notes { background: var(--btn-notes-grad); }
         .btn-work { background: var(--btn-work-grad); }
         .btn-sol { background: var(--btn-sol-grad); }
-        .btn-exam { background: var(--btn-exam-grad); }
-        .btn-essay { background: var(--btn-essay-grad); }
+        .btn-exam { background: var(--btn-exam-grad); font-weight: 800; }
 
         .card.is-locked { filter: grayscale(100%) opacity(0.65); cursor: not-allowed; position: relative; }
         .lock-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; gap: 8px; }
@@ -320,19 +277,6 @@
 </head>
 <body>
 
-<div id="video-popup-overlay">
-    <div class="video-popup-container" id="video-popup-container">
-        <button class="close-video-btn" onclick="closeVideoModal()" title="إغلاق الفيديو">✕</button>
-        <button class="expand-video-btn" onclick="toggleFullScreenVideo()" title="تكبير الشاشة">⛶</button>
-        <div class="video-ratio-wrapper">
-            <iframe id="popup-youtube-iframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-        </div>
-    </div>
-    <button id="floating-close-video-btn" class="floating-close-video-btn" onclick="closeVideoModal()" title="الرجوع للمنصة">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width:28px; height:28px; transform: scaleX(-1);"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-    </button>
-</div>
-
 <div id="login-overlay">
     <div class="login-box">
         <button class="close-login-btn" onclick="closeLoginModal()">✕</button>
@@ -347,10 +291,11 @@
 <div id="security-modal">
     <div class="warning-box">
         <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" style="width: 60px; height: 60px; margin-bottom: 15px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-        <h3>⚠️ تعليمات أمنية هامة!</h3>
-        <p><strong>احذر:</strong> مشاركة هذا الكود مع أي شخص آخر أو تشغيله على أكثر من جهاز قد يعرض حسابك ومنصتك للغلق النهائي فوراً والتحقيق القانوني.</p>
+        <h3>⚠️ تحذير أمني هام وعاجل!</h3>
+        <p>هل قمت بكتابة أو فتح هذا الكود في موبايل أو جهاز آخر من قبل؟<br><br><strong>احذر:</strong> مشاركة هذا الكود مع أي شخص آخر أو تشغيله على أكثر من جهاز قد يعرض حسابك ومنصتك للغلق النهائي فوراً والتحقيق القانوني!</p>
         <div class="warning-btns">
-            <button class="btn-agree" onclick="acceptSecurityWarning()">✅ أوافق على الشروط</button>
+            <button class="btn-no" onclick="handleWarningResponse(false)">❌ لا، هذا جهازي الأول والوحيد</button>
+            <button class="btn-yes" onclick="handleWarningResponse(true)">⚠️ نعم، فتحته على جهاز آخر</button>
         </div>
     </div>
 </div>
@@ -402,7 +347,7 @@
 
             <div class="progress-section">
                 <div class="progress-info">
-                    <span>📊 مؤشر مستوى إنجازك ومذاكرتك لهذا صف:</span>
+                    <span>📊 مؤشر مستوى إنجازك ومذاكرتك لهذا الصف:</span>
                     <span id="progress-percent-text">0%</span>
                 </div>
                 <div class="progress-bar-bg">
@@ -446,6 +391,7 @@
 
 <script>
     const GOOGLE_SHEET_ID = "1fpd9X0CYOArq59vhqjaruBTVrb2ZPxMeNoDz5briLwA"; 
+
     const BUILTIN_LESSONS = []; 
     const BUILTIN_GRADES = [];
 
@@ -464,63 +410,54 @@
     ];
     
     let gradesConfig = JSON.parse(localStorage.getItem('math_grades_config')) || (BUILTIN_GRADES.length > 0 ? BUILTIN_GRADES : defaultGradesConfig);
+
     window.tempStudentData = null;
 
-    function openVideoModal(videoUrl) {
-        const videoId = getYoutubeId(videoUrl);
-        if (videoId) {
-            const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
-            document.getElementById('popup-youtube-iframe').src = embedUrl;
-            document.getElementById('video-popup-overlay').style.display = 'flex';
-            document.getElementById('floating-close-video-btn').style.display = 'flex'; 
-            window.history.pushState({ popup: "video" }, "", "");
-        } else {
-            alert("⚠️ عذراً يا بطل! رابط الفيديو هذا غير صالح أو ليس من يوتيوب.");
+    // --- إضافة جديدة: جلب بيانات الدروس تلقائياً لأي زائر حتى لو لم يسجل دخول ---
+    async function loadPlatformData() {
+        try {
+            const response = await fetch('data.json');
+            if(response.ok) {
+                const data = await response.json();
+                if(data && data.lessons) {
+                    lessons = data.lessons;
+                    localStorage.setItem('math_lessons', JSON.stringify(lessons));
+                    if (selectedGradeId) renderLessons();
+                }
+            }
+        } catch(e) {
+            console.log("يتم استخدام البيانات المتاحة محلياً أو يتم الجلب من شيت جوجل.");
         }
+        fetchCloudData();
     }
 
-    function closeVideoModal(fromPopState = false) {
-        document.getElementById('popup-youtube-iframe').src = "";
-        document.getElementById('video-popup-overlay').style.display = 'none';
-        document.getElementById('floating-close-video-btn').style.display = 'none'; 
-        if (document.fullscreenElement) { if (document.exitFullscreen) { document.exitFullscreen(); } }
-        if (!fromPopState && window.history.state && window.history.state.popup === "video") { window.history.back(); }
+    function openLoginModal() {
+        document.getElementById('login-overlay').style.display = 'flex';
     }
 
-    window.addEventListener("popstate", function(event) {
-        const overlay = document.getElementById('video-popup-overlay');
-        if (overlay && overlay.style.display === 'flex') { closeVideoModal(true); }
-    });
-
-    function toggleFullScreenVideo() {
-        const container = document.getElementById('video-popup-container');
-        if (!document.fullscreenElement) {
-            if (container.requestFullscreen) { container.requestFullscreen(); }
-            else if (container.webkitRequestFullscreen) { container.webkitRequestFullscreen(); } 
-            else if (container.msRequestFullscreen) { container.msRequestFullscreen(); } 
-        } else {
-            if (document.exitFullscreen) { document.exitFullscreen(); }
-            else if (document.webkitExitFullscreen) { document.webkitExitFullscreen(); }
-            else if (document.msExitFullscreen) { document.msExitFullscreen(); }
-        }
+    function closeLoginModal() {
+        document.getElementById('login-overlay').style.display = 'none';
     }
-
-    function openLoginModal() { document.getElementById('login-overlay').style.display = 'flex'; }
-    function closeLoginModal() { document.getElementById('login-overlay').style.display = 'none'; }
 
     async function checkStudent(forcedCode = null, isAutoLoad = false) {
         const code = forcedCode ? forcedCode : document.getElementById('student-code-input').value.trim();
-        if(!code) { if(!isAutoLoad) alert("برجاء إدخال كود الاشتراك الخاص بك! 🔑"); return; }
+        if(!code) {
+            if(!isAutoLoad) alert("برجاء إدخال كود الاشتراك الخاص بك! 🔑");
+            return;
+        }
+
         try {
             const response = await fetch('data.json');
             if(!response.ok) throw new Error("الملف غير موجود");
             const data = await response.json();
+
             if (data.allowedCodes && data.allowedCodes[code]) {
                 const student = data.allowedCodes[code];
                 if (student.status === 'active') {
                     let isWarningCleared = localStorage.getItem('warning_cleared_' + code);
-                    if (isWarningCleared || isAutoLoad) { proceedToPlatform(code, data.lessons, student.name); } 
-                    else {
+                    if (isWarningCleared || isAutoLoad) {
+                        proceedToPlatform(code, data.lessons, student.name);
+                    } else {
                         window.tempStudentData = { code: code, lessons: data.lessons, name: student.name };
                         document.getElementById('login-overlay').style.display = 'none';
                         document.getElementById('security-modal').style.display = 'flex';
@@ -539,38 +476,52 @@
         }
     }
 
-    function acceptSecurityWarning() {
-        if (window.tempStudentData) {
-            const s = window.tempStudentData;
-            localStorage.setItem('warning_cleared_' + s.code, 'true');
-            document.getElementById('security-modal').style.display = 'none';
-            proceedToPlatform(s.code, s.lessons, s.name);
+    function handleWarningResponse(isShared) {
+        if (isShared) {
+            alert("🚨 من فضلك تواصل مع مستر أحمد جابر ليعطيك إذن تفعيل للجهاز الآخر ويتم اعتماد حسابك.");
+        } else {
+            if (window.tempStudentData) {
+                const s = window.tempStudentData;
+                localStorage.setItem('warning_cleared_' + s.code, 'true');
+                document.getElementById('security-modal').style.display = 'none';
+                proceedToPlatform(s.code, s.lessons, s.name);
+            }
         }
     }
 
     function proceedToPlatform(code, dataLessons, studentName) {
         isLoggedIn = true;
         localStorage.setItem('user_code', code);
-        if(dataLessons) { lessons = dataLessons; localStorage.setItem('math_lessons', JSON.stringify(lessons)); }
+        if(dataLessons) {
+            lessons = dataLessons;
+            localStorage.setItem('math_lessons', JSON.stringify(lessons));
+        }
         closeLoginModal();
+        
         const headerBtn = document.getElementById('header-login-btn');
         headerBtn.innerText = `👤 المشترك: ${studentName.split(' ')[0]}`;
         headerBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
         headerBtn.style.borderColor = '#10b981';
         headerBtn.onclick = () => alert(`أهلاً بك يا بطل (${studentName}). حسابك نشط وتستمتع بجميع ميزات المنصة! 🚀`);
+
         initWatermark(studentName, code);
         renderLessons();
     }
 
     function initWatermark(name, code) {
-        const container = document.getElementById('wm-container'); container.innerHTML = "";
-        const div = document.createElement('div'); div.className = 'watermark'; div.innerHTML = `${name} - ${code}`; container.appendChild(div);
+        const container = document.getElementById('wm-container');
+        container.innerHTML = "";
+        const div = document.createElement('div');
+        div.className = 'watermark';
+        div.innerHTML = `${name} - ${code}`;
+        container.appendChild(div);
     }
 
     function getYoutubeId(url) {
         if (!url) return null;
         const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-        const match = url.match(regExp); return (match && match[2].length === 11) ? match[2] : null;
+        const match = url.match(regExp);
+        return (match && match[2].length === 11) ? match[2] : null;
     }
 
     async function fetchCloudData() {
@@ -584,17 +535,23 @@
                 if(parsedLessons.length > 0) {
                     lessons = parsedLessons;
                     localStorage.setItem('math_lessons', JSON.stringify(lessons));
-                    renderLessons();
+                    if(selectedGradeId) renderLessons();
                 }
             }
-        } catch(e) { console.log("يتم استخدام البيانات المتاحة محلياً."); }
+        } catch(e) {
+            console.log("يتم استخدام البيانات المتاحة محلياً.");
+        }
     }
 
     function parseCSV(text) {
-        const lines = text.split('\n'); const result = [];
+        const lines = text.split('\n');
+        const result = [];
         for(let i = 1; i < lines.length; i++) {
-            let line = lines[i].trim(); if(!line) continue;
-            let row = []; let insideQuote = false; let entry = '';
+            let line = lines[i].trim();
+            if(!line) continue;
+            let row = [];
+            let insideQuote = false;
+            let entry = '';
             for(let j = 0; j < line.length; j++) {
                 let char = line[j];
                 if(char === '"') { insideQuote = !insideQuote; }
@@ -602,6 +559,7 @@
                 else { entry += char; }
             }
             row.push(entry);
+
             if (row[2] && row[2].trim() !== "") {
                 result.push({
                     grade: row[0] ? row[0].trim() : "6",
@@ -609,11 +567,9 @@
                     title: row[2] ? row[2].trim() : "",
                     img: row[3] ? row[3].trim() : "",
                     url_expl: row[4] ? row[4].trim() : "",
-                    url_notes: row[5] ? row[5].trim() : "", /* زر ورق الشرح الجديد */
-                    url_work: row[6] ? row[6].trim() : "",
-                    url_sol: row[7] ? row[7].trim() : "",
-                    url_exam: row[8] ? row[8].trim() : "",
-                    url_essay: row[9] ? row[9].trim() : "" /* زر مقالي الجديد */
+                    url_work: row[5] ? row[5].trim() : "",
+                    url_sol: row[6] ? row[6].trim() : "",
+                    url_exam: row[7] ? row[7].trim() : ""
                 });
             }
         }
@@ -621,7 +577,8 @@
     }
 
     function renderGradeCards() {
-        const view = document.getElementById('grades-view'); view.innerHTML = "";
+        const view = document.getElementById('grades-view');
+        view.innerHTML = "";
         gradesConfig.forEach(g => {
             view.innerHTML += `
                 <div class="grade-card ${g.colorClass}" onclick="viewGrade('${g.id}', '${g.title}')">
@@ -632,7 +589,8 @@
     }
 
     function viewGrade(gradeId, gradeTitle) {
-        selectedGradeId = gradeId; currentBranchFilter = 'all';
+        selectedGradeId = gradeId;
+        currentBranchFilter = 'all';
         document.getElementById('search-input').value = '';
         document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
         document.getElementById('filter-all').classList.add('active');
@@ -662,7 +620,9 @@
 
     function handleExamClick(lessonKey, examUrl) {
         if (!openedExams.includes(lessonKey)) {
-            openedExams.push(lessonKey); localStorage.setItem('math_opened_exams', JSON.stringify(openedExams)); renderLessons();
+            openedExams.push(lessonKey);
+            localStorage.setItem('math_opened_exams', JSON.stringify(openedExams));
+            renderLessons();
         }
         window.open(examUrl, '_blank');
     }
@@ -674,14 +634,11 @@
         renderLessons();
     }
 
-    // إضافة الأيقونات الجديدة
     const icons = {
         expl: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`,
-        notes: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`,
         work: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>`,
         sol: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`,
-        exam: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path></svg>`,
-        essay: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`
+        exam: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path></svg>`
     };
 
     function renderLessons() {
@@ -690,13 +647,17 @@
         const searchQuery = document.getElementById('search-input').value.trim().toLowerCase();
         
         const allGradeLessons = lessons.filter(l => l.grade === selectedGradeId);
+        
         let isPrevLessonCompleted = true; 
         const lessonsWithLockStatus = allGradeLessons.map((l, index) => {
             const lessonKey = `${selectedGradeId}_${l.title}`;
             const isCompleted = completedLessons.includes(lessonKey);
+            
             const isFree = (index === 0);
+            
             const isLockedSeq = !isPrevLessonCompleted;
             isPrevLessonCompleted = isCompleted;
+            
             return { ...l, lessonKey, isCompleted, isFree, isLockedSeq };
         });
 
@@ -721,10 +682,7 @@
             const finalImgSrc = l.img ? l.img : (ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80');
             let branchClass = 'bg-branch-jabr'; if(l.branch === 'هندسة') branchClass = 'bg-branch-handasa'; if(l.branch === 'إحصاء') branchClass = 'bg-branch-ehsa';
             const safeLessonKey = l.lessonKey.replace(/'/g, "\\'");
-            const urlExplClean = l.url_expl ? l.url_expl.replace(/'/g, "\\'") : '';
-            const urlSolClean = l.url_sol ? l.url_sol.replace(/'/g, "\\'") : '';
 
-            // تم تحديث الأزرار المغلقة لتشمل الـ 6 أزرار الجديدة
             if (!isLoggedIn && !l.isFree) {
                 grid.innerHTML += `
                     <div class="card is-locked" onclick="openLoginModal()">
@@ -737,12 +695,8 @@
                             <div class="student-status-bar"><span class="branch-badge ${branchClass}">${l.branch || 'جبر'}</span></div>
                             <h3 class="card-title">${l.title}</h3>
                             <div class="links-grid">
-                                <span class="link-btn btn-expl" style="opacity:0.5;">${icons.expl} شرح</span>
-                                <span class="link-btn btn-notes" style="opacity:0.5;">${icons.notes} ورق</span>
-                                <span class="link-btn btn-work" style="opacity:0.5;">${icons.work} واجب</span>
-                                <span class="link-btn btn-sol" style="opacity:0.5;">${icons.sol} حل</span>
-                                <span class="link-btn btn-exam" style="opacity:0.5;">${icons.exam} تفاعلي</span>
-                                <span class="link-btn btn-essay" style="opacity:0.5;">${icons.essay} مقالي</span>
+                                <span class="link-btn btn-expl" style="opacity:0.5;">${icons.expl} فيديو الشرح</span>
+                                <span class="link-btn btn-exam" style="opacity:0.5;">${icons.exam} الامتحان</span>
                             </div>
                         </div>
                     </div>`;
@@ -759,12 +713,8 @@
                             <div class="student-status-bar"><span class="branch-badge ${branchClass}">${l.branch || 'جبر'}</span></div>
                             <h3 class="card-title">${l.title}</h3>
                             <div class="links-grid">
-                                <span class="link-btn btn-expl" style="opacity:0.5;">${icons.expl} شرح</span>
-                                <span class="link-btn btn-notes" style="opacity:0.5;">${icons.notes} ورق</span>
-                                <span class="link-btn btn-work" style="opacity:0.5;">${icons.work} واجب</span>
-                                <span class="link-btn btn-sol" style="opacity:0.5;">${icons.sol} حل</span>
-                                <span class="link-btn btn-exam" style="opacity:0.5;">${icons.exam} تفاعلي</span>
-                                <span class="link-btn btn-essay" style="opacity:0.5;">${icons.essay} مقالي</span>
+                                <span class="link-btn btn-expl" style="opacity:0.5;">${icons.expl} فيديو الشرح</span>
+                                <span class="link-btn btn-exam" style="opacity:0.5;">${icons.exam} الامتحان</span>
                             </div>
                         </div>
                     </div>`;
@@ -772,7 +722,6 @@
             else {
                 const showDoneBtn = !l.url_exam || openedExams.includes(l.lessonKey) || l.isCompleted;
 
-                // تحديث الأزرار وترتيبها للمشتركين بناءً على توفر الروابط
                 grid.innerHTML += `
                     <div class="card">
                         <div class="card-img-wrapper">
@@ -789,12 +738,10 @@
                             </div>
                             <h3 class="card-title">${l.title}</h3>
                             <div class="links-grid">
-                                ${l.url_expl ? `<span onclick="openVideoModal('${urlExplClean}')" class="link-btn btn-expl">${icons.expl} فيديو الشرح</span>` : ''}
-                                ${l.url_notes ? `<a href="${l.url_notes}" target="_blank" class="link-btn btn-notes">${icons.notes} ورق الشرح</a>` : ''}
-                                ${l.url_work ? `<a href="${l.url_work}" target="_blank" class="link-btn btn-work">${icons.work} ورق الواجب</a>` : ''}
-                                ${l.url_sol ? `<span onclick="openVideoModal('${urlSolClean}')" class="link-btn btn-sol">${icons.sol} فيديو الحل</span>` : ''}
-                                ${l.url_exam ? `<span onclick="handleExamClick('${safeLessonKey}', '${l.url_exam}')" class="link-btn btn-exam">${icons.exam} امتحان تفاعلي</span>` : ''}
-                                ${l.url_essay ? `<a href="${l.url_essay}" target="_blank" class="link-btn btn-essay">${icons.essay} امتحان مقالي</a>` : ''}
+                                ${l.url_expl ? `<a href="${l.url_expl}" target="_blank" class="link-btn btn-expl">${icons.expl} فيديو الشرح</a>` : ''}
+                                ${l.url_work ? `<a href="${l.url_work}" target="_blank" class="link-btn btn-work">${icons.work} تحميل الواجب</a>` : ''}
+                                ${l.url_sol ? `<a href="${l.url_sol}" target="_blank" class="link-btn btn-sol">${icons.sol} فيديو الحل</a>` : ''}
+                                ${l.url_exam ? `<span onclick="handleExamClick('${safeLessonKey}', '${l.url_exam}')" class="link-btn btn-exam">${icons.exam} الامتحان</span>` : ''}
                             </div>
                         </div>
                     </div>`;
@@ -809,18 +756,26 @@
         else { icon.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="none" stroke="currentColor" stroke-width="2.5"></path>`; text.innerText = "الوضع الليلي"; }
     }
 
-    let deferredPrompt;
+    // --- كود تثبيت PWA الذكي والمتوافق مع جميع الأجهزة والأنظمة ---
+    let deferredPrompt = null;
     window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault(); deferredPrompt = e; const installBtn = document.getElementById('custom-install-btn');
-        if (installBtn) { installBtn.style.display = 'flex'; }
+        e.preventDefault();
+        deferredPrompt = e;
     });
 
     function triggerPwaInstall() {
-        if (!deferredPrompt) return; deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-            if (choiceResult.outcome === 'accepted') { console.log('User accepted the install prompt'); }
-            deferredPrompt = null; document.getElementById('custom-install-btn').style.display = 'none';
-        });
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                }
+                deferredPrompt = null;
+            });
+        } else {
+            // رسالة إرشادية في حالة أجهزة الآيفون أو متصفح الكمبيوتر أو تم التثبيت مسبقاً
+            alert("📲 لتثبيت منصة المؤسس على شاشة هاتفك الرئيسية:\n\n1️⃣ في أجهزة الأندرويد (Chrome): اضغط على القائمة (⋮) أعلى المتصفح واختر «تثبيت التطبيق» أو «Install app / Add to Home screen».\n\n2️⃣ في أجهزة الآيفون (Safari): اضغط على زر المشاركة (⬆️) أسفل الشاشة، ثم مرر لأسفل واختر «إضافة إلى الشاشة الرئيسية» أو «Add to Home Screen».");
+        }
     }
 
     if ('serviceWorker' in navigator) {
@@ -833,9 +788,16 @@
 
     window.onload = function() { 
         if(localStorage.getItem('math_theme') === 'dark') { document.body.classList.add('dark-mode'); } 
-        updateThemeUI(); renderGradeCards();
+        updateThemeUI(); 
+        renderGradeCards();
+        
+        // جلب البيانات فوراً لجميع الطلاب والزوار لضمان عمل الكروت المجانية
+        loadPlatformData();
+
         const savedCode = localStorage.getItem('user_code');
-        if(savedCode) { checkStudent(savedCode, true); }
+        if(savedCode) {
+            checkStudent(savedCode, true);
+        }
     };
 </script>
 </body>
