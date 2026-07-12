@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منصة المؤسس في الرياضيات | مستر أحمد جابر</title>
     
+    <!-- إعدادات التطبيق المستقل (PWA) -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#20262e">
     <meta name="mobile-web-app-capable" content="yes">
@@ -12,10 +13,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="المؤسس">
     
+    <!-- أيقونة المتصفح والشاشة الرئيسية موحدة على ملف logo.jpg -->
     <link rel="icon" type="image/jpeg" href="logo.jpg">
     <link rel="apple-touch-icon" href="logo.jpg">
     
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root { 
             --dark-hero: linear-gradient(135deg, #0b132b, #1c2541);
@@ -80,11 +82,48 @@
         .warning-box h3 { color: #ef4444; font-weight: 900; font-size: 1.6rem; margin-bottom: 15px; }
         .warning-box p { color: #cbd5e1; font-weight: 600; font-size: 1.05rem; margin-bottom: 25px; line-height: 1.7; }
         .warning-btns { display: flex; gap: 15px; }
-        .btn-no { background: #22c55e; flex: 1; padding: 12px; font-weight: 700; border-radius: 12px; border:none; color:white; cursor:pointer;}
-        .btn-no:hover { background: #16a34a; transform: translateY(-2px); }
-        .btn-yes { background: #ef4444; flex: 1; padding: 12px; font-weight: 700; border-radius: 12px; border:none; color:white; cursor:pointer;}
-        .btn-yes:hover { background: #dc2626; transform: translateY(-2px); }
+        .btn-agree { background: #22c55e; width: 100%; padding: 14px; font-size: 1.1rem; font-weight: 800; border-radius: 12px; border:none; color:white; cursor:pointer;}
+        .btn-agree:hover { background: #16a34a; transform: translateY(-2px); }
+
+        /* 🎬 تصميم نافذة عرض الفيديو السينمائية المدمجة داخل التطبيق */
+        #video-popup-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.92); backdrop-filter: blur(8px);
+            display: none; align-items: center; justify-content: center;
+            z-index: 30000; padding: 15px;
+        }
+        .video-popup-container {
+            background: #1e293b; width: 100%; max-width: 900px; border-radius: 24px;
+            border: 2px solid #f59e0b; overflow: hidden; position: relative;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.7); transition: all 0.3s ease;
+        }
+        /* زر إغلاق الفيديو */
+        .close-video-btn {
+            position: absolute; top: 12px; left: 12px; background: rgba(255,255,255,0.2);
+            border: none; color: white; width: 38px; height: 38px; border-radius: 50%;
+            font-size: 16px; cursor: pointer; z-index: 100; display: flex; align-items: center; justify-content: center;
+        }
+        .close-video-btn:hover { background: #ef4444; }
+        /* زر تكبير الشاشة */
+        .expand-video-btn {
+            position: absolute; top: 12px; left: 58px; background: rgba(255,255,255,0.2);
+            border: none; color: white; width: 38px; height: 38px; border-radius: 50%;
+            font-size: 18px; cursor: pointer; z-index: 100; display: flex; align-items: center; justify-content: center; font-weight: bold;
+        }
+        .expand-video-btn:hover { background: #3b82f6; }
         
+        /* 🔥 الزر العائم الجديد لإغلاق الفيديو (إضافة جديدة) */
+        .floating-close-video-btn {
+            position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; border-radius: 50%;
+            background: linear-gradient(135deg, #ef4444, #b91c1c); color: white; border: none;
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.5); cursor: pointer; z-index: 30001; display: none; align-items: center; justify-content: center;
+        }
+        .floating-close-video-btn:hover { transform: scale(1.1) translateY(-3px); box-shadow: 0 15px 30px rgba(239, 68, 68, 0.7); }
+
+        .video-ratio-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; }
+        .video-ratio-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        
+        /* علامة مائية للمشترك */
         .watermark {
             position: fixed; font-size: 28px; color: rgba(148, 163, 184, 0.07);
             pointer-events: none; z-index: 9999; transform: rotate(-25deg);
@@ -137,10 +176,8 @@
         body.dark-mode .motivation-container h2 { color: #f8fafc; }
         .motivation-container p { color: var(--text-muted); font-size: 1.05rem; font-weight: 600; }
 
-        /* يبدأ الزر مخفياً تماماً ولا يظهره الكود إلا عندما يكون الهاتف جاهزاً للتثبيت الفوري */
         .install-pwa-btn {
-            display: none; 
-            align-items: center; justify-content: center; gap: 12px;
+            display: none; align-items: center; justify-content: center; gap: 12px;
             background: linear-gradient(135deg, #f59e0b, #ea580c); color: white; border: none;
             padding: 16px 28px; border-radius: 18px; font-size: 1.18rem; font-weight: 900; cursor: pointer;
             margin: 0 auto 25px auto; max-width: 550px; width: 100%;
@@ -278,6 +315,27 @@
 </head>
 <body>
 
+<!-- 🎬 الشاشة المنبثقة الذكية لعرض فيديوهات اليوتيوب داخل المنصة -->
+<div id="video-popup-overlay">
+    <div class="video-popup-container" id="video-popup-container">
+        <!-- زر الإغلاق -->
+        <button class="close-video-btn" onclick="closeVideoModal()" title="إغلاق الفيديو">✕</button>
+        <!-- زر التكبير الجديد بحجم الشاشة بالكامل -->
+        <button class="expand-video-btn" onclick="toggleFullScreenVideo()" title="تكبير الشاشة">⛶</button>
+        
+        <div class="video-ratio-wrapper">
+            <!-- يوتيوب بلاير يدعم التكبير التلقائي أيضاً عبر allowfullscreen -->
+            <iframe id="popup-youtube-iframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+    </div>
+    
+    <!-- 🔥 الزر العائم الجديد لإغلاق الفيديو والرجوع للمنصة (إضافة جديدة) -->
+    <button id="floating-close-video-btn" class="floating-close-video-btn" onclick="closeVideoModal()" title="الرجوع للمنصة">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width:28px; height:28px; transform: scaleX(-1);"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+    </button>
+</div>
+
+<!-- بوابة تسجيل الدخول بالكود -->
 <div id="login-overlay">
     <div class="login-box">
         <button class="close-login-btn" onclick="closeLoginModal()">✕</button>
@@ -289,20 +347,21 @@
     </div>
 </div>
 
+<!-- شاشة التحذير الأمني الذكية المحدثة -->
 <div id="security-modal">
     <div class="warning-box">
         <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" style="width: 60px; height: 60px; margin-bottom: 15px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-        <h3>⚠️ تحذير أمني هام وعاجل!</h3>
-        <p>هل قمت بكتابة أو فتح هذا الكود في موبايل أو جهاز آخر من قبل؟<br><br><strong>احذر:</strong> مشاركة هذا الكود مع أي شخص آخر أو تشغيله على أكثر من جهاز قد يعرض حسابك ومنصتك للغلق النهائي فوراً والتحقيق القانوني!</p>
+        <h3>⚠️ تعليمات أمنية هامة!</h3>
+        <p><strong>احذر:</strong> مشاركة هذا الكود مع أي شخص آخر أو تشغيله على أكثر من جهاز قد يعرض حسابك ومنصتك للغلق النهائي فوراً والتحقيق القانوني.</p>
         <div class="warning-btns">
-            <button class="btn-no" onclick="handleWarningResponse(false)">❌ لا، هذا جهازي الأول والوحيد</button>
-            <button class="btn-yes" onclick="handleWarningResponse(true)">⚠️ نعم، فتحته على جهاز آخر</button>
+            <button class="btn-agree" onclick="acceptSecurityWarning()">✅ أوافق على الشروط</button>
         </div>
     </div>
 </div>
 
 <div id="wm-container"></div>
 
+<!-- المحتوى الرئيسي للمنصة -->
 <div id="main-content">
     <header class="hero-header">
         <div class="top-right-controls">
@@ -348,7 +407,7 @@
 
             <div class="progress-section">
                 <div class="progress-info">
-                    <span>📊 مؤشر مستوى إنجازك ومذاكرتك لهذا الصف:</span>
+                    <span>📊 مؤشر مستوى إنجازك ومذاكرتك لهذا صف:</span>
                     <span id="progress-percent-text">0%</span>
                 </div>
                 <div class="progress-bar-bg">
@@ -386,11 +445,15 @@
     </footer>
 </div>
 
+<!-- الزر العائم للرجوع للخلف -->
 <button id="floating-back-btn" class="floating-back-btn" onclick="showGradesHome()" title="العودة للمراحل الدراسية">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width:24px; height:24px;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
 </button>
 
 <script>
+    // -----------------------------------------------------------
+    // إعدادات المنصة الأساسية 
+    // -----------------------------------------------------------
     const GOOGLE_SHEET_ID = "1fpd9X0CYOArq59vhqjaruBTVrb2ZPxMeNoDz5briLwA"; 
 
     const BUILTIN_LESSONS = []; 
@@ -414,31 +477,82 @@
 
     window.tempStudentData = null;
 
-    // --- إضافة جديدة: جلب بيانات الدروس تلقائياً لأي زائر حتى لو لم يسجل دخول ---
+    // -----------------------------------------------------------
+    // جلب بيانات المنصة للزوار (إضافة جديدة لعرض المحتوى للكل)
+    // -----------------------------------------------------------
     async function loadPlatformData() {
         try {
             const response = await fetch('data.json');
-            if(response.ok) {
+            if (response.ok) {
                 const data = await response.json();
-                if(data && data.lessons) {
+                if (data.lessons) {
                     lessons = data.lessons;
                     localStorage.setItem('math_lessons', JSON.stringify(lessons));
-                    if (selectedGradeId) renderLessons();
+                    // تحديث العرض إذا كان الطالب داخل صف دراسي
+                    if(selectedGradeId) renderLessons();
                 }
             }
         } catch(e) {
-            console.log("يتم استخدام البيانات المتاحة محلياً أو يتم الجلب من شيت جوجل.");
+            console.log("يتم استخدام البيانات المحفوظة حالياً.");
         }
-        fetchCloudData();
     }
 
-    function openLoginModal() {
-        document.getElementById('login-overlay').style.display = 'flex';
+    // -----------------------------------------------------------
+    // نوافذ البوب-أب للفيديو (تم تعديلها لمنع الخروج من التطبيق 🔥)
+    // -----------------------------------------------------------
+    function openVideoModal(videoUrl) {
+        const videoId = getYoutubeId(videoUrl);
+        if (videoId) {
+            const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
+            document.getElementById('popup-youtube-iframe').src = embedUrl;
+            document.getElementById('video-popup-overlay').style.display = 'flex';
+            document.getElementById('floating-close-video-btn').style.display = 'flex';
+            
+            window.history.pushState({ popup: "video" }, "", "");
+        } else {
+            alert("⚠️ عذراً يا بطل! رابط الفيديو هذا غير صالح أو ليس من يوتيوب.");
+        }
     }
 
-    function closeLoginModal() {
-        document.getElementById('login-overlay').style.display = 'none';
+    function closeVideoModal(fromPopState = false) {
+        document.getElementById('popup-youtube-iframe').src = "";
+        document.getElementById('video-popup-overlay').style.display = 'none';
+        document.getElementById('floating-close-video-btn').style.display = 'none';
+        
+        if (document.fullscreenElement) {
+            if (document.exitFullscreen) { document.exitFullscreen(); }
+        }
+        
+        if (!fromPopState && window.history.state && window.history.state.popup === "video") {
+            window.history.back();
+        }
     }
+
+    window.addEventListener("popstate", function(event) {
+        const overlay = document.getElementById('video-popup-overlay');
+        if (overlay && overlay.style.display === 'flex') {
+            closeVideoModal(true);
+        }
+    });
+
+    function toggleFullScreenVideo() {
+        const container = document.getElementById('video-popup-container');
+        if (!document.fullscreenElement) {
+            if (container.requestFullscreen) { container.requestFullscreen(); }
+            else if (container.webkitRequestFullscreen) { container.webkitRequestFullscreen(); } 
+            else if (container.msRequestFullscreen) { container.msRequestFullscreen(); } 
+        } else {
+            if (document.exitFullscreen) { document.exitFullscreen(); }
+            else if (document.webkitExitFullscreen) { document.webkitExitFullscreen(); }
+            else if (document.msExitFullscreen) { document.msExitFullscreen(); }
+        }
+    }
+
+    // -----------------------------------------------------------
+    // دوال الدخول والأمان والتحقق من الكود
+    // -----------------------------------------------------------
+    function openLoginModal() { document.getElementById('login-overlay').style.display = 'flex'; }
+    function closeLoginModal() { document.getElementById('login-overlay').style.display = 'none'; }
 
     async function checkStudent(forcedCode = null, isAutoLoad = false) {
         const code = forcedCode ? forcedCode : document.getElementById('student-code-input').value.trim();
@@ -477,16 +591,12 @@
         }
     }
 
-    function handleWarningResponse(isShared) {
-        if (isShared) {
-            alert("🚨 من فضلك تواصل مع مستر أحمد جابر ليعطيك إذن تفعيل للجهاز الآخر ويتم اعتماد حسابك.");
-        } else {
-            if (window.tempStudentData) {
-                const s = window.tempStudentData;
-                localStorage.setItem('warning_cleared_' + s.code, 'true');
-                document.getElementById('security-modal').style.display = 'none';
-                proceedToPlatform(s.code, s.lessons, s.name);
-            }
+    function acceptSecurityWarning() {
+        if (window.tempStudentData) {
+            const s = window.tempStudentData;
+            localStorage.setItem('warning_cleared_' + s.code, 'true');
+            document.getElementById('security-modal').style.display = 'none';
+            proceedToPlatform(s.code, s.lessons, s.name);
         }
     }
 
@@ -518,63 +628,14 @@
         container.appendChild(div);
     }
 
+    // -----------------------------------------------------------
+    // جلب البيانات وبناء محتوى المنصة
+    // -----------------------------------------------------------
     function getYoutubeId(url) {
         if (!url) return null;
         const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
         const match = url.match(regExp);
         return (match && match[2].length === 11) ? match[2] : null;
-    }
-
-    async function fetchCloudData() {
-        if(!GOOGLE_SHEET_ID || GOOGLE_SHEET_ID.includes("ضع_هنا")) return;
-        const csvUrl = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/export?format=csv&gid=0`;
-        try {
-            const response = await fetch(csvUrl);
-            if(response.ok) {
-                const csvText = await response.text();
-                const parsedLessons = parseCSV(csvText);
-                if(parsedLessons.length > 0) {
-                    lessons = parsedLessons;
-                    localStorage.setItem('math_lessons', JSON.stringify(lessons));
-                    if(selectedGradeId) renderLessons();
-                }
-            }
-        } catch(e) {
-            console.log("يتم استخدام البيانات المتاحة محلياً.");
-        }
-    }
-
-    function parseCSV(text) {
-        const lines = text.split('\n');
-        const result = [];
-        for(let i = 1; i < lines.length; i++) {
-            let line = lines[i].trim();
-            if(!line) continue;
-            let row = [];
-            let insideQuote = false;
-            let entry = '';
-            for(let j = 0; j < line.length; j++) {
-                let char = line[j];
-                if(char === '"') { insideQuote = !insideQuote; }
-                else if(char === ',' && !insideQuote) { row.push(entry); entry = ''; }
-                else { entry += char; }
-            }
-            row.push(entry);
-
-            if (row[2] && row[2].trim() !== "") {
-                result.push({
-                    grade: row[0] ? row[0].trim() : "6",
-                    branch: row[1] ? row[1].trim() : "جبر",
-                    title: row[2] ? row[2].trim() : "",
-                    img: row[3] ? row[3].trim() : "",
-                    url_expl: row[4] ? row[4].trim() : "",
-                    url_work: row[5] ? row[5].trim() : "",
-                    url_sol: row[6] ? row[6].trim() : "",
-                    url_exam: row[7] ? row[7].trim() : ""
-                });
-            }
-        }
-        return result;
     }
 
     function renderGradeCards() {
@@ -653,9 +714,7 @@
         const lessonsWithLockStatus = allGradeLessons.map((l, index) => {
             const lessonKey = `${selectedGradeId}_${l.title}`;
             const isCompleted = completedLessons.includes(lessonKey);
-            
             const isFree = (index === 0);
-            
             const isLockedSeq = !isPrevLessonCompleted;
             isPrevLessonCompleted = isCompleted;
             
@@ -683,6 +742,8 @@
             const finalImgSrc = l.img ? l.img : (ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80');
             let branchClass = 'bg-branch-jabr'; if(l.branch === 'هندسة') branchClass = 'bg-branch-handasa'; if(l.branch === 'إحصاء') branchClass = 'bg-branch-ehsa';
             const safeLessonKey = l.lessonKey.replace(/'/g, "\\'");
+            const urlExplClean = l.url_expl ? l.url_expl.replace(/'/g, "\\'") : '';
+            const urlSolClean = l.url_sol ? l.url_sol.replace(/'/g, "\\'") : '';
 
             if (!isLoggedIn && !l.isFree) {
                 grid.innerHTML += `
@@ -739,9 +800,9 @@
                             </div>
                             <h3 class="card-title">${l.title}</h3>
                             <div class="links-grid">
-                                ${l.url_expl ? `<a href="${l.url_expl}" target="_blank" class="link-btn btn-expl">${icons.expl} فيديو الشرح</a>` : ''}
+                                ${l.url_expl ? `<span onclick="openVideoModal('${urlExplClean}')" class="link-btn btn-expl">${icons.expl} فيديو الشرح</span>` : ''}
                                 ${l.url_work ? `<a href="${l.url_work}" target="_blank" class="link-btn btn-work">${icons.work} تحميل الواجب</a>` : ''}
-                                ${l.url_sol ? `<a href="${l.url_sol}" target="_blank" class="link-btn btn-sol">${icons.sol} فيديو الحل</a>` : ''}
+                                ${l.url_sol ? `<span onclick="openVideoModal('${urlSolClean}')" class="link-btn btn-sol">${icons.sol} فيديو الحل</span>` : ''}
                                 ${l.url_exam ? `<span onclick="handleExamClick('${safeLessonKey}', '${l.url_exam}')" class="link-btn btn-exam">${icons.exam} الامتحان</span>` : ''}
                             </div>
                         </div>
@@ -757,53 +818,43 @@
         else { icon.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="none" stroke="currentColor" stroke-width="2.5"></path>`; text.innerText = "الوضع الليلي"; }
     }
 
-    // --- كود التثبيت الفوري والاختفاء التلقائي (PWA Direct Install) ---
-    let deferredPrompt = null;
-    const installBtn = document.getElementById('custom-install-btn');
+    // -----------------------------------------------------------
+    // إعدادات الـ PWA والتشغيل الأولي (محدثة للإخفاء التام بعد التثبيت)
+    // -----------------------------------------------------------
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        
+        // التأكد من أن التطبيق غير مثبت مسبقاً وغير مفتوح كبرنامج مستقل
+        const isInstalled = localStorage.getItem('pwa_installed') === 'true';
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+        
+        if (!isInstalled && !isStandalone) {
+            const installBtn = document.getElementById('custom-install-btn');
+            if (installBtn) { installBtn.style.display = 'flex'; }
+        }
+    });
 
-    // دالة للتحقق مما إذا كان الطالب يفتح المنصة من التطبيق المثبت بالفعل على هاتفه
-    function isRunningStandalone() {
-        return (window.matchMedia('(display-mode: standalone)').matches) || 
-               (window.navigator.standalone === true) || 
-               (document.referrer.includes('android-app://'));
-    }
-
-    // 1. إذا كان التطبيق مثبتاً ومفتوحاً من شاشة الهاتف، اخفِ الزر نهائياً
-    if (isRunningStandalone()) {
-        if (installBtn) installBtn.style.display = 'none';
-    } else {
-        // 2. التقاط إشارة التثبيت من المتصفح وإظهار الزر فقط عندما يكون جاهزاً للتثبيت الفوري بضغطة واحدة
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            // إظهار الزر الآن لأن التثبيت المباشر أصبح متاحاً 100%
-            if (installBtn) installBtn.style.display = 'flex';
-        });
-    }
-
-    // 3. دالة التثبيت الفوري عند الضغط على الزر (بدون أي خطوات أو إرشادات)
     function triggerPwaInstall() {
         if (!deferredPrompt) return;
-        
-        // إظهار نافذة التثبيت الرسمية الخاصة بنظام التشغيل فوراً
         deferredPrompt.prompt();
-        
-        // متابعة قرار الطالب بعد ظهور النافذة
         deferredPrompt.userChoice.then((choiceResult) => {
-            if (choiceResult.outcome === 'accepted') {
-                console.log('تم تثبيت التطبيق بنجاح');
-                // إخفاء الزر فوراً بمجرد قبول التثبيت
-                if (installBtn) installBtn.style.display = 'none';
+            if (choiceResult.outcome === 'accepted') { 
+                console.log('User accepted the install prompt'); 
+                // تسجيل أنه تم التثبيت بنجاح
+                localStorage.setItem('pwa_installed', 'true');
+                document.getElementById('custom-install-btn').style.display = 'none';
             }
             deferredPrompt = null;
         });
     }
 
-    // 4. تأكيد إضافي لإخفاء الزر نهائياً وتلقائياً بمجرد اكتمال تثبيت التطبيق في نظام الهاتف
+    // الاستماع لحدث التثبيت الناجح (حتى لو قام الطالب بالتثبيت من إعدادات المتصفح)
     window.addEventListener('appinstalled', (evt) => {
-        console.log('App was successfully installed');
-        if (installBtn) installBtn.style.display = 'none';
-        deferredPrompt = null;
+        console.log('App Installed Successfully');
+        localStorage.setItem('pwa_installed', 'true');
+        document.getElementById('custom-install-btn').style.display = 'none';
     });
 
     if ('serviceWorker' in navigator) {
@@ -814,17 +865,25 @@
         });
     }
 
-    window.onload = function() { 
+    window.onload = async function() { 
         if(localStorage.getItem('math_theme') === 'dark') { document.body.classList.add('dark-mode'); } 
         updateThemeUI(); 
         renderGradeCards();
-        
-        // جلب البيانات فوراً لجميع الطلاب والزوار لضمان عمل الكروت المجانية
-        loadPlatformData();
 
+        // إخفاء زر التثبيت فوراً إذا كان التطبيق مثبتاً أو مفتوحاً بالفعل كـ App
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+        if (isStandalone || localStorage.getItem('pwa_installed') === 'true') {
+            const installBtn = document.getElementById('custom-install-btn');
+            if(installBtn) installBtn.style.display = 'none';
+        }
+
+        // 1. جلب البيانات أولاً للجميع لكي تظهر الكروت المجانية للزوار
+        await loadPlatformData();
+
+        // 2. التحقق مما إذا كان الطالب لديه تسجيل دخول سابق
         const savedCode = localStorage.getItem('user_code');
-        if(savedCode) {
-            checkStudent(savedCode, true);
+        if(savedCode) { 
+            await checkStudent(savedCode, true); 
         }
     };
 </script>
