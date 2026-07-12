@@ -137,9 +137,10 @@
         body.dark-mode .motivation-container h2 { color: #f8fafc; }
         .motivation-container p { color: var(--text-muted); font-size: 1.05rem; font-weight: 600; }
 
-        /* تعديل: جعل زر التثبيت ظاهراً دائماً لجميع الزوار فور فتح الرابط */
+        /* يبدأ الزر مخفياً تماماً ولا يظهره الكود إلا عندما يكون الهاتف جاهزاً للتثبيت الفوري */
         .install-pwa-btn {
-            display: flex; align-items: center; justify-content: center; gap: 12px;
+            display: none; 
+            align-items: center; justify-content: center; gap: 12px;
             background: linear-gradient(135deg, #f59e0b, #ea580c); color: white; border: none;
             padding: 16px 28px; border-radius: 18px; font-size: 1.18rem; font-weight: 900; cursor: pointer;
             margin: 0 auto 25px auto; max-width: 550px; width: 100%;
@@ -756,27 +757,54 @@
         else { icon.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="none" stroke="currentColor" stroke-width="2.5"></path>`; text.innerText = "الوضع الليلي"; }
     }
 
-    // --- كود تثبيت PWA الذكي والمتوافق مع جميع الأجهزة والأنظمة ---
+    // --- كود التثبيت الفوري والاختفاء التلقائي (PWA Direct Install) ---
     let deferredPrompt = null;
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-    });
+    const installBtn = document.getElementById('custom-install-btn');
 
-    function triggerPwaInstall() {
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                    console.log('User accepted the install prompt');
-                }
-                deferredPrompt = null;
-            });
-        } else {
-            // رسالة إرشادية في حالة أجهزة الآيفون أو متصفح الكمبيوتر أو تم التثبيت مسبقاً
-            alert("📲 لتثبيت منصة المؤسس على شاشة هاتفك الرئيسية:\n\n1️⃣ في أجهزة الأندرويد (Chrome): اضغط على القائمة (⋮) أعلى المتصفح واختر «تثبيت التطبيق» أو «Install app / Add to Home screen».\n\n2️⃣ في أجهزة الآيفون (Safari): اضغط على زر المشاركة (⬆️) أسفل الشاشة، ثم مرر لأسفل واختر «إضافة إلى الشاشة الرئيسية» أو «Add to Home Screen».");
-        }
+    // دالة للتحقق مما إذا كان الطالب يفتح المنصة من التطبيق المثبت بالفعل على هاتفه
+    function isRunningStandalone() {
+        return (window.matchMedia('(display-mode: standalone)').matches) || 
+               (window.navigator.standalone === true) || 
+               (document.referrer.includes('android-app://'));
     }
+
+    // 1. إذا كان التطبيق مثبتاً ومفتوحاً من شاشة الهاتف، اخفِ الزر نهائياً
+    if (isRunningStandalone()) {
+        if (installBtn) installBtn.style.display = 'none';
+    } else {
+        // 2. التقاط إشارة التثبيت من المتصفح وإظهار الزر فقط عندما يكون جاهزاً للتثبيت الفوري بضغطة واحدة
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // إظهار الزر الآن لأن التثبيت المباشر أصبح متاحاً 100%
+            if (installBtn) installBtn.style.display = 'flex';
+        });
+    }
+
+    // 3. دالة التثبيت الفوري عند الضغط على الزر (بدون أي خطوات أو إرشادات)
+    function triggerPwaInstall() {
+        if (!deferredPrompt) return;
+        
+        // إظهار نافذة التثبيت الرسمية الخاصة بنظام التشغيل فوراً
+        deferredPrompt.prompt();
+        
+        // متابعة قرار الطالب بعد ظهور النافذة
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('تم تثبيت التطبيق بنجاح');
+                // إخفاء الزر فوراً بمجرد قبول التثبيت
+                if (installBtn) installBtn.style.display = 'none';
+            }
+            deferredPrompt = null;
+        });
+    }
+
+    // 4. تأكيد إضافي لإخفاء الزر نهائياً وتلقائياً بمجرد اكتمال تثبيت التطبيق في نظام الهاتف
+    window.addEventListener('appinstalled', (evt) => {
+        console.log('App was successfully installed');
+        if (installBtn) installBtn.style.display = 'none';
+        deferredPrompt = null;
+    });
 
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
