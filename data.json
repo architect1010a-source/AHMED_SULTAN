@@ -124,6 +124,10 @@
     }
   ],
   "allowedCodes": {
+    "2815": {
+      "name": "ناني",
+      "status": "active"
+    },
     "FE_4628": {
       "name": "فيصل ابراهيم فيصل",
       "status": "active"
