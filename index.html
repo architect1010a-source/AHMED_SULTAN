@@ -733,12 +733,12 @@
                             <div class="student-status-bar"><span class="branch-badge ${branchClass}">${l.branch || 'جبر'}</span></div>
                             <h3 class="card-title">${l.title}</h3>
                             <div class="links-grid">
-                                <span class="link-btn btn-expl" style="opacity:0.5;">${icons.expl} الشرح</span>
+                                <span class="link-btn btn-expl" style="opacity:0.5;">${icons.expl} فديو الشرح</span>
                                 <span class="link-btn btn-notes" style="opacity:0.5;">${icons.notes} المذكرة</span>
                                 <span class="link-btn btn-work" style="opacity:0.5;">${icons.work} الواجب</span>
-                                <span class="link-btn btn-sol" style="opacity:0.5;">${icons.sol} الحل</span>
-                                <span class="link-btn btn-essay" style="opacity:0.5;">${icons.essay} المقالي</span>
-                                <span class="link-btn btn-exam" style="opacity:0.5;">${icons.exam} الامتحان</span>
+                                <span class="link-btn btn-sol" style="opacity:0.5;">${icons.sol} حل الواجب</span>
+                                <span class="link-btn btn-essay" style="opacity:0.5;">${icons.essay} امتحان مقالي</span>
+                                <span class="link-btn btn-exam" style="opacity:0.5;">${icons.exam} امتحان تفاعلى</span>
                             </div>
                         </div>
                     </div>`;
@@ -784,12 +784,12 @@
                             </div>
                             <h3 class="card-title">${l.title}</h3>
                             <div class="links-grid">
-                                ${urlExpl ? `<span onclick="openVideoModal('${urlExpl}')" class="link-btn btn-expl">${icons.expl} الشرح</span>` : ''}
+                                ${urlExpl ? `<span onclick="openVideoModal('${urlExpl}')" class="link-btn btn-expl">${icons.expl} فديو الشرح</span>` : ''}
                                 ${urlNotes ? `<a href="${urlNotes}" target="_blank" class="link-btn btn-notes">${icons.notes} المذكرة</a>` : ''}
                                 ${urlWork ? `<a href="${urlWork}" target="_blank" class="link-btn btn-work">${icons.work} الواجب</a>` : ''}
-                                ${urlSol ? `<span onclick="openVideoModal('${urlSol}')" class="link-btn btn-sol">${icons.sol} الحل</span>` : ''}
-                                ${urlEssay ? `<a href="${urlEssay}" target="_blank" class="link-btn btn-essay">${icons.essay} المقالي</a>` : ''}
-                                ${urlExam ? `<span onclick="handleExamClick('${safeLessonKey}', '${urlExam}')" class="link-btn btn-exam">${icons.exam} الامتحان</span>` : ''}
+                                ${urlSol ? `<span onclick="openVideoModal('${urlSol}')" class="link-btn btn-sol">${icons.sol} حل الواجب</span>` : ''}
+                                ${urlEssay ? `<a href="${urlEssay}" target="_blank" class="link-btn btn-essay">${icons.essay} امتحان مقالي</a>` : ''}
+                                ${urlExam ? `<span onclick="handleExamClick('${safeLessonKey}', '${urlExam}')" class="link-btn btn-exam">${icons.exam} امتحان تفاعلى</span>` : ''}
                             </div>
                         </div>
                     </div>`;
