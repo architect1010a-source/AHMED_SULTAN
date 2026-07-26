@@ -488,6 +488,9 @@
         document.getElementById('url_exam').value = l.url_exam || "";
         document.getElementById('url_essay').value = l.url_essay || ""; 
         document.getElementById('save-btn').innerHTML = "☁️ تحديث بيانات الدرس ورفعها للسيرفر";
+
+        // ✨ السطر الجديد المسؤول عن الصعود السلس لأعلى الصفحة ✨
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     async function deleteLesson(idx) {
