@@ -141,6 +141,18 @@
       "url_sol": "",
       "url_exam": "",
       "url_essay": ""
+    },
+    {
+      "grade": "3_prep",
+      "branch": "جبر",
+      "title": "المعادلات الاسية",
+      "img": "",
+      "url_expl": "",
+      "url_notes": "",
+      "url_work": "",
+      "url_sol": "",
+      "url_exam": "",
+      "url_essay": ""
     }
   ],
   "allowedCodes": {
