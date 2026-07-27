@@ -33,6 +33,16 @@
       "url_exam": "exams6/ketabet_taberat_adadia.html"
     },
     {
+      "grade": "6",
+      "branch": "جبر",
+      "title": "تحليل المضاعف المشترك الأصغر",
+      "img": "",
+      "url_expl": "https://youtu.be/dIHyCpuDOd8?si=k4v3NB3tWnPQXuXF",
+      "url_work": "",
+      "url_sol": "",
+      "url_exam": "exams6/tahlil_aalmodaaf_almoshtak_alasgr.html"
+    },
+    {
       "grade": "1_prep",
       "branch": "جبر",
       "title": "التناسب",
@@ -43,16 +53,6 @@
       "url_sol": "https://youtu.be/7Zei_ypiHaA",
       "url_exam": "exams1/1tanasob.html",
       "url_essay": "https://drive.google.com/file/d/1VFPon_wHV_pIubdBlvlcJia3s7H-oGac/view?usp=sharing"
-    },
-    {
-      "grade": "6",
-      "branch": "جبر",
-      "title": "تحليل المضاعف المشترك الأصغر",
-      "img": "",
-      "url_expl": "https://youtu.be/dIHyCpuDOd8?si=k4v3NB3tWnPQXuXF",
-      "url_work": "",
-      "url_sol": "",
-      "url_exam": "exams6/tahlil_aalmodaaf_almoshtak_alasgr.html"
     },
     {
       "grade": "1_prep",
