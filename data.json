@@ -129,6 +129,18 @@
       "url_work": "",
       "url_sol": "",
       "url_exam": "exams2/kwanin_algzoor.html"
+    },
+    {
+      "grade": "3_prep",
+      "branch": "جبر",
+      "title": "قوى القوى",
+      "img": "",
+      "url_expl": "",
+      "url_notes": "",
+      "url_work": "",
+      "url_sol": "",
+      "url_exam": "",
+      "url_essay": ""
     }
   ],
   "allowedCodes": {
