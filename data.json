@@ -57,6 +57,16 @@
       "url_essay": "https://drive.google.com/file/d/1L638P0Qi2fS58Xo89QsAUTXQ9PTQjWJW/view?usp=sharing"
     },
     {
+      "grade": "6",
+      "branch": "جبر",
+      "title": "تحليل المضاعف المشترك الأصغر",
+      "img": "",
+      "url_expl": "https://youtu.be/dIHyCpuDOd8?si=k4v3NB3tWnPQXuXF",
+      "url_work": "",
+      "url_sol": "",
+      "url_exam": "exams6/tahlil_aalmodaaf_almoshtak_alasgr.html"
+    },
+    {
       "grade": "1_prep",
       "branch": "جبر",
       "title": "التقسيم التناسبي",
@@ -67,16 +77,6 @@
       "url_sol": "",
       "url_exam": "exams1/3exam-altaqseem-altanasobi.html",
       "url_essay": ""
-    },
-    {
-      "grade": "6",
-      "branch": "جبر",
-      "title": "تحليل المضاعف المشترك الأصغر",
-      "img": "",
-      "url_expl": "https://youtu.be/dIHyCpuDOd8?si=k4v3NB3tWnPQXuXF",
-      "url_work": "",
-      "url_sol": "",
-      "url_exam": "exams6/tahlil_aalmodaaf_almoshtak_alasgr.html"
     },
     {
       "grade": "1_prep",
