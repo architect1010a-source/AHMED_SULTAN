@@ -226,6 +226,7 @@
         .bg-branch-jabr { background: #3b82f6; }
         .bg-branch-handasa { background: #8b5cf6; }
         .bg-branch-ehsa { background: #ec4899; }
+        .bg-branch-moragaat { background: #06b6d4; } /* شارة فرع المراجعات */
 
         .done-toggle-btn {
             display: flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 50px;
@@ -423,6 +424,7 @@
                     <button class="filter-btn" id="filter-jabr" onclick="filterByBranch('جبر')">جبر</button>
                     <button class="filter-btn" id="filter-handasa" onclick="filterByBranch('هندسة')">هندسة</button>
                     <button class="filter-btn" id="filter-ehsa" onclick="filterByBranch('إحصاء')">إحصاء</button>
+                    <button class="filter-btn" id="filter-moragaat" onclick="filterByBranch('مراجعات')">مراجعات</button>
                 </div>
             </div>
 
@@ -644,6 +646,7 @@
         if(branch === 'جبر') document.getElementById('filter-jabr').classList.add('active');
         if(branch === 'هندسة') document.getElementById('filter-handasa').classList.add('active');
         if(branch === 'إحصاء') document.getElementById('filter-ehsa').classList.add('active');
+        if(branch === 'مراجعات') document.getElementById('filter-moragaat').classList.add('active');
         renderLessons();
     }
 
@@ -718,7 +721,12 @@
 
             const ytId = getYoutubeId(urlExpl);
             const finalImgSrc = l.img ? l.img : (ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80');
-            let branchClass = 'bg-branch-jabr'; if(l.branch === 'هندسة') branchClass = 'bg-branch-handasa'; if(l.branch === 'إحصاء') branchClass = 'bg-branch-ehsa';
+            
+            let branchClass = 'bg-branch-jabr'; 
+            if(l.branch === 'هندسة') branchClass = 'bg-branch-handasa'; 
+            if(l.branch === 'إحصاء') branchClass = 'bg-branch-ehsa';
+            if(l.branch === 'مراجعات') branchClass = 'bg-branch-moragaat';
+
             const safeLessonKey = l.lessonKey.replace(/'/g, "\\'");
 
             if (!isLoggedIn && !l.isFree) {
