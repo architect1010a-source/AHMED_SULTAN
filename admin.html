@@ -65,7 +65,15 @@
         .action-btn { padding: 6px 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 0.85rem; margin: 2px;}
         .btn-edit { background: #e0f2fe; color: #0369a1; }
         .btn-delete { background: #fee2e2; color: #b91c1c; }
-        .btn-move { background: #f1f5f9; color: #475569; }
+
+        /* تنسيقات خاصّة بالسحب والإفلات وتحديد أكثر من صف */
+        tr.draggable-row { transition: background-color 0.2s, opacity 0.2s; }
+        tr.draggable-row.selected-row { background-color: #e0f2fe !important; }
+        tr.draggable-row.dragging { opacity: 0.4; background-color: #f1f5f9; }
+        tr.draggable-row.drag-over { border-top: 3px solid #2563eb !important; background-color: #eff6ff !important; }
+        .drag-handle { cursor: grab; font-size: 1.3rem; color: #64748b; user-select: none; display: inline-block; padding: 4px 8px; }
+        .drag-handle:active { cursor: grabbing; color: #2563eb; }
+        .lesson-checkbox { cursor: pointer; transform: scale(1.3); }
     </style>
 </head>
 <body>
@@ -99,6 +107,7 @@
                     <option value="جبر">فرع الجبر</option>
                     <option value="هندسة">فرع الهندسة</option>
                     <option value="إحصاء">فرع الإحصاء</option>
+                    <option value="مراجعات">فرع المراجعات</option>
                 </select>
                 <input type="text" id="title" placeholder="📚 عنوان الدرس الجديد...">
                 <input type="text" id="img" placeholder="🖼️ اتركها فارغة لغلاف اليوتيوب تلقائياً...">
@@ -167,14 +176,15 @@
         </div>
 
         <div class="preview-section">
-            <h3 class="preview-title">📊 إدارة وترتيب كافة الدروس المضافة حالياً:</h3>
+            <h3 class="preview-title">📊 إدارة وترتيب كافة الدروس المضافة حالياً (اسحب الصف لتغيير الترتيب 🖐️):</h3>
             <table id="admin-lessons-table">
                 <thead>
                     <tr>
+                        <th style="width: 50px; text-align: center;">تحديد</th>
                         <th>المرحلة</th>
                         <th>الفرع</th>
                         <th>عنوان الدرس</th>
-                        <th>الترتيب</th>
+                        <th style="text-align: center;">الترتيب</th>
                         <th>العمليات</th>
                     </tr>
                 </thead>
@@ -195,7 +205,8 @@
     let lessons = [];
     let students = {};
     let editIndex = -1;
-    let editStudentOldCode = null; // ✨ متغير جديد لتتبع تعديل كود الطالب ✨
+    let editStudentOldCode = null;
+    let draggedIndices = []; // لتخزين الدروس المحددة للسحب
 
     let defaultGradesConfig = [
         { id: "6", title: "الصف السادس الابتدائي", desc: "تأسيس هندسي وحسابي متين وبداية طريق الأذكياء", img: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?auto=format&fit=crop&w=600&q=80", colorClass: "border-yellow" },
@@ -327,30 +338,122 @@
         }
     };
 
-    // --- أكواد إدارة الواجهة والبيانات ---
+    // --- أكواد تحديد الصفوف ---
+    function toggleRowSelection(checkbox) {
+        const tr = checkbox.closest('tr');
+        if (checkbox.checked) {
+            tr.classList.add('selected-row');
+        } else {
+            tr.classList.remove('selected-row');
+        }
+    }
+
+    // --- أكواد جدول الدروس مع دعم السحب والإفلات لعدة عناصر ---
     function refreshAdminTable() {
         const tbody = document.querySelector("#admin-lessons-table tbody");
         tbody.innerHTML = "";
         if(lessons.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">لا توجد دروس مضافة حالياً.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">لا توجد دروس مضافة حالياً.</td></tr>`;
             return;
         }
+
         lessons.forEach((l, idx) => {
-            tbody.innerHTML += `
-                <tr>
-                    <td>${l.grade}</td>
-                    <td>${l.branch}</td>
-                    <td><strong>${l.title}</strong></td>
-                    <td>
-                        <button class="action-btn btn-move" onclick="moveLesson(${idx}, -1)">🔼</button>
-                        <button class="action-btn btn-move" onclick="moveLesson(${idx}, 1)">🔽</button>
-                    </td>
-                    <td>
-                        <button class="action-btn btn-edit" onclick="editLesson(${idx})">تعديل</button>
-                        <button class="action-btn btn-delete" onclick="deleteLesson(${idx})">حذف</button>
-                    </td>
-                </tr>`;
+            const tr = document.createElement("tr");
+            tr.className = "draggable-row";
+            tr.draggable = true;
+            tr.dataset.index = idx;
+
+            tr.innerHTML = `
+                <td style="text-align: center;">
+                    <input type="checkbox" class="lesson-checkbox" data-index="${idx}" onchange="toggleRowSelection(this)">
+                </td>
+                <td>${l.grade}</td>
+                <td>${l.branch}</td>
+                <td><strong>${l.title}</strong></td>
+                <td style="text-align: center;"><span class="drag-handle" title="اضغط واسحب لتغيير الترتيب">☰</span></td>
+                <td>
+                    <button class="action-btn btn-edit" onclick="editLesson(${idx})">تعديل</button>
+                    <button class="action-btn btn-delete" onclick="deleteLesson(${idx})">حذف</button>
+                </td>
+            `;
+
+            // أحداث السحب والإفلات
+            tr.addEventListener("dragstart", handleDragStart);
+            tr.addEventListener("dragover", handleDragOver);
+            tr.addEventListener("dragenter", handleDragEnter);
+            tr.addEventListener("dragleave", handleDragLeave);
+            tr.addEventListener("drop", handleDrop);
+            tr.addEventListener("dragend", handleDragEnd);
+
+            tbody.appendChild(tr);
         });
+    }
+
+    function handleDragStart(e) {
+        const index = Number(this.dataset.index);
+        const checkbox = this.querySelector('.lesson-checkbox');
+        
+        // إذا قام بسحب عنصر غير محدد، نسحب هذا العنصر فقط
+        if (!checkbox.checked) {
+            draggedIndices = [index];
+            this.classList.add("dragging");
+        } else {
+            // سحب كل العناصر المحددة
+            draggedIndices = Array.from(document.querySelectorAll('.lesson-checkbox:checked')).map(cb => Number(cb.dataset.index));
+            document.querySelectorAll('.lesson-checkbox:checked').forEach(cb => {
+                cb.closest('tr').classList.add('dragging');
+            });
+        }
+        e.dataTransfer.effectAllowed = "move";
+    }
+
+    function handleDragOver(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
+    }
+
+    function handleDragEnter(e) {
+        this.classList.add("drag-over");
+    }
+
+    function handleDragLeave(e) {
+        this.classList.remove("drag-over");
+    }
+
+    async function handleDrop(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        const targetIndex = Number(this.dataset.index);
+        
+        // منع الإفلات على نفس العناصر المحددة
+        if (draggedIndices.length > 0 && !draggedIndices.includes(targetIndex)) {
+            
+            // 1. استخراج الدروس المسحوبة
+            const movedItems = draggedIndices.map(idx => lessons[idx]);
+            
+            // 2. الاحتفاظ بمرجع للعنصر الهدف لمعرفة مكانه الجديد بعد الحذف
+            let targetItem = lessons[targetIndex];
+
+            // 3. حذف الدروس المسحوبة من المصفوفة القديمة
+            lessons = lessons.filter((_, idx) => !draggedIndices.includes(idx));
+
+            // 4. إيجاد الاندكس الجديد للعنصر الهدف وإدراج الدروس المسحوبة قبله
+            let insertIndex = lessons.indexOf(targetItem);
+            lessons.splice(insertIndex, 0, ...movedItems);
+
+            // تحديث الجدول والمزامنة فوراً مع جيت هب
+            refreshAdminTable();
+            await syncWithGitHub();
+        }
+    }
+
+    function handleDragEnd(e) {
+        document.querySelectorAll(".draggable-row").forEach(tr => {
+            tr.classList.remove("dragging");
+            tr.classList.remove("drag-over");
+        });
+        draggedIndices = [];
     }
 
     function generateRandomCode() {
@@ -358,7 +461,6 @@
         document.getElementById('student-code').value = `Mo_${rand}`;
     }
 
-    // ✨ تم إضافة زر التعديل في جدول الطلاب هنا ✨
     function refreshStudentsTable() {
         const tbody = document.querySelector("#admin-students-table tbody");
         tbody.innerHTML = "";
@@ -387,7 +489,6 @@
         });
     }
 
-    // ✨ دالة التعديل الذكية: سحب بيانات الطالب لحقول الإدخال ✨
     function editStudent(code) {
         if(students[code]) {
             editStudentOldCode = code;
@@ -398,23 +499,20 @@
         }
     }
 
-    // ✨ تم تطوير دالة الإضافة لتدعم الحفظ بعد التعديل ✨
     async function addStudent() {
         const name = document.getElementById('student-name').value.trim();
         const code = document.getElementById('student-code').value.trim();
         if(!name || !code) return alert("برجاء إدخال اسم الطالب والكود معاً!");
 
         if(editStudentOldCode) {
-            // حالة تعديل طالب موجود
             const oldStatus = students[editStudentOldCode] ? students[editStudentOldCode].status : 'active';
             if (editStudentOldCode !== code) {
-                delete students[editStudentOldCode]; // حذف الكود القديم إن تم تغييره
+                delete students[editStudentOldCode];
             }
-            students[code] = { name: name, status: oldStatus }; // حفظ البيانات مع الاحتفاظ بنفس حالة الاشتراك
+            students[code] = { name: name, status: oldStatus };
             editStudentOldCode = null;
             document.getElementById('save-student-btn').innerHTML = "☁️ إضافة الطالب لقائمة المشتركين وتحديث السيرفر";
         } else {
-            // حالة إضافة طالب جديد
             if(students[code]) {
                 if(!confirm("هذا الكود موجود مسبقاً! هل تريد تحديث بياناته؟")) return;
             }
@@ -489,22 +587,12 @@
         document.getElementById('url_essay').value = l.url_essay || ""; 
         document.getElementById('save-btn').innerHTML = "☁️ تحديث بيانات الدرس ورفعها للسيرفر";
 
-        // ✨ السطر الجديد المسؤول عن الصعود السلس لأعلى الصفحة ✨
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     async function deleteLesson(idx) {
         if(confirm("هل أنت متأكد من حذف هذا الدرس نهائياً؟")) {
             lessons.splice(idx, 1);
-            refreshAdminTable();
-            await syncWithGitHub();
-        }
-    }
-
-    async function moveLesson(index, direction) {
-        const newIndex = index + direction;
-        if (newIndex >= 0 && newIndex < lessons.length) {
-            const temp = lessons[index]; lessons[index] = lessons[newIndex]; lessons[newIndex] = temp;
             refreshAdminTable();
             await syncWithGitHub();
         }
