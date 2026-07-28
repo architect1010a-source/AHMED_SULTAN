@@ -32,15 +32,16 @@
             background: white; padding: 35px; border-radius: 24px; 
             margin-bottom: 40px; border: 1px solid #e2e8f0; box-shadow: var(--card-shadow);
         }
-        .admin-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 25px; }
+        .admin-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 25px; flex-wrap: wrap; }
         .admin-header h2 { font-weight: 900; font-size: 1.6rem; color: #1c2541; }
         
         .input-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 25px; }
-        input, select { 
+        .url-input-container { display: flex; gap: 8px; align-items: center; }
+        input, select, textarea { 
             width: 100%; padding: 14px 18px; border: 2px solid #e2e8f0; border-radius: 12px; 
             font-size: 0.95rem; font-weight: 600; background: #f8fafc;
         }
-        input:focus, select:focus { outline: none; border-color: #2563eb; background: white; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #2563eb; background: white; }
         
         .btn { 
             display: flex; align-items: center; justify-content: center; gap: 8px;
@@ -64,7 +65,9 @@
         th { background: #f1f5f9; color: #1c2541; font-weight: 800; }
         .action-btn { padding: 6px 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 0.85rem; margin: 2px;}
         .btn-edit { background: #e0f2fe; color: #0369a1; }
+        .btn-copy { background: #fef3c7; color: #b45309; }
         .btn-delete { background: #fee2e2; color: #b91c1c; }
+        .btn-preview-link { background: #e0f2fe; color: #0284c7; padding: 14px 15px; border-radius: 12px; border: none; cursor: pointer; font-weight: bold; }
 
         /* تنسيقات خاصّة بالسحب والإفلات وتحديد أكثر من صف */
         tr.draggable-row { transition: background-color 0.2s, opacity 0.2s; }
@@ -92,7 +95,10 @@
         <div class="admin-panel">
             <div class="admin-header">
                 <h2>لوحة تحكم المعلم الذكية ⚙️</h2>
-                <button class="btn" style="background: #ef4444; padding: 8px 15px; font-size: 0.85rem;" onclick="logout()">تسجيل الخروج</button>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn" style="background: #0284c7; padding: 8px 15px; font-size: 0.85rem;" onclick="downloadBackup()">💾 تحميل نسخة احتياطية</button>
+                    <button class="btn" style="background: #ef4444; padding: 8px 15px; font-size: 0.85rem;" onclick="logout()">تسجيل الخروج</button>
+                </div>
             </div>
             
             <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:12px;">➕ إضافة أو تعديل درس تعليمي:</h3>
@@ -116,16 +122,35 @@
                     <option value="إحصاء">فرع الإحصاء</option>
                     <option value="مراجعات">فرع المراجعات</option>
                 </select>
-                <input type="text" id="title" placeholder="📚 عنوان الدرس الجديد...">
-                <input type="text" id="img" placeholder="🖼️ اتركها فارغة لغلاف اليوتيوب تلقائياً...">
+                <input type="text" id="title" placeholder="📚 عنوان الدرس الجديد..." onchange="markUnsaved()">
+                <input type="text" id="img" placeholder="🖼️ اتركها فارغة لغلاف اليوتيوب تلقائياً..." onchange="markUnsaved()">
             </div>
+            
             <div class="input-group" style="margin-top: -10px;">
-                <input type="text" id="url_expl" placeholder="▶️ رابط فيديو الشرح الرئيسي من اليوتيوب">
-                <input type="text" id="url_notes" placeholder="📝 رابط ورق الشرح (جديد)">
-                <input type="text" id="url_work" placeholder="📄 رابط ملف واجب الـ PDF">
-                <input type="text" id="url_sol" placeholder="✅ رابط فيديو حل الواجب">
-                <input type="text" id="url_exam" placeholder="📝 رابط الامتحان التفاعلي">
-                <input type="text" id="url_essay" placeholder="✍️ رابط الامتحان المقالي (جديد)">
+                <div class="url-input-container">
+                    <input type="text" id="url_expl" placeholder="▶️ رابط فيديو الشرح الرئيسي" onchange="markUnsaved()">
+                    <button type="button" class="btn-preview-link" onclick="previewUrl('url_expl')" title="معاينة الرابط">👁️</button>
+                </div>
+                <div class="url-input-container">
+                    <input type="text" id="url_notes" placeholder="📝 رابط ورق الشرح (جديد)" onchange="markUnsaved()">
+                    <button type="button" class="btn-preview-link" onclick="previewUrl('url_notes')" title="معاينة الرابط">👁️</button>
+                </div>
+                <div class="url-input-container">
+                    <input type="text" id="url_work" placeholder="📄 رابط ملف واجب الـ PDF" onchange="markUnsaved()">
+                    <button type="button" class="btn-preview-link" onclick="previewUrl('url_work')" title="معاينة الرابط">👁️</button>
+                </div>
+                <div class="url-input-container">
+                    <input type="text" id="url_sol" placeholder="✅ رابط فيديو حل الواجب" onchange="markUnsaved()">
+                    <button type="button" class="btn-preview-link" onclick="previewUrl('url_sol')" title="معاينة الرابط">👁️</button>
+                </div>
+                <div class="url-input-container">
+                    <input type="text" id="url_exam" placeholder="📝 رابط الامتحان التفاعلي" onchange="markUnsaved()">
+                    <button type="button" class="btn-preview-link" onclick="previewUrl('url_exam')" title="معاينة الرابط">👁️</button>
+                </div>
+                <div class="url-input-container">
+                    <input type="text" id="url_essay" placeholder="✍️ رابط الامتحان المقالي (جديد)" onchange="markUnsaved()">
+                    <button type="button" class="btn-preview-link" onclick="previewUrl('url_essay')" title="معاينة الرابط">👁️</button>
+                </div>
             </div>
             
             <button id="save-btn" class="btn btn-primary" onclick="saveLesson()">
@@ -141,9 +166,9 @@
                         <option value="2_prep">الصف الثاني الاعدادي</option>
                         <option value="3_prep">الصف الثالث الاعدادي</option>
                     </select>
-                    <input type="text" id="grade-title-input" placeholder="اسم الصف الدراسي...">
-                    <input type="text" id="grade-desc-input" placeholder="الوصف التحفيزي للمرحلة...">
-                    <input type="text" id="grade-img-input" placeholder="رابط غلاف صورة الكارت...">
+                    <input type="text" id="grade-title-input" placeholder="اسم الصف الدراسي..." onchange="markUnsaved()">
+                    <input type="text" id="grade-desc-input" placeholder="الوصف التحفيزي للمرحلة..." onchange="markUnsaved()">
+                    <input type="text" id="grade-img-input" placeholder="رابط غلاف صورة الكارت..." onchange="markUnsaved()">
                 </div>
                 <button class="btn" style="background: #0f172a; width: 100%;" onclick="updateGradeCardConfig()">
                     ☁️ حفظ تعديلات كارت الصف المختار ورفعها للمنصة
@@ -155,6 +180,9 @@
             <div class="admin-header">
                 <h2>👥 إدارة أكواد الطلاب والمشتركين</h2>
             </div>
+            
+            <!-- إضافة فردية -->
+            <h4 style="font-weight: 800; margin-bottom: 8px; color: #475569;">👤 إضافة طالب جديد فردياً:</h4>
             <div class="input-group">
                 <input type="text" id="student-name" placeholder="👤 اسم الطالب الثنائي أو الثلاثي...">
                 <div style="display: flex; gap: 10px;">
@@ -162,12 +190,25 @@
                     <button class="btn" style="background: #475569; padding: 0 15px; font-size: 0.9rem; white-space: nowrap;" onclick="generateRandomCode()">توليد كود</button>
                 </div>
             </div>
-            <button id="save-student-btn" class="btn" style="background: linear-gradient(135deg, #059669, #10b981); width: 100%;" onclick="addStudent()">
+            <button id="save-student-btn" class="btn" style="background: linear-gradient(135deg, #059669, #10b981); width: 100%; margin-bottom: 25px;" onclick="addStudent()">
                 ☁️ إضافة الطالب لقائمة المشتركين وتحديث السيرفر
             </button>
             
+            <!-- إضافة جماعية -->
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 16px; margin-bottom: 25px;">
+                <h4 style="font-weight: 800; margin-bottom: 8px; color: #1e293b;">📋 إضافة مجموعة طلاب دفعة واحدة (Bulk Import):</h4>
+                <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 12px;">انسخ العشرات من الأسماء والصقها هنا، كل اسم في سطر مفرد (يمكن وضع الفاصلة والكود اختياري، وإذا لم تضع كوداً سينشئه النظام تلقائياً):</p>
+                <textarea id="bulk-students-input" rows="4" placeholder="مثال:&#10;أحمد محمد علي, Mo_101&#10;محمود حسن&#10;زياد أحمد, Mo_102"></textarea>
+                <button class="btn" style="background: #0284c7; width: 100%; margin-top: 12px;" onclick="addBulkStudents()">
+                    ☁️ استيراد ومزامنة مجموعة الطلاب فوراً
+                </button>
+            </div>
+
             <div class="preview-section" style="margin-top: 25px; box-shadow: none; padding: 0;">
-                <h3 class="preview-title" style="font-size: 1.1rem; margin-bottom: 12px;">📊 قائمة الطلاب الحاليين والتحكم بالاشتراك:</h3>
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
+                    <h3 class="preview-title" style="font-size: 1.1rem; margin: 0;">📊 قائمة الطلاب الحاليين والتحكم بالاشتراك:</h3>
+                    <input type="text" id="search-student-input" oninput="refreshStudentsTable()" placeholder="🔍 ابحث عن طالب بالاسم أو الكود..." style="max-width: 300px; padding: 8px 14px; background: white;">
+                </div>
                 <table id="admin-students-table">
                     <thead>
                         <tr>
@@ -184,6 +225,26 @@
 
         <div class="preview-section">
             <h3 class="preview-title">📊 إدارة وترتيب كافة الدروس المضافة حالياً (اسحب الصف لتغيير الترتيب 🖐️):</h3>
+            
+            <!-- شريط فلترة وتصفية الدروس -->
+            <div style="display: flex; gap: 15px; margin-bottom: 15px; background: #f8fafc; padding: 12px 15px; border-radius: 12px; border: 1px solid #e2e8f0; align-items: center; flex-wrap: wrap;">
+                <span style="font-weight: 800; color: #1c2541;">🔍 تصفية الدروس المعروضة:</span>
+                <select id="filter-grade" onchange="refreshAdminTable()" style="width: auto; flex: 1; padding: 8px 12px;">
+                    <option value="all">جميع المراحل الدراسية</option>
+                    <option value="6">الصف السادس الابتدائي</option>
+                    <option value="1_prep">الصف الأول الاعدادي</option>
+                    <option value="2_prep">الصف الثاني الاعدادي</option>
+                    <option value="3_prep">الصف الثالث الاعدادي</option>
+                </select>
+                <select id="filter-branch" onchange="refreshAdminTable()" style="width: auto; flex: 1; padding: 8px 12px;">
+                    <option value="all">جميع الفروع</option>
+                    <option value="جبر">فرع الجبر</option>
+                    <option value="هندسة">فرع الهندسة</option>
+                    <option value="إحصاء">فرع الإحصاء</option>
+                    <option value="مراجعات">فرع المراجعات</option>
+                </select>
+            </div>
+
             <table id="admin-lessons-table">
                 <thead>
                     <tr>
@@ -213,7 +274,8 @@
     let students = {};
     let editIndex = -1;
     let editStudentOldCode = null;
-    let draggedIndices = []; // لتخزين الدروس المحددة للسحب
+    let draggedIndices = []; 
+    let isDirty = false; // لمتابعة وجود تغييرات غير محفوظة
 
     let defaultGradesConfig = [
         { id: "6", title: "الصف السادس الابتدائي", desc: "تأسيس هندسي وحسابي متين وبداية طريق الأذكياء", img: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?auto=format&fit=crop&w=600&q=80", colorClass: "border-yellow" },
@@ -222,6 +284,41 @@
         { id: "3_prep", title: "الصف الثالث الاعدادي", desc: "سنة الشهادة الحاسمة.. نحو القمة والدرجات النهائية دائماً", img: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=600&q=80", colorClass: "border-orange" }
     ];
     let gradesConfig = defaultGradesConfig;
+
+    // --- حماية من إغلاق الصفحة بدون حفظ ---
+    function markUnsaved() {
+        isDirty = true;
+    }
+
+    window.addEventListener('beforeunload', function (e) {
+        if (isDirty) {
+            e.preventDefault();
+            e.returnValue = '';
+        }
+    });
+
+    // --- معاينة الروابط ---
+    function previewUrl(inputId) {
+        const val = document.getElementById(inputId).value.trim();
+        if(!val) return alert("الرابط فارغ! يرجى إدخال الرابط أولاً للتمكن من معاينته.");
+        window.open(val, '_blank');
+    }
+
+    // --- تنزيل نسخة احتياطية ---
+    function downloadBackup() {
+        const contentObj = {
+            lessons: lessons,
+            allowedCodes: students,
+            gradesConfig: gradesConfig
+        };
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(contentObj, null, 2));
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", `admin_backup_${new Date().toISOString().slice(0,10)}.json`);
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+    }
 
     // --- دالة فك التشفير الآمنة للغة العربية ---
     function decodeBase64UTF8(base64) {
@@ -294,6 +391,7 @@
             if (response.ok) {
                 const data = await response.json();
                 currentFileSha = data.content.sha;
+                isDirty = false; // إعادة تعيين التغييرات بعد المزامنة الناجحة
                 statusEl.innerText = "✅ تمت المزامنة بنجاح!";
                 setTimeout(() => statusEl.style.display = 'none', 2000);
             } else {
@@ -375,17 +473,29 @@
         }
     }
 
-    // --- أكواد جدول الدروس مع دعم السحب والإفلات لعدة عناصر ---
+    // --- أكواد جدول الدروس مع الفلترة ودعم السحب والتكرار ---
     function refreshAdminTable() {
         const tbody = document.querySelector("#admin-lessons-table tbody");
         tbody.innerHTML = "";
         updateLessonSearchDatalist();
-        if(lessons.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">لا توجد دروس مضافة حالياً.</td></tr>`;
+
+        const filterGrade = document.getElementById('filter-grade') ? document.getElementById('filter-grade').value : 'all';
+        const filterBranch = document.getElementById('filter-branch') ? document.getElementById('filter-branch').value : 'all';
+
+        const filteredLessons = lessons.map((l, originalIdx) => ({ l, originalIdx })).filter(item => {
+            const matchGrade = (filterGrade === 'all' || item.l.grade === filterGrade);
+            const matchBranch = (filterBranch === 'all' || item.l.branch === filterBranch);
+            return matchGrade && matchBranch;
+        });
+
+        if(filteredLessons.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">لا توجد دروس مطابقة حالياً.</td></tr>`;
             return;
         }
 
-        lessons.forEach((l, idx) => {
+        filteredLessons.forEach((item) => {
+            const l = item.l;
+            const idx = item.originalIdx;
             const tr = document.createElement("tr");
             tr.className = "draggable-row";
             tr.draggable = true;
@@ -401,6 +511,7 @@
                 <td style="text-align: center;"><span class="drag-handle" title="اضغط واسحب لتغيير الترتيب">☰</span></td>
                 <td>
                     <button class="action-btn btn-edit" onclick="editLesson(${idx})">تعديل</button>
+                    <button class="action-btn btn-copy" onclick="duplicateLesson(${idx})">نسخ 📋</button>
                     <button class="action-btn btn-delete" onclick="deleteLesson(${idx})">حذف</button>
                 </td>
             `;
@@ -417,16 +528,22 @@
         });
     }
 
+    function duplicateLesson(idx) {
+        editLesson(idx);
+        editIndex = -1; // تحويله لوضع الإضافة الجديدة بدلاً من التعديل
+        document.getElementById('title').value += " (نسخة)";
+        document.getElementById('save-btn').innerHTML = "☁️ اعتماد وحفظ الدرس الجديد ورفعه للمنصة فوراً";
+        markUnsaved();
+    }
+
     function handleDragStart(e) {
         const index = Number(this.dataset.index);
         const checkbox = this.querySelector('.lesson-checkbox');
         
-        // إذا قام بسحب عنصر غير محدد، نسحب هذا العنصر فقط
         if (!checkbox.checked) {
             draggedIndices = [index];
             this.classList.add("dragging");
         } else {
-            // سحب كل العناصر المحددة
             draggedIndices = Array.from(document.querySelectorAll('.lesson-checkbox:checked')).map(cb => Number(cb.dataset.index));
             document.querySelectorAll('.lesson-checkbox:checked').forEach(cb => {
                 cb.closest('tr').classList.add('dragging');
@@ -454,23 +571,15 @@
 
         const targetIndex = Number(this.dataset.index);
         
-        // منع الإفلات على نفس العناصر المحددة
         if (draggedIndices.length > 0 && !draggedIndices.includes(targetIndex)) {
-            
-            // 1. استخراج الدروس المسحوبة
             const movedItems = draggedIndices.map(idx => lessons[idx]);
-            
-            // 2. الاحتفاظ بمرجع للعنصر الهدف لمعرفة مكانه الجديد بعد الحذف
             let targetItem = lessons[targetIndex];
 
-            // 3. حذف الدروس المسحوبة من المصفوفة القديمة
             lessons = lessons.filter((_, idx) => !draggedIndices.includes(idx));
 
-            // 4. إيجاد الاندكس الجديد للعنصر الهدف وإدراج الدروس المسحوبة قبله
             let insertIndex = lessons.indexOf(targetItem);
             lessons.splice(insertIndex, 0, ...movedItems);
 
-            // تحديث الجدول والمزامنة فوراً مع جيت هب
             refreshAdminTable();
             await syncWithGitHub();
         }
@@ -492,11 +601,19 @@
     function refreshStudentsTable() {
         const tbody = document.querySelector("#admin-students-table tbody");
         tbody.innerHTML = "";
-        const keys = Object.keys(students);
+        
+        const searchVal = document.getElementById('search-student-input') ? document.getElementById('search-student-input').value.trim().toLowerCase() : "";
+        let keys = Object.keys(students);
+
+        if (searchVal) {
+            keys = keys.filter(code => code.toLowerCase().includes(searchVal) || students[code].name.toLowerCase().includes(searchVal));
+        }
+
         if(keys.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">لا يوجد طلاب مضافين حالياً.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">لا يوجد طلاب مطابقين للبحث.</td></tr>`;
             return;
         }
+
         keys.forEach(code => {
             const s = students[code];
             const statusText = s.status === 'active' ? '🟢 نشط' : '🔴 اشتراك ملغي';
@@ -551,6 +668,29 @@
         document.getElementById('student-code').value = "";
         refreshStudentsTable();
         
+        await syncWithGitHub();
+    }
+
+    async function addBulkStudents() {
+        const text = document.getElementById('bulk-students-input').value.trim();
+        if(!text) return alert("الرجاء كتابة أو لصق أسماء الطلاب أولاً!");
+
+        const lines = text.split('\n');
+        let count = 0;
+
+        lines.forEach(line => {
+            const parts = line.split(/[,،]/).map(p => p.trim());
+            if(parts[0]) {
+                const name = parts[0];
+                let code = parts[1] || `Mo_${Math.floor(1000 + Math.random() * 9000)}`;
+                students[code] = { name: name, status: 'active' };
+                count++;
+            }
+        });
+
+        document.getElementById('bulk-students-input').value = "";
+        refreshStudentsTable();
+        alert(`تمت إضافة وتجهيز ${count} طالب بنجاح! جاري المزامنة...`);
         await syncWithGitHub();
     }
 
