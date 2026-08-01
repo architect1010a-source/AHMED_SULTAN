@@ -585,6 +585,10 @@
     "MA_5283": {
       "name": "ملك السيد احمد",
       "status": "active"
+    },
+    "NA_8760": {
+      "name": "نور أحمد خيري",
+      "status": "active"
     }
   },
   "gradesConfig": [
