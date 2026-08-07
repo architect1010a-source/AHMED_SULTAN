@@ -398,6 +398,26 @@
     }
   ],
   "allowedCodes": {
+    "6001": {
+      "name": "اسر احمد رامي",
+      "status": "active"
+    },
+    "6005": {
+      "name": "عمر ناجح",
+      "status": "active"
+    },
+    "6010": {
+      "name": "جودي رأئف",
+      "status": "active"
+    },
+    "6015": {
+      "name": "حذيفة احمد عبد القوي",
+      "status": "active"
+    },
+    "6020": {
+      "name": "رهف مصطفي",
+      "status": "active"
+    },
     "FE_4628": {
       "name": "فيصل ابراهيم فيصل",
       "status": "active"
