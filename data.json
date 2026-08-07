@@ -398,6 +398,86 @@
     }
   ],
   "allowedCodes": {
+    "1005": {
+      "name": "فهد",
+      "status": "active"
+    },
+    "1010": {
+      "name": "كارمن محمود",
+      "status": "active"
+    },
+    "1015": {
+      "name": "يارا درويش",
+      "status": "active"
+    },
+    "1020": {
+      "name": "اروى محمد سيد",
+      "status": "active"
+    },
+    "1025": {
+      "name": "ادم شريف فؤاد",
+      "status": "active"
+    },
+    "1030": {
+      "name": "حبيبة جمال حسن",
+      "status": "active"
+    },
+    "1035": {
+      "name": "روان احمد محمد",
+      "status": "active"
+    },
+    "1040": {
+      "name": "تسنيم طارق",
+      "status": "active"
+    },
+    "1045": {
+      "name": "نور محمد",
+      "status": "active"
+    },
+    "1050": {
+      "name": "محمد رائف",
+      "status": "active"
+    },
+    "1055": {
+      "name": "لارين احمد محمد",
+      "status": "active"
+    },
+    "1065": {
+      "name": "لوجينا عبد العاطي",
+      "status": "active"
+    },
+    "1070": {
+      "name": "عائشة مجدي محمد",
+      "status": "active"
+    },
+    "1075": {
+      "name": "اسينات محمد",
+      "status": "active"
+    },
+    "1080": {
+      "name": "ريان محمد زغلول",
+      "status": "active"
+    },
+    "1085": {
+      "name": "رودينا عماد صابر",
+      "status": "active"
+    },
+    "1090": {
+      "name": "رؤي اسلام ممتاز",
+      "status": "active"
+    },
+    "1095": {
+      "name": "اسر مهند",
+      "status": "active"
+    },
+    "1100": {
+      "name": "جني محمد",
+      "status": "active"
+    },
+    "1105": {
+      "name": "يونس محمد",
+      "status": "active"
+    },
     "6001": {
       "name": "اسر احمد رامي",
       "status": "active"
