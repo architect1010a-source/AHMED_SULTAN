@@ -370,9 +370,12 @@
             </button>
         </div>
         
-        <div class="top-left-controls">
+        <div class="top-left-controls" style="display: flex; gap: 8px; align-items: center;">
             <button class="btn btn-login-trigger" id="header-login-btn" onclick="openLoginModal()">
                 🔐 إدخال كود الاشتراك
+            </button>
+            <button class="btn" id="header-logout-btn" onclick="logoutStudent()" style="display: none; background: linear-gradient(135deg, #ef4444, #b91c1c); color: white; border: 1px solid #ef4444; padding: 10px 15px;" title="تسجيل الخروج وتغيير الكود">
+                🚪 خروج
             </button>
         </div>
         
@@ -587,8 +590,34 @@
         headerBtn.style.borderColor = '#10b981';
         headerBtn.onclick = () => alert(`أهلاً بك يا بطل (${studentName}). حسابك نشط وتستمتع بجميع ميزات المنصة! 🚀`);
 
+        // إظهار زر تسجيل الخروج
+        document.getElementById('header-logout-btn').style.display = 'flex';
+
         initWatermark(studentName, code);
         renderLessons();
+    }
+
+    // دالة تسجيل الخروج الجديدة لإزالة بيانات الطالب
+    function logoutStudent() {
+        if(confirm("هل أنت متأكد أنك تريد تسجيل الخروج؟ سيتم إغلاق الدروس الحصرية وتطلب كوداً جديداً.")) {
+            localStorage.removeItem('user_code');
+            isLoggedIn = false;
+            
+            // إعادة زر تسجيل الدخول لشكله الأصلي
+            const headerBtn = document.getElementById('header-login-btn');
+            headerBtn.innerText = '🔐 إدخال كود الاشتراك';
+            headerBtn.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+            headerBtn.style.borderColor = '#f59e0b';
+            headerBtn.onclick = openLoginModal;
+            
+            // إخفاء زر الخروج وإزالة العلامة المائية
+            document.getElementById('header-logout-btn').style.display = 'none';
+            document.getElementById('wm-container').innerHTML = "";
+            document.getElementById('student-code-input').value = "";
+            
+            // إعادة قفل الدروس
+            renderLessons();
+        }
     }
 
     function initWatermark(name, code) {
