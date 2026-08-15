@@ -398,10 +398,6 @@
     }
   ],
   "allowedCodes": {
-    "1090": {
-      "name": "رؤي اسلام ممتاز",
-      "status": "active"
-    },
     "1095": {
       "name": "اسر مهند",
       "status": "active"
@@ -1244,6 +1240,10 @@
     },
     "1085RE": {
       "name": "رودينا عماد صابر",
+      "status": "active"
+    },
+    "1090RE": {
+      "name": "رؤي اسلام ممتاز",
       "status": "active"
     }
   },
