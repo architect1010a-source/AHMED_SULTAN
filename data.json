@@ -398,10 +398,6 @@
     }
   ],
   "allowedCodes": {
-    "1120": {
-      "name": "حمزة حسين",
-      "status": "active"
-    },
     "2001": {
       "name": "ندي احمد عبد النبي",
       "status": "active"
@@ -1244,6 +1240,10 @@
     },
     "1110LS": {
       "name": "ليلي شادي خليفة",
+      "status": "active"
+    },
+    "1120HH": {
+      "name": "حمزة حسين",
       "status": "active"
     }
   },
