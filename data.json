@@ -398,10 +398,6 @@
     }
   ],
   "allowedCodes": {
-    "2010": {
-      "name": "لمى شريف فؤاد",
-      "status": "active"
-    },
     "2015": {
       "name": "كريم سعيد سباعي",
       "status": "active"
@@ -1244,6 +1240,10 @@
     },
     "2005AM": {
       "name": "احمد محمد",
+      "status": "active"
+    },
+    "2010LS": {
+      "name": "لمى شريف فؤاد",
       "status": "active"
     }
   },
