@@ -398,10 +398,6 @@
     }
   ],
   "allowedCodes": {
-    "2040": {
-      "name": "مالك عمرو",
-      "status": "active"
-    },
     "2045": {
       "name": "الامير احمد",
       "status": "active"
@@ -1244,6 +1240,10 @@
     },
     "2035RB": {
       "name": "ريتال بدران محمد",
+      "status": "active"
+    },
+    "2040MA": {
+      "name": "مالك عمرو",
       "status": "active"
     }
   },
