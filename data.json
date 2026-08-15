@@ -398,10 +398,6 @@
     }
   ],
   "allowedCodes": {
-    "2070": {
-      "name": "تيام محمود فايد",
-      "status": "active"
-    },
     "2075": {
       "name": "مصطفي",
       "status": "active"
@@ -1256,6 +1252,10 @@
     },
     "AG_2182": {
       "name": "عبدالرحمن جمال فتحي",
+      "status": "active"
+    },
+    "2070TM": {
+      "name": "تيام محمود فايد",
       "status": "active"
     }
   },
