@@ -398,10 +398,6 @@
     }
   ],
   "allowedCodes": {
-    "2001": {
-      "name": "ندي احمد عبد النبي",
-      "status": "active"
-    },
     "2005": {
       "name": "احمد محمد",
       "status": "active"
@@ -1244,6 +1240,10 @@
     },
     "1120HH": {
       "name": "حمزة حسين",
+      "status": "active"
+    },
+    "2001NA": {
+      "name": "ندي احمد عبد النبي",
       "status": "active"
     }
   },
