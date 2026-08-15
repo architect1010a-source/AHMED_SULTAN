@@ -398,10 +398,6 @@
     }
   ],
   "allowedCodes": {
-    "2020": {
-      "name": "دارين احمد",
-      "status": "active"
-    },
     "2025": {
       "name": "سلمى وليد",
       "status": "active"
@@ -1244,6 +1240,10 @@
     },
     "2015KS": {
       "name": "كريم سعيد سباعي",
+      "status": "active"
+    },
+    "2020DA": {
+      "name": "دارين احمد",
       "status": "active"
     }
   },
