@@ -398,10 +398,6 @@
     }
   ],
   "allowedCodes": {
-    "1005": {
-      "name": "فهد",
-      "status": "active"
-    },
     "1010": {
       "name": "كارمن محمود",
       "status": "active"
@@ -1240,6 +1236,10 @@
     },
     "AM_5054": {
       "name": "ادم محمد عبداللطيف",
+      "status": "active"
+    },
+    "1005FH": {
+      "name": "فهد",
       "status": "active"
     }
   },
