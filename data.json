@@ -398,10 +398,6 @@
     }
   ],
   "allowedCodes": {
-    "1105": {
-      "name": "يونس محمد",
-      "status": "active"
-    },
     "1110": {
       "name": "ليلي شادي خليفة",
       "status": "active"
@@ -1244,6 +1240,10 @@
     },
     "1100GM": {
       "name": "جني محمد",
+      "status": "active"
+    },
+    "1105YM": {
+      "name": "يونس محمد",
       "status": "active"
     }
   },
