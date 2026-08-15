@@ -398,10 +398,6 @@
     }
   ],
   "allowedCodes": {
-    "1075": {
-      "name": "اسينات محمد",
-      "status": "active"
-    },
     "1085": {
       "name": "رودينا عماد صابر",
       "status": "active"
@@ -1244,6 +1240,10 @@
     },
     "1070AM": {
       "name": "عائشة مجدي محمد",
+      "status": "active"
+    },
+    "1075AM": {
+      "name": "اسينات محمد",
       "status": "active"
     }
   },
