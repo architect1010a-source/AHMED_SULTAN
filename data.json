@@ -398,10 +398,6 @@
     }
   ],
   "allowedCodes": {
-    "2075": {
-      "name": "مصطفي",
-      "status": "active"
-    },
     "2080": {
       "name": "ريان محمد زغلول",
       "status": "active"
@@ -1256,6 +1252,10 @@
     },
     "2070TM": {
       "name": "تيام محمود فايد",
+      "status": "active"
+    },
+    "2075MA": {
+      "name": "مصطفي احمد",
       "status": "active"
     }
   },
