@@ -398,10 +398,6 @@
     }
   ],
   "allowedCodes": {
-    "1100": {
-      "name": "جني محمد",
-      "status": "active"
-    },
     "1105": {
       "name": "يونس محمد",
       "status": "active"
@@ -1244,6 +1240,10 @@
     },
     "1095AM": {
       "name": "اسر مهند",
+      "status": "active"
+    },
+    "1100GM": {
+      "name": "جني محمد",
       "status": "active"
     }
   },
