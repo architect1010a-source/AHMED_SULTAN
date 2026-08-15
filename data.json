@@ -398,10 +398,6 @@
     }
   ],
   "allowedCodes": {
-    "2050": {
-      "name": "ليلي مسعد فايز",
-      "status": "active"
-    },
     "2055": {
       "name": "مسك عمرو صلاح",
       "status": "active"
@@ -1244,6 +1240,10 @@
     },
     "2045AA": {
       "name": "الامير احمد",
+      "status": "active"
+    },
+    "2050LM": {
+      "name": "ليلي مسعد فايز",
       "status": "active"
     }
   },
