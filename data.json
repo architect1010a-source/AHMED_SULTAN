@@ -398,10 +398,6 @@
     }
   ],
   "allowedCodes": {
-    "2065": {
-      "name": "رقية ياسر",
-      "status": "active"
-    },
     "2070": {
       "name": "تيام محمود فايد",
       "status": "active"
@@ -1244,6 +1240,10 @@
     },
     "2060AM": {
       "name": "عزيزة محمد السيد",
+      "status": "active"
+    },
+    "2065RY": {
+      "name": "رقية ياسر",
       "status": "active"
     }
   },
