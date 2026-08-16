@@ -398,6 +398,10 @@
     }
   ],
   "allowedCodes": {
+    "1115": {
+      "name": "جوري امير",
+      "status": "active"
+    },
     "3001": {
       "name": "عمر ايمن فيصل",
       "status": "active"
