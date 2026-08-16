@@ -1257,6 +1257,10 @@
     "2100MA": {
       "name": "ملك عمرو محفوظ",
       "status": "active"
+    },
+    "MA_3192": {
+      "name": "محمد اسامة شاهين",
+      "status": "active"
     }
   },
   "gradesConfig": [
