@@ -398,10 +398,6 @@
     }
   ],
   "allowedCodes": {
-    "1115": {
-      "name": "جوري امير",
-      "status": "active"
-    },
     "3001": {
       "name": "عمر ايمن فيصل",
       "status": "active"
@@ -1272,6 +1268,10 @@
     },
     "AA_9407": {
       "name": "اية احمد خالد عبدالراضي",
+      "status": "active"
+    },
+    "1115GA": {
+      "name": "جوري امير",
       "status": "active"
     }
   },
