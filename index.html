@@ -56,9 +56,9 @@
         }
         .login-box {
             background: #1e293b; position: relative;
-            padding: 40px 30px; border-radius: 24px; border: 2px solid #f59e0b;
+            padding: 35px 25px; border-radius: 24px; border: 2px solid #f59e0b;
             box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-            max-width: 420px; width: 100%; text-align: center;
+            max-width: 520px; width: 100%; text-align: center;
         }
         .close-login-btn {
             position: absolute; top: 15px; left: 15px; background: rgba(255,255,255,0.1);
@@ -66,8 +66,34 @@
             font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;
         }
         .close-login-btn:hover { background: #ef4444; }
-        .login-box h2 { font-weight: 900; margin-bottom: 10px; font-size: 1.7rem; color: #ffffff; }
-        .login-box p { color: #cbd5e1; font-weight: 600; margin-bottom: 25px; font-size: 0.95rem; }
+        .login-box h2 { font-weight: 900; margin-bottom: 8px; font-size: 1.6rem; color: #ffffff; }
+        .login-box p { color: #cbd5e1; font-weight: 600; margin-bottom: 20px; font-size: 0.95rem; }
+
+        /* 🎴 كروت اختيار المرحلة داخل بوابة الدخول */
+        .modal-grade-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 15px 0 10px 0; }
+        @media (max-width: 480px) { .modal-grade-grid { grid-template-columns: 1fr; } }
+        .modal-grade-card {
+            background: #0f172a; border: 2px solid #334155; border-radius: 16px; padding: 16px 10px;
+            cursor: pointer; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .modal-grade-card:hover { transform: translateY(-4px); border-color: #f59e0b; background: #1e293b; box-shadow: 0 8px 20px rgba(245, 158, 11, 0.25); }
+        .modal-grade-card.card-6 { border-color: #eab308; }
+        .modal-grade-card.card-1_prep { border-color: #8b5cf6; }
+        .modal-grade-card.card-2_prep { border-color: #10b981; }
+        .modal-grade-card.card-3_prep { border-color: #f97316; }
+        .modal-grade-card .grade-icon { font-size: 2rem; line-height: 1; }
+        .modal-grade-card .grade-name { font-size: 1.05rem; font-weight: 800; color: #ffffff; }
+        
+        .selected-grade-badge {
+            background: rgba(245, 158, 11, 0.15); border: 1.5px solid #f59e0b; color: #ffe066;
+            padding: 8px 16px; border-radius: 50px; font-weight: 800; font-size: 0.95rem; margin-bottom: 15px; display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn-change-grade {
+            background: transparent; border: 1px solid #64748b; color: #cbd5e1; padding: 8px 14px; border-radius: 10px;
+            font-size: 0.85rem; font-weight: 700; cursor: pointer; margin-top: 10px; width: 100%;
+        }
+        .btn-change-grade:hover { background: rgba(255,255,255,0.1); color: white; }
 
         /* تنسيق نافذة التحذير الأمني الذكية */
         #security-modal {
@@ -338,11 +364,43 @@
 <div id="login-overlay">
     <div class="login-box">
         <button class="close-login-btn" onclick="closeLoginModal()">✕</button>
-        <svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" style="width: 55px; height: 55px; margin-bottom: 15px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-        <h2>بوابة المؤسس التعليمية 🏰</h2>
-        <p>هذا الدرس حصري للمشتركين! الرجاء إدخال كود الاشتراك لفتح كل الدروس:</p>
-        <input type="text" id="student-code-input" placeholder="🔐 أدخل الكود هنا (مثال: Mo_4321)..." style="text-align: center; font-size: 1.1rem; margin-bottom: 20px;">
-        <button class="btn btn-login" onclick="checkStudent()">🚀 تفعيل وفتح المنصة الآن</button>
+        <svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" style="width: 50px; height: 50px; margin-bottom: 10px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        
+        <!-- الخطوة الأولى: اختيار المرحلة الدراسية عبر كروت كبيرة -->
+        <div id="login-step-1">
+            <h2>بوابة المؤسس التعليمية 🏰</h2>
+            <p>اختر صفك الدراسي أولاً للبدء:</p>
+            <div class="modal-grade-grid">
+                <div class="modal-grade-card card-6" onclick="selectLoginGrade('6', 'الصف السادس الابتدائي')">
+                    <span class="grade-icon">📐</span>
+                    <span class="grade-name">الصف السادس الابتدائي</span>
+                </div>
+                <div class="modal-grade-card card-1_prep" onclick="selectLoginGrade('1_prep', 'الصف الأول الاعدادي')">
+                    <span class="grade-icon">📘</span>
+                    <span class="grade-name">الصف الأول الاعدادي</span>
+                </div>
+                <div class="modal-grade-card card-2_prep" onclick="selectLoginGrade('2_prep', 'الصف الثاني الاعدادي')">
+                    <span class="grade-icon">📗</span>
+                    <span class="grade-name">الصف الثاني الاعدادي</span>
+                </div>
+                <div class="modal-grade-card card-3_prep" onclick="selectLoginGrade('3_prep', 'الصف الثالث الاعدادي')">
+                    <span class="grade-icon">📙</span>
+                    <span class="grade-name">الصف الثالث الاعدادي</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- الخطوة الثانية: إدخال كود الاشتراك -->
+        <div id="login-step-2" style="display: none;">
+            <h2>أدخل كود الاشتراك 🔐</h2>
+            <div class="selected-grade-badge" id="selected-grade-badge">
+                <span>🎓</span> <span id="selected-grade-text">الصف المحدد</span>
+            </div>
+            <p>هذا الكود سيتم ربطه وقفله على هذه المرحلة فقط:</p>
+            <input type="text" id="student-code-input" placeholder="🔐 أدخل الكود هنا (مثال: Mo_4321)..." style="text-align: center; font-size: 1.1rem; margin-bottom: 15px;">
+            <button class="btn btn-login" onclick="checkStudentStep1()">🚀 تفعيل وفتح المنصة الآن</button>
+            <button class="btn-change-grade" onclick="backToStep1()">↩️ تغيير الصف الدراسي</button>
+        </div>
     </div>
 </div>
 
@@ -350,10 +408,10 @@
 <div id="security-modal">
     <div class="warning-box">
         <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" style="width: 60px; height: 60px; margin-bottom: 15px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-        <h3>⚠️ تعليمات أمنية هامة!</h3>
-        <p><strong>احذر:</strong> مشاركة هذا الكود مع أي شخص آخر أو تشغيله على أكثر من جهاز قد يعرض حسابك ومنصتك للغلق النهائي فوراً والتحقيق القانوني.</p>
+        <h3>⚠️ تعليمات أمنية وحماية الاشتراك!</h3>
+        <p><strong>احذر:</strong> مشاركة هذا الكود مع أي شخص آخر أو تشغيله على أكثر من جهاز ستتسبب في <strong>ربطه وقفله على هذه المرحلة نهائياً</strong> أو <strong>إغلاق حسابك ومنصتك بشكل دائم</strong>.</p>
         <div class="warning-btns">
-            <button class="btn-agree" onclick="acceptSecurityWarning()">✅ أوافق على الشروط</button>
+            <button class="btn-agree" onclick="acceptSecurityWarning()">✅ أوافق وأفهم الشروط</button>
         </div>
     </div>
 </div>
@@ -450,7 +508,7 @@
 
 <!-- الزر العائم للرجوع للخلف -->
 <button id="floating-back-btn" class="floating-back-btn" onclick="showGradesHome()" title="العودة للمراحل الدراسية">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width:24px; height:24px;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width:24px; height:24px;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 5"></polyline></svg>
 </button>
 
 <script>
@@ -466,6 +524,10 @@
     let selectedGradeId = null;
     let currentBranchFilter = 'all';
     let isLoggedIn = false;
+    let userBoundGrade = localStorage.getItem('user_grade') || null;
+
+    let selectedModalGradeId = null;
+    let selectedModalGradeTitle = '';
 
     let defaultGradesConfig = [
         { id: "6", title: "الصف السادس الابتدائي", desc: "تأسيس هندسي وحسابي متين وبداية طريق الأذكياء", img: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?auto=format&fit=crop&w=600&q=80", colorClass: "border-yellow" },
@@ -533,12 +595,96 @@
         }
     }
 
-    function openLoginModal() { document.getElementById('login-overlay').style.display = 'flex'; }
+    function openLoginModal() { 
+        backToStep1();
+        document.getElementById('student-code-input').value = '';
+        document.getElementById('login-overlay').style.display = 'flex'; 
+    }
+    
     function closeLoginModal() { document.getElementById('login-overlay').style.display = 'none'; }
+
+    function selectLoginGrade(gradeId, gradeTitle) {
+        selectedModalGradeId = gradeId;
+        selectedModalGradeTitle = gradeTitle;
+        document.getElementById('selected-grade-text').innerText = gradeTitle;
+        document.getElementById('login-step-1').style.display = 'none';
+        document.getElementById('login-step-2').style.display = 'block';
+    }
+
+    function backToStep1() {
+        selectedModalGradeId = null;
+        selectedModalGradeTitle = '';
+        document.getElementById('login-step-2').style.display = 'none';
+        document.getElementById('login-step-1').style.display = 'block';
+    }
+
+    function checkStudentStep1() {
+        const code = document.getElementById('student-code-input').value.trim();
+        if(!code) { alert("برجاء إدخال كود الاشتراك الخاص بك! 🔑"); return; }
+        if(!selectedModalGradeId) { alert("برجاء تحديد الصف الدراسي أولاً! 🎓"); backToStep1(); return; }
+
+        window.tempStudentData = {
+            code: code,
+            gradeId: selectedModalGradeId,
+            gradeTitle: selectedModalGradeTitle
+        };
+
+        document.getElementById('login-overlay').style.display = 'none';
+        document.getElementById('security-modal').style.display = 'flex';
+    }
+
+    async function acceptSecurityWarning() {
+        if (!window.tempStudentData) return;
+        const temp = window.tempStudentData;
+
+        try {
+            const response = await fetch('data.json');
+            if(!response.ok) throw new Error("الملف غير موجود");
+            const data = await response.json();
+
+            if (data.allowedCodes && data.allowedCodes[temp.code]) {
+                const student = data.allowedCodes[temp.code];
+                if (student.status === 'active') {
+                    // التحقق من ربط المرحلة
+                    let assignedGrade = student.grade || localStorage.getItem('code_grade_' + temp.code);
+
+                    if (assignedGrade && assignedGrade !== temp.gradeId) {
+                        let assignedGradeObj = gradesConfig.find(g => g.id === assignedGrade);
+                        let assignedTitle = assignedGradeObj ? assignedGradeObj.title : assignedGrade;
+                        document.getElementById('security-modal').style.display = 'none';
+                        alert(`🛑 عذراً يا بطل! هذا الكود مخصص لـ (${assignedTitle}) فقط، ولا يمكن استخدامه لدخول دروس مرحلة أخرى.`);
+                        openLoginModal();
+                        return;
+                    }
+
+                    // حفظ قفل المرحلة للكود
+                    if (!assignedGrade) {
+                        localStorage.setItem('code_grade_' + temp.code, temp.gradeId);
+                    }
+
+                    localStorage.setItem('warning_cleared_' + temp.code, 'true');
+                    localStorage.setItem('user_grade', temp.gradeId);
+
+                    document.getElementById('security-modal').style.display = 'none';
+                    proceedToPlatform(temp.code, data.lessons, student.name, temp.gradeId);
+                } else {
+                    document.getElementById('security-modal').style.display = 'none';
+                    alert("🔴 هذا الاشتراك معطل أو منتهي! برجاء التواصل مع مستر أحمد جابر.");
+                }
+            } else {
+                document.getElementById('security-modal').style.display = 'none';
+                alert("❌ كود الاشتراك غير صحيح! تأكد من كتابته بشكل سليم.");
+                openLoginModal();
+            }
+        } catch(e) {
+            document.getElementById('security-modal').style.display = 'none';
+            alert("⚠️ تعذر التحقق من الكود حالياً. تأكد من وجود ملف data.json");
+        }
+    }
 
     async function checkStudent(forcedCode = null, isAutoLoad = false) {
         const code = forcedCode ? forcedCode : document.getElementById('student-code-input').value.trim();
-        if(!code) { if(!isAutoLoad) alert("برجاء إدخال كود الاشتراك الخاص بك! 🔑"); return; }
+        if(!code) return;
 
         try {
             const response = await fetch('data.json');
@@ -548,39 +694,25 @@
             if (data.allowedCodes && data.allowedCodes[code]) {
                 const student = data.allowedCodes[code];
                 if (student.status === 'active') {
-                    let isWarningCleared = localStorage.getItem('warning_cleared_' + code);
-                    if (isWarningCleared || isAutoLoad) {
-                        proceedToPlatform(code, data.lessons, student.name);
-                    } else {
-                        window.tempStudentData = { code: code, lessons: data.lessons, name: student.name };
-                        document.getElementById('login-overlay').style.display = 'none';
-                        document.getElementById('security-modal').style.display = 'flex';
-                    }
+                    let assignedGrade = student.grade || localStorage.getItem('code_grade_' + code) || localStorage.getItem('user_grade');
+                    proceedToPlatform(code, data.lessons, student.name, assignedGrade);
                 } else {
                     if(isAutoLoad) localStorage.removeItem('user_code');
-                    alert("🔴 هذا الاشتراك معطل أو منتهي! برجاء التواصل مع مستر أحمد جابر.");
                 }
             } else {
                 if(isAutoLoad) localStorage.removeItem('user_code');
-                if(!isAutoLoad) alert("❌ كود الاشتراك غير صحيح! تأكد من كتابته بشكل سليم.");
             }
         } catch(e) {
-            if(!isAutoLoad) alert("⚠️ تعذر التحقق من الكود حالياً. تأكد من وجود ملف data.json");
+            console.log("تعذر التحقق التلقائي من الكود.");
         }
     }
 
-    function acceptSecurityWarning() {
-        if (window.tempStudentData) {
-            const s = window.tempStudentData;
-            localStorage.setItem('warning_cleared_' + s.code, 'true');
-            document.getElementById('security-modal').style.display = 'none';
-            proceedToPlatform(s.code, s.lessons, s.name);
-        }
-    }
-
-    function proceedToPlatform(code, dataLessons, studentName) {
+    function proceedToPlatform(code, dataLessons, studentName, boundGrade) {
         isLoggedIn = true;
+        userBoundGrade = boundGrade || localStorage.getItem('user_grade');
         localStorage.setItem('user_code', code);
+        if (userBoundGrade) localStorage.setItem('user_grade', userBoundGrade);
+
         if(dataLessons) { lessons = dataLessons; localStorage.setItem('math_lessons', JSON.stringify(lessons)); }
         closeLoginModal();
         
@@ -588,20 +720,33 @@
         headerBtn.innerText = `👤 المشترك: ${studentName.split(' ')[0]}`;
         headerBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
         headerBtn.style.borderColor = '#10b981';
-        headerBtn.onclick = () => alert(`أهلاً بك يا بطل (${studentName}). حسابك نشط وتستمتع بجميع ميزات المنصة! 🚀`);
+        
+        let boundGradeObj = gradesConfig.find(g => g.id === userBoundGrade);
+        let boundGradeTitle = boundGradeObj ? boundGradeObj.title : '';
+
+        headerBtn.onclick = () => alert(`أهلاً بك يا بطل (${studentName}). حسابك نشط ومخصص لـ (${boundGradeTitle || 'مرحلتك'})! 🚀`);
 
         // إظهار زر تسجيل الخروج
         document.getElementById('header-logout-btn').style.display = 'flex';
 
         initWatermark(studentName, code);
-        renderLessons();
+
+        // فتح دروس المرحلة المحددة تلقائياً
+        if (userBoundGrade) {
+            if (!boundGradeTitle && boundGradeObj) boundGradeTitle = boundGradeObj.title;
+            viewGrade(userBoundGrade, boundGradeTitle || 'صفك الدراسي');
+        } else {
+            renderLessons();
+        }
     }
 
     // دالة تسجيل الخروج الجديدة لإزالة بيانات الطالب
     function logoutStudent() {
         if(confirm("هل أنت متأكد أنك تريد تسجيل الخروج؟ سيتم إغلاق الدروس الحصرية وتطلب كوداً جديداً.")) {
             localStorage.removeItem('user_code');
+            localStorage.removeItem('user_grade');
             isLoggedIn = false;
+            userBoundGrade = null;
             
             // إعادة زر تسجيل الدخول لشكله الأصلي
             const headerBtn = document.getElementById('header-login-btn');
@@ -615,7 +760,8 @@
             document.getElementById('wm-container').innerHTML = "";
             document.getElementById('student-code-input').value = "";
             
-            // إعادة قفل الدروس
+            showGradesHome();
+            renderGradeCards();
             renderLessons();
         }
     }
@@ -641,11 +787,21 @@
         view.innerHTML = "";
         gradesConfig.forEach(g => {
             view.innerHTML += `
-                <div class="grade-card ${g.colorClass}" onclick="viewGrade('${g.id}', '${g.title}')">
+                <div class="grade-card ${g.colorClass}" onclick="handleGradeCardClick('${g.id}', '${g.title}')">
                     <div class="grade-img-wrapper"><img class="grade-img" src="${g.img}" alt="${g.title}"></div>
                     <div class="grade-content"><h3>${g.title}</h3><p>${g.desc}</p></div>
                 </div>`;
         });
+    }
+
+    function handleGradeCardClick(gradeId, gradeTitle) {
+        if (isLoggedIn && userBoundGrade && userBoundGrade !== gradeId) {
+            let boundObj = gradesConfig.find(g => g.id === userBoundGrade);
+            let boundTitle = boundObj ? boundObj.title : userBoundGrade;
+            alert(`🔒 عذراً يا بطل! اشتراكك مخصص لـ (${boundTitle}) فقط، ولا يمكنك دخول هذا الصف.`);
+            return;
+        }
+        viewGrade(gradeId, gradeTitle);
     }
 
     function viewGrade(gradeId, gradeTitle) {
