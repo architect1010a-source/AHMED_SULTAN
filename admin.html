@@ -142,10 +142,6 @@
                     <option value="2_prep">الصف الثاني الاعدادي</option>
                     <option value="3_prep">الصف الثالث الاعدادي</option>
                 </select>
-                <select id="lesson-term">
-                    <option value="1">الترم الأول</option>
-                    <option value="2">الترم الثاني</option>
-                </select>
                 <select id="lesson-branch">
                     <option value="جبر">فرع الجبر</option>
                     <option value="هندسة">فرع الهندسة</option>
@@ -276,11 +272,6 @@
                     <option value="2_prep">الصف الثاني الاعدادي</option>
                     <option value="3_prep">الصف الثالث الاعدادي</option>
                 </select>
-                <select id="filter-term" onchange="refreshAdminTable()" style="width: auto; flex: 1; padding: 8px 12px;">
-                    <option value="all">جميع الأترام</option>
-                    <option value="1">الترم الأول</option>
-                    <option value="2">الترم الثاني</option>
-                </select>
                 <select id="filter-branch" onchange="refreshAdminTable()" style="width: auto; flex: 1; padding: 8px 12px;">
                     <option value="all">جميع الفروع</option>
                     <option value="جبر">فرع الجبر</option>
@@ -295,7 +286,6 @@
                     <tr>
                         <th style="width: 50px; text-align: center;">تحديد</th>
                         <th>المرحلة</th>
-                        <th>الترم</th>
                         <th>الفرع</th>
                         <th>عنوان الدرس</th>
                         <th style="text-align: center;">الترتيب</th>
@@ -543,25 +533,22 @@
         updateLessonSearchDatalist();
 
         const filterGrade = document.getElementById('filter-grade') ? document.getElementById('filter-grade').value : 'all';
-        const filterTerm = document.getElementById('filter-term') ? document.getElementById('filter-term').value : 'all';
         const filterBranch = document.getElementById('filter-branch') ? document.getElementById('filter-branch').value : 'all';
 
         const filteredLessons = lessons.map((l, originalIdx) => ({ l, originalIdx })).filter(item => {
             const matchGrade = (filterGrade === 'all' || item.l.grade === filterGrade);
-            const matchTerm = (filterTerm === 'all' || (item.l.term || "1") == filterTerm);
             const matchBranch = (filterBranch === 'all' || item.l.branch === filterBranch);
-            return matchGrade && matchTerm && matchBranch;
+            return matchGrade && matchBranch;
         });
 
         if(filteredLessons.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">لا توجد دروس مطابقة حالياً.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">لا توجد دروس مطابقة حالياً.</td></tr>`;
             return;
         }
 
         filteredLessons.forEach((item) => {
             const l = item.l;
             const idx = item.originalIdx;
-            const termText = (l.term == "2") ? "الترم الثاني" : "الترم الأول";
             const tr = document.createElement("tr");
             tr.className = "draggable-row";
             tr.draggable = true;
@@ -572,7 +559,6 @@
                     <input type="checkbox" class="lesson-checkbox" data-index="${idx}" onchange="toggleRowSelection(this)">
                 </td>
                 <td>${l.grade}</td>
-                <td>${termText}</td>
                 <td>${l.branch}</td>
                 <td><strong>${l.title}</strong></td>
                 <td style="text-align: center;"><span class="drag-handle" title="اضغط واسحب لتغيير الترتيب">☰</span></td>
@@ -779,7 +765,6 @@
 
     async function saveLesson() {
         const grade = document.getElementById('lesson-grade').value;
-        const term = document.getElementById('lesson-term') ? document.getElementById('lesson-term').value : "1";
         const branch = document.getElementById('lesson-branch').value;
         const title = document.getElementById('title').value.trim();
         const img = document.getElementById('img').value.trim();
@@ -792,7 +777,7 @@
 
         if(!title) return alert("عنوان الدرس مطلوب!");
 
-        const data = { grade, term, branch, title, img, url_expl, url_notes, url_work, url_sol, url_exam, url_essay };
+        const data = { grade, branch, title, img, url_expl, url_notes, url_work, url_sol, url_exam, url_essay };
 
         if(editIndex > -1) {
             lessons[editIndex] = data;
@@ -814,7 +799,6 @@
         editIndex = idx;
         const l = lessons[idx];
         document.getElementById('lesson-grade').value = l.grade;
-        if(document.getElementById('lesson-term')) document.getElementById('lesson-term').value = l.term || "1";
         document.getElementById('lesson-branch').value = l.branch;
         document.getElementById('title').value = l.title;
         document.getElementById('img').value = l.img || "";
