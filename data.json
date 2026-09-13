@@ -551,6 +551,18 @@
       "url_sol": "",
       "url_exam": "",
       "url_essay": ""
+    },
+    {
+      "grade": "2_prep",
+      "branch": "جبر",
+      "title": "تحليل الفرق بين المربعين والمكعبين",
+      "img": "",
+      "url_expl": "",
+      "url_notes": "",
+      "url_work": "",
+      "url_sol": "",
+      "url_exam": "",
+      "url_essay": ""
     }
   ],
   "allowedCodes": {
