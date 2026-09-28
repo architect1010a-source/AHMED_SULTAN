@@ -803,6 +803,18 @@
       "url_sol": "",
       "url_exam": "exams6/tahdid_almakadir_almotakafaa.html",
       "url_essay": ""
+    },
+    {
+      "grade": "1_prep",
+      "branch": "جبر",
+      "title": "المعادلات الخطية",
+      "img": "",
+      "url_expl": "https://youtu.be/fTFbhSwkZMI",
+      "url_notes": "",
+      "url_work": "",
+      "url_sol": "",
+      "url_exam": "",
+      "url_essay": ""
     }
   ],
   "allowedCodes": {
